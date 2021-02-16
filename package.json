@@ -47,6 +47,8 @@
     "express": "^4.17.1",
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
+    "grommet": "^2.16.3",
+    "grommet-icons": "^4.5.0",
     "helmet": "^3.21.2",
     "install": "^0.13.0",
     "merge-graphql-schemas": "^1.7.3",
@@ -62,7 +64,8 @@
     "ts-node": "^8.4.1",
     "tsconfig-paths": "^3.9.0",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.2",
+    "wired-elements": "^2.1.2"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
