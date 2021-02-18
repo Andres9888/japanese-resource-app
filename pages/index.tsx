@@ -1,68 +1,146 @@
 import React from 'react'
 import Head from 'next/head'
 import Nav from '~views/components/Nav'
-import 'wired-elements'
+
 
 const Home = () => (
   <div>
     <Head>
       <title>Home</title>
       <link rel="icon" href="/favicon.ico" />
-      <script type="module" src="wired-card/lib/wired-card.js"></script>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css" />
     </Head>
 
     <Nav />
-
-    <wired-card elevation="5">
-      <h1>wired-elements demo</h1>
-    </wired-card>
-
-    <style jsx>{`
-      .hero {
-        width: 100%;
-        color: #333;
-      }
-      .title {
-        margin: 0;
-        width: 100%;
-        padding-top: 80px;
-        line-height: 1.15;
-        font-size: 48px;
-      }
-      .title,
-      .description {
-        text-align: center;
-      }
-      .row {
-        max-width: 880px;
-        margin: 80px auto 40px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-      }
-      .card {
-        padding: 18px 18px 24px;
-        width: 220px;
-        text-align: left;
-        text-decoration: none;
-        color: #434343;
-        border: 1px solid #9b9b9b;
-      }
-      .card:hover {
-        border-color: #067df7;
-      }
-      .card h3 {
-        margin: 0;
-        color: #067df7;
-        font-size: 18px;
-      }
-      .card p {
-        margin: 0;
-        padding: 12px 0 0;
-        font-size: 13px;
-        color: #333;
-      }
-    `}</style>
+    <h1>working</h1>
+    <div className="container">
+    <table className="table">
+  <thead>
+    <tr>
+      <th><abbr title="Position">Pos</abbr></th>
+      <th>Team</th>
+      <th><abbr title="Played">Pld</abbr></th>
+      <th><abbr title="Won">W</abbr></th>
+      <th><abbr title="Drawn">D</abbr></th>
+      <th><abbr title="Lost">L</abbr></th>
+      <th><abbr title="Goals for">GF</abbr></th>
+      <th><abbr title="Goals against">GA</abbr></th>
+      <th><abbr title="Goal difference">GD</abbr></th>
+      <th><abbr title="Points">Pts</abbr></th>
+      <th>Qualification or relegation</th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr>
+      <th><abbr title="Position">Pos</abbr></th>
+      <th>Team</th>
+      <th><abbr title="Played">Pld</abbr></th>
+      <th><abbr title="Won">W</abbr></th>
+      <th><abbr title="Drawn">D</abbr></th>
+      <th><abbr title="Lost">L</abbr></th>
+      <th><abbr title="Goals for">GF</abbr></th>
+      <th><abbr title="Goals against">GA</abbr></th>
+      <th><abbr title="Goal difference">GD</abbr></th>
+      <th><abbr title="Points">Pts</abbr></th>
+      <th>Qualification or relegation</th>
+    </tr>
+  </tfoot>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td><a href="https://en.wikipedia.org/wiki/Leicester_City_F.C." title="Leicester City F.C.">Leicester City</a> <strong>(C)</strong>
+      </td>
+      <td>38</td>
+      <td>23</td>
+      <td>12</td>
+      <td>3</td>
+      <td>68</td>
+      <td>36</td>
+      <td>+32</td>
+      <td>81</td>
+      <td>Qualification for the <a href="https://en.wikipedia.org/wiki/2016%E2%80%9317_UEFA_Champions_League#Group_stage" title="2016–17 UEFA Champions League">Champions League group stage</a></td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td><a href="https://en.wikipedia.org/wiki/Arsenal_F.C." title="Arsenal F.C.">Arsenal</a></td>
+      <td>38</td>
+      <td>20</td>
+      <td>11</td>
+      <td>7</td>
+      <td>65</td>
+      <td>36</td>
+      <td>+29</td>
+      <td>71</td>
+      <td>Qualification for the <a href="https://en.wikipedia.org/wiki/2016%E2%80%9317_UEFA_Champions_League#Group_stage" title="2016–17 UEFA Champions League">Champions League group stage</a></td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td><a href="https://en.wikipedia.org/wiki/Tottenham_Hotspur_F.C." title="Tottenham Hotspur F.C.">Tottenham Hotspur</a></td>
+      <td>38</td>
+      <td>19</td>
+      <td>13</td>
+      <td>6</td>
+      <td>69</td>
+      <td>35</td>
+      <td>+34</td>
+      <td>70</td>
+      <td>Qualification for the <a href="https://en.wikipedia.org/wiki/2016%E2%80%9317_UEFA_Champions_League#Group_stage" title="2016–17 UEFA Champions League">Champions League group stage</a></td>
+    </tr>
+    <tr class="is-selected">
+      <th>4</th>
+      <td><a href="https://en.wikipedia.org/wiki/Manchester_City_F.C." title="Manchester City F.C.">Manchester City</a></td>
+      <td>38</td>
+      <td>19</td>
+      <td>9</td>
+      <td>10</td>
+      <td>71</td>
+      <td>41</td>
+      <td>+30</td>
+      <td>66</td>
+      <td>Qualification for the <a href="https://en.wikipedia.org/wiki/2016%E2%80%9317_UEFA_Champions_League#Play-off_round" title="2016–17 UEFA Champions League">Champions League play-off round</a></td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td><a href="https://en.wikipedia.org/wiki/Manchester_United_F.C." title="Manchester United F.C.">Manchester United</a></td>
+      <td>38</td>
+      <td>19</td>
+      <td>9</td>
+      <td>10</td>
+      <td>49</td>
+      <td>35</td>
+      <td>+14</td>
+      <td>66</td>
+      <td>Qualification for the <a href="https://en.wikipedia.org/wiki/2016%E2%80%9317_UEFA_Europa_League#Group_stage" title="2016–17 UEFA Europa League">Europa League group stage</a></td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td><a href="https://en.wikipedia.org/wiki/Southampton_F.C." title="Southampton F.C.">Southampton</a></td>
+      <td>38</td>
+      <td>18</td>
+      <td>9</td>
+      <td>11</td>
+      <td>59</td>
+      <td>41</td>
+      <td>+18</td>
+      <td>63</td>
+      <td>Qualification for the <a href="https://en.wikipedia.org/wiki/2016%E2%80%9317_UEFA_Europa_League#Group_stage" title="2016–17 UEFA Europa League">Europa League group stage</a></td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td><a href="https://en.wikipedia.org/wiki/West_Ham_United_F.C." title="West Ham United F.C.">West Ham United</a></td>
+      <td>38</td>
+      <td>16</td>
+      <td>14</td>
+      <td>8</td>
+      <td>65</td>
+      <td>51</td>
+      <td>+14</td>
+      <td>62</td>
+      <td>Qualification for the <a href="https://en.wikipedia.org/wiki/2016%E2%80%9317_UEFA_Europa_League#Third_qualifying_round" title="2016–17 UEFA Europa League">Europa League third qualifying round</a></td>
+    </tr>
+  </tbody>
+</table>
+  </div>
   </div>
 )
 
