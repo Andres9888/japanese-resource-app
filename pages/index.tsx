@@ -106,7 +106,7 @@ const Home = ({ props }) => {
     </div>
   </div>
 </div></TableData>
-              <TableData>Actions</TableData>
+              <TableData>👍</TableData>
             </TableRow>
             ))}
           </tbody>
