@@ -63,6 +63,7 @@
     "react-bulma-components": "^3.4.0",
     "react-dom": "16.10.2",
     "reactbulma": "^3.0.4",
+    "sakura-js": "^1.1.1",
     "styled-components": "^4.4.1",
     "ts-node": "^8.4.1",
     "tsconfig-paths": "^3.9.0",
