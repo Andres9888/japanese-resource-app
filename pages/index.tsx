@@ -6,19 +6,24 @@ import styled from 'styled-components'
 
 const TableRow = styled.tr`
   display:flex;
+  box-shadow: 1px 2px 4px rgb(0 0 0 / 3%);
+  border-radius:6px;
 `;
 
 const TableData = styled.td`
   display:flex;
+  border:none !important;
   font-size:48px;
   font-weight:700;
   align-self:center;
   font-family: 'Montserrat', sans-serif;
   img{
     max-width: 233px;
+    border-radius:6px;
   }
 `;
 const TableDataDescription = styled.td`
+  border:none !important;
   font-family: 'Source Sans Pro', sans-serif;
   display:flex;
   font-size:21px;
@@ -56,53 +61,53 @@ const Home = ({ props }) => {
               <TableData><img src={resource.image} alt=""/></TableData>
               <TableData><a href={resource.url}>{resource.title}</a></TableData>
               <TableDataDescription>{resource.description}</TableDataDescription>
-              <TableData><div class="field is-grouped is-grouped-multiline">
-  <div class="control">
-    <div class="tags has-addons">
-      <a class="tag is-link">Technology</a>
-      <a class="tag is-delete"></a>
+              <TableData><div className="field is-grouped is-grouped-multiline">
+  <div className="control">
+    <div className="tags has-addons">
+      <a className="tag is-link">Technology</a>
+      <a className="tag is-delete"></a>
     </div>
   </div>
 
-  <div class="control">
-    <div class="tags has-addons">
-      <a class="tag is-link">CSS</a>
-      <a class="tag is-delete"></a>
+  <div className="control">
+    <div className="tags has-addons">
+      <a className="tag is-link">CSS</a>
+      <a className="tag is-delete"></a>
     </div>
   </div>
 
-  <div class="control">
-    <div class="tags has-addons">
-      <a class="tag is-link">Flexbox</a>
-      <a class="tag is-delete"></a>
+  <div className="control">
+    <div className="tags has-addons">
+      <a className="tag is-link">Flexbox</a>
+      <a className="tag is-delete"></a>
     </div>
   </div>
 
-  <div class="control">
-    <div class="tags has-addons">
-      <a class="tag is-link">Web Design</a>
-      <a class="tag is-delete"></a>
+  <div className="control">
+    <div className="tags has-addons">
+      <a className="tag is-link">Web Design</a>
+      <a className="tag is-delete"></a>
     </div>
   </div>
 
-  <div class="control">
-    <div class="tags has-addons">
-      <a class="tag is-link">Open Source</a>
-      <a class="tag is-delete"></a>
+  <div className="control">
+    <div className="tags has-addons">
+      <a className="tag is-link">Open Source</a>
+      <a className="tag is-delete"></a>
     </div>
   </div>
 
-  <div class="control">
-    <div class="tags has-addons">
-      <a class="tag is-link">Community</a>
-      <a class="tag is-delete"></a>
+  <div className="control">
+    <div className="tags has-addons">
+      <a className="tag is-link">Community</a>
+      <a className="tag is-delete"></a>
     </div>
   </div>
 
-  <div class="control">
-    <div class="tags has-addons">
-      <a class="tag is-link">Documentation</a>
-      <a class="tag is-delete"></a>
+  <div className="control">
+    <div className="tags has-addons">
+      <a className="tag is-link">Documentation</a>
+      <a className="tag is-delete"></a>
     </div>
   </div>
 </div></TableData>
