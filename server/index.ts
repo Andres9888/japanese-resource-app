@@ -10,6 +10,8 @@ import compression from 'compression'
 
 import apollo from '~server/core/apollo'
 
+import { connectDatabase } from '~server/database';
+
 const { PORT = '3000', NODE_ENV } = process.env
 const port = parseInt(PORT, 10) || 3000
 const dev = NODE_ENV !== 'production'
@@ -33,9 +35,18 @@ nextApp.prepare().then(() => {
   )
   server.use(compression())
 
+  const listings = async () => {
+    const db = await connectDatabase();
+  
+    // ...
+  
+    const listings = await db.listings.find({}).toArray();
+    console.log(listings);
+  };
+  listings()
   //start apollo server
   apollo.applyMiddleware({ app: server })
-
+  
   server.get('*', (req, res) => handle(req, res))
   // express().use(handler).listen(3000) //routes handle way
   server.listen(port, err => {
