@@ -1,12 +1,30 @@
 scalar IsoDate #declered for all .graphql files
+
+type Listing {
+    id: ID!
+    title: String!
+    address: String!
+    count: Int!
+  }
+
 type Query {
   clients: [Client]
   client(id: ID!): Client
 }
 
-type Mutation {
-  updateUser(newName: String): Client
-}
+  type Query {
+    listings: [Listing!]!
+  }
+
+ type Mutation {
+    increment(): {CountResult}
+  }
+
+  type CountResult {
+    
+  acknowledged: Boolean,
+  }
+`
 
 type Client {
   id: ID!
@@ -17,3 +35,9 @@ type Client {
   avatar: String
   createdAt: IsoDate
 }
+
+
+
+
+  
+  

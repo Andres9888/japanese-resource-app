@@ -11,7 +11,6 @@ import compression from 'compression'
 
 import apollo from '~server/core/apollo'
 
-import { connectDatabase } from '~server/database'
 
 const { PORT = '3000', NODE_ENV } = process.env
 const port = parseInt(PORT, 10) || 3000
@@ -35,21 +34,7 @@ nextApp.prepare().then(() => {
     morgan(':method :url :status :res[content-length] - :response-time ms')
   )
   server.use(compression())
-
-  const listings = async () => {
-    const db = await connectDatabase()
-
-    // ...
-
-    
-    const listings = await db.listings.find({}).toArray()
-    
-    const result = await db.listings.updateOne({ title: 'Clean and fully furnished apartment' },
-       {$inc: { count: 1 } })
-    console.log(listings)
-    console.log(result)
-  }
-  listings()
+  
   //start apollo server
   apollo.applyMiddleware({ app: server })
 

@@ -1,10 +1,16 @@
 export default {
   // Query
   Query: {
-    client: (_, username) => {},
+    listings: async (_root: undefined, _args: {}, { db }) => {
+      return await db.listings.find({}).toArray();
+    }
   },
   // Mutation
   Mutation: {
-    updateUser: (_, newName, context) => {},
-  },
+    increment: async (_root: undefined, _args: {}, { db }) => {
+     return await db.listings.updateOne({ title: 'Clean and fully furnished apartment' },
+       {$inc: { count: 1 } })
+    
+  }
+}
 }
