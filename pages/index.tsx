@@ -1,8 +1,20 @@
 import React from 'react'
 import Head from 'next/head'
+import gql from 'graphql-tag'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import Nav from '~views/components/Nav'
 import jpresources from 'data/jpresources.json'
 import styled from 'styled-components'
+
+
+const GET_PETS = gql`
+  query getPets {
+    
+  listings{title,count}
+}
+  
+`;
+
 
 const TableRow = styled.tr`
   display:flex;
@@ -35,6 +47,8 @@ const TableDataDescription = styled.td`
 
 
 const Home = ({ props }) => {
+  const { loading, error, data } = useQuery(GET_PETS);
+  console.log(data)
   return (
     <div>
       <Head>
