@@ -1,3 +1,4 @@
+//@ts-ignore
 require('dotenv').config()
 // if you want to use nextRoutes
 // const routes = require('~server/core/nextRoutes')
@@ -10,7 +11,7 @@ import compression from 'compression'
 
 import apollo from '~server/core/apollo'
 
-import { connectDatabase } from '~server/database';
+import { connectDatabase } from '~server/database'
 
 const { PORT = '3000', NODE_ENV } = process.env
 const port = parseInt(PORT, 10) || 3000
@@ -36,17 +37,22 @@ nextApp.prepare().then(() => {
   server.use(compression())
 
   const listings = async () => {
-    const db = await connectDatabase();
-  
+    const db = await connectDatabase()
+
     // ...
-  
-    const listings = await db.listings.find({}).toArray();
-    console.log(listings);
-  };
+
+    
+    const listings = await db.listings.find({}).toArray()
+    
+    const result = await db.listings.updateOne({ title: 'Clean and fully furnished apartment' },
+       {$inc: { count: 1 } })
+    console.log(listings)
+    console.log(result)
+  }
   listings()
   //start apollo server
   apollo.applyMiddleware({ app: server })
-  
+
   server.get('*', (req, res) => handle(req, res))
   // express().use(handler).listen(3000) //routes handle way
   server.listen(port, err => {
