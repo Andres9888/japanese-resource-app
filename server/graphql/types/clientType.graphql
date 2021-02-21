@@ -7,34 +7,15 @@ type Listing {
     count: Int!
   }
 
-type Query {
-  clients: [Client]
-  client(id: ID!): Client
-}
-
   type Query {
     listings: [Listing!]!
   }
-
- type Mutation {
-    increment(): {CountResult}
-  }
-
   type CountResult {
-    
-  acknowledged: Boolean,
+  acknowledged: Boolean
   }
-`
-
-type Client {
-  id: ID!
-  username: String
-  email: String
-  name: String
-  bio: String
-  avatar: String
-  createdAt: IsoDate
-}
+ type Mutation {
+    increment: CountResult
+  }
 
 
 
