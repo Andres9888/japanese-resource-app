@@ -1,5 +1,5 @@
 <h1 align="center">React + GraphQL + Next.js + Apollo + Scss + Typescript Starter</h1>
-
+<h1 align="center">Your can watch me code this project out on youtube by click this link (<a href="https://www.youtube.com/playlist?list=PLC0KM3xw4Iyu_SyFSJCeZ6kIGJN_WUUbl" target="_blank">Here</a>)</h1>
 <p align="center">
   <a href="https://www.typescriptlang.org/" target="_blank"><img src="https://img.shields.io/badge/Typescript-v3.7.2-blue.svg?logo=TypeScript"></a>
   <a href="https://nextjs.org/" target="_blank"><img src="https://img.shields.io/badge/Next.js-v9.1.1-blueviolet.svg"></a>
@@ -48,4 +48,4 @@ Configuration in this project is not perfect - it's just my own preference, and 
 - [Apollo context management](https://www.apollographql.com/docs/react/data/local-state/)
 - [graphql-tag](https://devstore.io/js/graphql-tag)
 
-PS; I'm always looking for interesting freelance/full time opportunities, hmu @ sebastianpob@gmail.com
+
