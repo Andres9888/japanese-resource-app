@@ -1,9 +1,10 @@
 scalar IsoDate #declered for all .graphql files
 
 type Listing {
-    id: ID!
+    image: String!
+    url: String!
     title: String!
-    address: String!
+    description: String!
     count: Int!
   }
 
