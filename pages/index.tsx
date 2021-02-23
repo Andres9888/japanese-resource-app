@@ -7,20 +7,13 @@ import jpresources from 'data/jpresources.json'
 import apollo from '~lib/apolloClient'
 import styled from 'styled-components'
 
-const GET_RESOURCES = gql`
-  query getResources {
-    listings {
-      title
-      description
-      url
-      image
-      count
+const INCREMENT_COUNT = gql`
+  mutation incrementCount {
+    increment(id: "60346aac0b169203831344ee") {
+      acknowledged
     }
   }
 `
-
-
-
 
 const TableRow = styled.tr`
   display: flex;
@@ -49,8 +42,14 @@ const TableDataDescription = styled.td`
   align-self: center;
 `
 
-const Home = ({data}) => {
+const Home = ({ data }) => {
+  function greetUser() {
+    console.log("Hi there, user!");
+  }
   console.log(data)
+  if (!data) {
+    return <div>Loading...</div>
+  }
   return (
     <div>
       <Head>
@@ -78,7 +77,7 @@ const Home = ({data}) => {
         <table className='table is-fullwidth is-hoverable'>
           <tbody>
             {data.content.map((resource, index) => (
-              <TableRow>
+              <TableRow key={resource['_id'].$oid}>
                 <TableData>
                   <img src={resource.image} alt='' />
                 </TableData>
@@ -142,7 +141,7 @@ const Home = ({data}) => {
                 </TableData>
                 <TableData>
                   👍
-                 <h3>{}</h3> 
+                  <h3 onClick={greetUser}>count</h3>
                 </TableData>
               </TableRow>
             ))}
@@ -152,7 +151,6 @@ const Home = ({data}) => {
     </div>
   )
 }
-
 
 Home.getInitialProps = async ctx => {
   return { data: jpresources }
