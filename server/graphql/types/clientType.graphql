@@ -1,6 +1,7 @@
 scalar IsoDate #declered for all .graphql files
 
 type Listing {
+    id: ID!
     image: String!
     url: String!
     title: String!
@@ -15,7 +16,7 @@ type Listing {
   acknowledged: Boolean
   }
  type Mutation {
-    increment: CountResult
+    increment(id: ID!): CountResult
   }
 
 

@@ -141,7 +141,10 @@ const Home = ( ) => {
                     </div>
                   </div>
                 </TableData>
-                <TableData>👍</TableData>
+                <TableData>
+                  👍
+                 <h3 onClick={}>{resource.count}</h3> 
+                </TableData>
               </TableRow>
             ))}
           </tbody>
