@@ -49,8 +49,7 @@ const TableDataDescription = styled.td`
   align-self: center;
 `
 
-const Home = ( ) => {
-  const { loading, error, data } = useQuery(GET_RESOURCES)
+const Home = ({data}) => {
   console.log(data)
   return (
     <div>
@@ -78,7 +77,7 @@ const Home = ( ) => {
         <h1>Resources for Studying Japanese</h1>
         <table className='table is-fullwidth is-hoverable'>
           <tbody>
-            {data.listings.map((resource, index) => (
+            {data.content.map((resource, index) => (
               <TableRow>
                 <TableData>
                   <img src={resource.image} alt='' />
@@ -143,7 +142,7 @@ const Home = ( ) => {
                 </TableData>
                 <TableData>
                   👍
-                 <h3 onClick={}>{resource.count}</h3> 
+                 <h3>{}</h3> 
                 </TableData>
               </TableRow>
             ))}
@@ -155,6 +154,8 @@ const Home = ( ) => {
 }
 
 
-
+Home.getInitialProps = async ctx => {
+  return { data: jpresources }
+}
 
 export default Home
