@@ -141,7 +141,7 @@ const Home = ({ data }) => {
                 </TableData>
                 <TableData>
                   👍
-                  <h3 onClick={greetUser}>count</h3>
+                  <h3 onClick={greetUser()}>count</h3>
                 </TableData>
               </TableRow>
             ))}
