@@ -71,7 +71,7 @@ const Home = ({ json }) => {
   const sortedJson = json.content.sort(function (a, b) {
     return b.count.$numberInt - a.count.$numberInt
   })
-  console.log(sortedJson)
+  
   return (
     <div>
       <Head>
@@ -98,7 +98,8 @@ const Home = ({ json }) => {
         <h1>Resources for Studying Japanese</h1>
         <table className='table is-fullwidth is-hoverable'>
           <tbody>
-            {sortedJson.map((resource, index) => (
+            {sortedJson.map((resource, index) =>
+              (
               <TableRow key={resource['_id'].$oid}>
                 <TableData>
                   <img src={resource.image} alt='' />
@@ -109,56 +110,17 @@ const Home = ({ json }) => {
                 <TableDataDescription>
                   {resource.description}
                 </TableDataDescription>
+                
                 <TableData>
                   <div className='field is-grouped is-grouped-multiline'>
+                  {resource.tags.map((tag, index) => (
                     <div className='control'>
                       <div className='tags has-addons'>
-                        <a className='tag is-link'>Technology</a>
+                        <a className='tag is-link'>{tag}</a>
                         <a className='tag is-delete'></a>
                       </div>
-                    </div>
+                    </div>))}
 
-                    <div className='control'>
-                      <div className='tags has-addons'>
-                        <a className='tag is-link'>CSS</a>
-                        <a className='tag is-delete'></a>
-                      </div>
-                    </div>
-
-                    <div className='control'>
-                      <div className='tags has-addons'>
-                        <a className='tag is-link'>Flexbox</a>
-                        <a className='tag is-delete'></a>
-                      </div>
-                    </div>
-
-                    <div className='control'>
-                      <div className='tags has-addons'>
-                        <a className='tag is-link'>Web Design</a>
-                        <a className='tag is-delete'></a>
-                      </div>
-                    </div>
-
-                    <div className='control'>
-                      <div className='tags has-addons'>
-                        <a className='tag is-link'>Open Source</a>
-                        <a className='tag is-delete'></a>
-                      </div>
-                    </div>
-
-                    <div className='control'>
-                      <div className='tags has-addons'>
-                        <a className='tag is-link'>Community</a>
-                        <a className='tag is-delete'></a>
-                      </div>
-                    </div>
-
-                    <div className='control'>
-                      <div className='tags has-addons'>
-                        <a className='tag is-link'>Documentation</a>
-                        <a className='tag is-delete'></a>
-                      </div>
-                    </div>
                   </div>
                 </TableData>
                 <TableData>
