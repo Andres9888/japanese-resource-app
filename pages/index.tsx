@@ -171,7 +171,8 @@ const Home = ({ json }) => {
 }
 
 Home.getInitialProps = async ctx => {
-  return { json: jpresources }
+  let sortByHighestCount = jpresources.content.sort(function(a,b){ return b.count.$numberInt - a.count.$numberInt })  
+  return { json: sortByHighestCount }
 }
 
 export default Home
