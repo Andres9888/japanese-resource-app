@@ -7,9 +7,21 @@ import jpresources from 'data/jpresources.json'
 import apollo from '~lib/apolloClient'
 import styled from 'styled-components'
 
+
+const LISTINGS = gql`
+  query getResources {
+    listings {
+      id
+      title
+      count
+    }
+  }
+`
+
+
 const INCREMENT_COUNT = gql`
-  mutation incrementCount {
-    increment(id: "60346aac0b169203831344ee") {
+  mutation incrementCount($id: ID!) {
+    increment(id: $id) {
       acknowledged
     }
   }
@@ -42,12 +54,18 @@ const TableDataDescription = styled.td`
   align-self: center;
 `
 
-const Home = ({ data }) => {
-  function greetUser() {
-    console.log("Hi there, user!");
-  }
+const Home = ({ json }) => {
+  const { data, loading, error, refetch } = useQuery<ListingsData>(LISTINGS);
+  const [
+    incrementCount
+  ] = useMutation(INCREMENT_COUNT);
+  const handleIncrementCount = async (id: string) => {
+    await incrementCount({ variables: { id } });
+    refetch();
+  };
   console.log(data)
-  if (!data) {
+  console.log(json)
+  if (!json) {
     return <div>Loading...</div>
   }
   return (
@@ -76,7 +94,7 @@ const Home = ({ data }) => {
         <h1>Resources for Studying Japanese</h1>
         <table className='table is-fullwidth is-hoverable'>
           <tbody>
-            {data.content.map((resource, index) => (
+            {json.content.map((resource, index) => (
               <TableRow key={resource['_id'].$oid}>
                 <TableData>
                   <img src={resource.image} alt='' />
@@ -140,8 +158,8 @@ const Home = ({ data }) => {
                   </div>
                 </TableData>
                 <TableData>
-                  👍
-                  <h3 onClick={greetUser()}>count</h3>
+                  👍 
+                  <h3 onClick={() => handleIncrementCount(resource['_id'].$oid)}>count</h3>
                 </TableData>
               </TableRow>
             ))}
@@ -153,7 +171,7 @@ const Home = ({ data }) => {
 }
 
 Home.getInitialProps = async ctx => {
-  return { data: jpresources }
+  return { json: jpresources }
 }
 
 export default Home
