@@ -68,6 +68,10 @@ const Home = ({ json }) => {
   if (!json) {
     return <div>Loading...</div>
   }
+  const sortedJson = json.content.sort(function (a, b) {
+    return b.count.$numberInt - a.count.$numberInt
+  })
+  console.log(sortedJson)
   return (
     <div>
       <Head>
@@ -94,7 +98,7 @@ const Home = ({ json }) => {
         <h1>Resources for Studying Japanese</h1>
         <table className='table is-fullwidth is-hoverable'>
           <tbody>
-            {json.content.map((resource, index) => (
+            {sortedJson.map((resource, index) => (
               <TableRow key={resource['_id'].$oid}>
                 <TableData>
                   <img src={resource.image} alt='' />
@@ -171,8 +175,7 @@ const Home = ({ json }) => {
 }
 
 Home.getInitialProps = async ctx => {
-  let sortByHighestCount = jpresources.content.sort(function(a,b){ return b.count.$numberInt - a.count.$numberInt })  
-  return { json: sortByHighestCount }
+  return { json: jpresources }
 }
 
 export default Home
