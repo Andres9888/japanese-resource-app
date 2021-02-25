@@ -6,7 +6,8 @@ import Nav from '~views/components/Nav'
 import jpresources from 'data/jpresources.json'
 import apollo from '~lib/apolloClient'
 import styled from 'styled-components'
-
+import ApolloClient from 'apollo-client'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 
 const LISTINGS = gql`
   query getResources {
@@ -54,7 +55,7 @@ const TableDataDescription = styled.td`
   align-self: center;
 `
 
-const Home = ({ json }) => {
+export default function Home(){
   const { data, loading, error, refetch } = useQuery<ListingsData>(LISTINGS);
   const [
     incrementCount
@@ -63,14 +64,11 @@ const Home = ({ json }) => {
     await incrementCount({ variables: { id } });
     refetch();
   };
-  console.log(data)
-  console.log(json)
-  if (!json) {
-    return <div>Loading...</div>
-  }
-  const sortedJson = json.content.sort(function (a, b) {
+  
+  
+  /*const sortedJson = json.content.sort(function (a, b) {
     return b.count.$numberInt - a.count.$numberInt
-  })
+  })*/
   
   return (
     <div>
@@ -98,7 +96,7 @@ const Home = ({ json }) => {
         <h1>Resources for Studying Japanese</h1>
         <table className='table is-fullwidth is-hoverable'>
           <tbody>
-            {sortedJson.map((resource, index) =>
+            {/*sortedJson.map((resource, index) =>
               (
               <TableRow key={resource['_id'].$oid}>
                 <TableData>
@@ -117,7 +115,6 @@ const Home = ({ json }) => {
                     <div className='control'>
                       <div className='tags has-addons'>
                         <a className='tag is-link'>{tag}</a>
-                        <a className='tag is-delete'></a>
                       </div>
                     </div>))}
 
@@ -128,7 +125,7 @@ const Home = ({ json }) => {
                   <h3 onClick={() => handleIncrementCount(resource['_id'].$oid)}>count</h3>
                 </TableData>
               </TableRow>
-            ))}
+            ))*/}
           </tbody>
         </table>
       </div>
@@ -136,8 +133,23 @@ const Home = ({ json }) => {
   )
 }
 
-Home.getInitialProps = async ctx => {
-  return { json: jpresources }
-}
-
-export default Home
+export async function getStaticProps() {
+  const { data } = await apollo.query({
+    query: gql`
+     query getResources {
+    listings {
+      id
+      title
+      count
+    }
+  }
+    `
+  });
+  
+  
+  console.log(data, "data console log")
+  return {
+      props: {
+    launches: data.listings
+  }
+}}

@@ -11,7 +11,8 @@ const { GRAPHQL_URL } = process.env
 const { NODE_ENV } = process.env
 
 const httpLink = new HttpLink({
-  uri: NODE_ENV !== 'production' ? '/graphql' : GRAPHQL_URL,
+  //;uri: NODE_ENV !== 'production' ? '/graphql' : GRAPHQL_URL,
+  uri: 'http://localhost:3000/graphql',
   fetch: fetch,
   credentials: 'same-origin',
 })
