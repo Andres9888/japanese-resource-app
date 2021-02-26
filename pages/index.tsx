@@ -14,6 +14,9 @@ const LISTINGS = gql`
     listings {
       id
       title
+      description
+      image
+      url
       count
     }
   }
@@ -65,11 +68,18 @@ export default function Home(){
     refetch();
   };
   
-  
-  /*const sortedJson = json.content.sort(function (a, b) {
-    return b.count.$numberInt - a.count.$numberInt
-  })*/
-  
+ 
+  if(loading){
+    return <h1>loading</h1>
+  }
+  if(error){
+    return <h1>error</h1>
+  }
+   const sortedData = data.listings.sort(function (a, b) {
+    return b.count - a.count
+  })
+  console.log(data.listings)
+  console.log(sortedData)
   return (
     <div>
       <Head>
@@ -96,9 +106,9 @@ export default function Home(){
         <h1>Resources for Studying Japanese</h1>
         <table className='table is-fullwidth is-hoverable'>
           <tbody>
-            {/*sortedJson.map((resource, index) =>
+            {data.listings.map((resource, index) =>
               (
-              <TableRow key={resource['_id'].$oid}>
+              <TableRow key={resource.id}>
                 <TableData>
                   <img src={resource.image} alt='' />
                 </TableData>
@@ -111,21 +121,21 @@ export default function Home(){
                 
                 <TableData>
                   <div className='field is-grouped is-grouped-multiline'>
-                  {resource.tags.map((tag, index) => (
+                  {/*resource.tags.map((tag, index) => (
                     <div className='control'>
                       <div className='tags has-addons'>
                         <a className='tag is-link'>{tag}</a>
                       </div>
-                    </div>))}
+                  </div>))*/}
 
                   </div>
                 </TableData>
                 <TableData>
                   👍 
-                  <h3 onClick={() => handleIncrementCount(resource['_id'].$oid)}>count</h3>
+                  <h3 onClick={() => handleIncrementCount(resource.id)}>{resource.count}</h3>
                 </TableData>
               </TableRow>
-            ))*/}
+            ))}
           </tbody>
         </table>
       </div>
@@ -133,23 +143,3 @@ export default function Home(){
   )
 }
 
-export async function getStaticProps() {
-  const { data } = await apollo.query({
-    query: gql`
-     query getResources {
-    listings {
-      id
-      title
-      count
-    }
-  }
-    `
-  });
-  
-  
-  console.log(data, "data console log")
-  return {
-      props: {
-    launches: data.listings
-  }
-}}
