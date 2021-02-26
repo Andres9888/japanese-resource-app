@@ -6,6 +6,7 @@ type Listing {
     url: String!
     title: String!
     description: String!
+    tags:[String!]!
     count: Int!
   }
 

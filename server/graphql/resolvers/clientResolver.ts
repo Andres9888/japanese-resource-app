@@ -19,4 +19,5 @@ export default {
 Listing: {
   id: (listing): string => listing._id.toString()
 }
+
 }

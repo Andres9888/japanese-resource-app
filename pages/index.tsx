@@ -17,6 +17,7 @@ const LISTINGS = gql`
       description
       image
       url
+      tags
       count
     }
   }
@@ -78,8 +79,6 @@ export default function Home(){
    const sortedData = data.listings.sort(function (a, b) {
     return b.count - a.count
   })
-  console.log(data.listings)
-  console.log(sortedData)
   return (
     <div>
       <Head>
@@ -106,7 +105,7 @@ export default function Home(){
         <h1>Resources for Studying Japanese</h1>
         <table className='table is-fullwidth is-hoverable'>
           <tbody>
-            {data.listings.map((resource, index) =>
+            {sortedData.map((resource, index) =>
               (
               <TableRow key={resource.id}>
                 <TableData>
@@ -121,12 +120,12 @@ export default function Home(){
                 
                 <TableData>
                   <div className='field is-grouped is-grouped-multiline'>
-                  {/*resource.tags.map((tag, index) => (
+                  {resource.tags.map((tag, index) => (
                     <div className='control'>
                       <div className='tags has-addons'>
                         <a className='tag is-link'>{tag}</a>
                       </div>
-                  </div>))*/}
+                  </div>))}
 
                   </div>
                 </TableData>
@@ -136,6 +135,7 @@ export default function Home(){
                 </TableData>
               </TableRow>
             ))}
+            <h1>Grammar</h1>
           </tbody>
         </table>
       </div>
