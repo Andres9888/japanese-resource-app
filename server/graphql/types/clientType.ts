@@ -1,5 +1,7 @@
-scalar IsoDate #declered for all .graphql files
+//scalar IsoDate #declered for all .graphql files
+import { gql } from '@apollo/client'
 
+export const typeDefs = gql`
 type Listing {
     id: ID!
     image: String!
@@ -19,7 +21,7 @@ type Listing {
  type Mutation {
     increment(id: ID!): CountResult
   }
-
+`
 
 
 

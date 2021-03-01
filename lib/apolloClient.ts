@@ -1,54 +1,48 @@
-import fetch from 'node-fetch'
 
-import ApolloClient from 'apollo-client'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import {
+  ApolloClient,
+  InMemoryCache,
+  NormalizedCacheObject,
+} from "@apollo/client";
+import { useMemo } from "react";
 
-import { ApolloLink } from 'apollo-link'
-import { onError } from 'apollo-link-error'
-import { HttpLink } from 'apollo-link-http'
+let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-const { GRAPHQL_URL } = process.env
-const { NODE_ENV } = process.env
+function createIsomorphicLink() {
+  if (typeof window === "undefined") {
+    // server
+    const { SchemaLink } = require("@apollo/client/link/schema");
+    const { schema } = require("./schema");
+    return new SchemaLink({ schema });
+  } else {
+    // client
+    const { HttpLink } = require("@apollo/client/link/http");
+    return new HttpLink({ uri: "/graphql" });
+  }
+}
 
-const httpLink = new HttpLink({
-  //;uri: NODE_ENV !== 'production' ? '/graphql' : GRAPHQL_URL,
-  uri: 'http://localhost:3000/graphql',
-  fetch: fetch,
-  credentials: 'same-origin',
-})
+function createApolloClient() {
+  return new ApolloClient({
+    ssrMode: typeof window === "undefined",
+    link: createIsomorphicLink(),
+    cache: new InMemoryCache(),
+  });
+}
 
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors)
-    graphQLErrors.map(({ message, locations, path }) =>
-      console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-      )
-    )
+export function initializeApollo(initialState = null) {
+  const _apolloClient = apolloClient ?? createApolloClient();
 
-  if (networkError) console.log(`[Network error]: ${networkError}`)
-})
+  if (initialState) {
+    _apolloClient.cache.restore(initialState);
+  }
 
-//merger all apollo links
-const link = ApolloLink.from([errorLink, httpLink])
+  if (typeof window === "undefined") return _apolloClient;
+  apolloClient = apolloClient ?? _apolloClient;
 
-const cache = new InMemoryCache()
+  return apolloClient;
+}
 
-//main apollo client
-const apollo = new ApolloClient({
-  defaultOptions: {
-    watchQuery: {
-      errorPolicy: 'all',
-    },
-    query: {
-      errorPolicy: 'all',
-    },
-    mutate: {
-      errorPolicy: 'all',
-    },
-  },
-  ssrMode: !process.browser, // Disables forceFetch on the server (so queries are only run once)
-  link,
-  cache,
-})
-
-export default apollo
+export function useApollo(initialState) {
+  const store = useMemo(() => initializeApollo(initialState), [initialState]);
+  return store;
+}

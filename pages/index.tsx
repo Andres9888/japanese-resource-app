@@ -4,9 +4,9 @@ import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import Nav from '~views/components/Nav'
 import jpresources from 'data/jpresources.json'
-import apollo from '~lib/apolloClient'
+import { initializeApollo } from '~lib/apolloClient'
 import styled from 'styled-components'
-import ApolloClient from 'apollo-client'
+//import ApolloClient from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
 const LISTINGS = gql`
@@ -69,16 +69,10 @@ export default function Home(){
     refetch();
   };
   
- 
-  if(loading){
-    return <h1>loading</h1>
-  }
-  if(error){
-    return <h1>error</h1>
-  }
-   const sortedData = data.listings.sort(function (a, b) {
-    return b.count - a.count
-  })
+  
+   //const sortedData = data.listings.sort(function (a, b) {
+ //   return b.count - a.count
+ // })
   return (
     <div>
       <Head>
@@ -105,7 +99,7 @@ export default function Home(){
         <h1>Resources for Studying Japanese</h1>
         <table className='table is-fullwidth is-hoverable'>
           <tbody>
-            {sortedData.map((resource, index) =>
+            {data.listings.map((resource, index) =>
               (
               <TableRow key={resource.id}>
                 <TableData>
@@ -143,3 +137,28 @@ export default function Home(){
   )
 }
 
+
+export async function getStaticProps() {
+  const apolloClient = initializeApollo()
+
+  await apolloClient.query({
+    query: gql`
+     query getResources {
+    listings {
+      id
+      title
+      description
+      image
+      url
+      tags
+      count
+    }
+  }
+    `
+  });
+  console.log(apolloClient.cache)
+  return {
+    props: {initialApolloState: apolloClient.cache.extract(),
+    },
+  }
+}

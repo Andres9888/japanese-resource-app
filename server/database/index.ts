@@ -7,6 +7,7 @@ const userPassword = process.env.USERPASSWORD;
 const cluster = process.env.CLUSTER;
 const dbname = process.env.DBNAME
 
+
 const url = `mongodb+srv://${user}:${userPassword}@${cluster}/${dbname}?retryWrites=true&w=majority`;
 
 export const connectDatabase = async () => {

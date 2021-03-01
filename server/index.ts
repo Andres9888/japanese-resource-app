@@ -9,8 +9,12 @@ import morgan from 'morgan'
 import helmet from 'helmet'
 import compression from 'compression'
 
-import apollo from '~server/core/apollo'
 
+import { ApolloServer } from 'apollo-server-express'
+import {typeDefs} from '~server/graphql/types/clientType'
+import {resolvers} from '~server/graphql/resolvers/clientResolver'
+import { connectDatabase } from '~server/database'
+import {schema} from '~lib/schema'
 
 const { PORT = '3000', NODE_ENV } = process.env
 const port = parseInt(PORT, 10) || 3000
@@ -23,7 +27,11 @@ const handle = nextApp.getRequestHandler()
 // if you want to use nextRoutes
 // const handle = routes.getRequestHandler(nextApp)
 
-nextApp.prepare().then(() => {
+const playground = {
+  endpoint: `http://localhost:3000/graphql`,
+}
+
+nextApp.prepare().then( async () => {
   const server = express()
 
   //security
@@ -36,6 +44,18 @@ nextApp.prepare().then(() => {
   server.use(compression())
   
   //start apollo server
+  
+  const apollo = new ApolloServer({
+    typeDefs,
+    resolvers,
+    schema,
+    playground,
+    }
+  
+  )
+  
+
+
   apollo.applyMiddleware({ app: server })
 
   server.get('*', (req, res) => handle(req, res))
