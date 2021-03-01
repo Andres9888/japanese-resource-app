@@ -68,11 +68,16 @@ export default function Home(){
     await incrementCount({ variables: { id } });
     refetch();
   };
-  
-  
+  console.log(data)
+  if(loading){
+    return <h1>loading</h1>
+  }
+  if(error){
+    return <h1>error</h1>
+  }
    //const sortedData = data.listings.sort(function (a, b) {
  //   return b.count - a.count
- // })
+ //})
   return (
     <div>
       <Head>

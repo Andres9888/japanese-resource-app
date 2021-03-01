@@ -20,8 +20,9 @@ export const resolvers = {
   },
   // Mutation
   Mutation: {
-    increment: async (_root: undefined, { id }: { id: string }, { db }) => {
-     return await db.listings.updateOne({  _id: new ObjectId(id) },
+    increment: async (_root: undefined, { id }: { id: string }) => {
+      const collection = await getCollection();
+      return await collection.listings.updateOne({  _id: new ObjectId(id) },
        {$inc: { count: 1 } })
     
   }
