@@ -68,22 +68,21 @@ export default function Home () {
   const handleChange = event => {
     setSearchTerm(event.target.value)
   }
-  let sortedData = listings.slice().sort(function (a, b) {
-    return b.count - a.count
-  })
-  console.log(sortedData)
+   let sortedData = listings.slice().sort(function (a, b) {
+     return b.count - a.count
+   })
+
   React.useEffect(() => {
     const results = sortedData.filter(
       item =>
         item.title.toLowerCase().includes(searchTerm) ||
-        item.description.toLowerCase().includes(searchTerm) 
-        // need to get tags working to be case insensitve
-        //|| item.tags.includes(searchTerm)
+        item.description.toLowerCase().includes(searchTerm)
+      // need to get tags working to be case insensitve
+      //|| item.tags.includes(searchTerm)
     )
     setSearchResults(results)
-  }, [searchTerm])
+  }, [searchTerm, listings])
 
-  
   const handleIncrementCount = async (id: string) => {
     await incrementCount({ variables: { id } })
     refetch()
