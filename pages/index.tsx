@@ -3,11 +3,8 @@ import Head from 'next/head'
 import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import Nav from '~views/components/Nav'
-import jpresources from 'data/jpresources.json'
 import { initializeApollo } from '~lib/apolloClient'
 import styled from 'styled-components'
-//import ApolloClient from 'apollo-client'
-import { InMemoryCache } from 'apollo-cache-inmemory'
 
 const LISTINGS = gql`
   query getResources {
@@ -22,7 +19,6 @@ const LISTINGS = gql`
     }
   }
 `
-
 
 const INCREMENT_COUNT = gql`
   mutation incrementCount($id: ID!) {
@@ -59,25 +55,46 @@ const TableDataDescription = styled.td`
   align-self: center;
 `
 
-export default function Home(){
-  const { data, loading, error, refetch } = useQuery<ListingsData>(LISTINGS);
-  const [
-    incrementCount
-  ] = useMutation(INCREMENT_COUNT);
+export default function Home () {
+  const {
+    data: { listings },
+    loading,
+    error,
+    refetch,
+  } = useQuery(LISTINGS)
+  const [incrementCount] = useMutation(INCREMENT_COUNT)
+  const [searchTerm, setSearchTerm] = React.useState('')
+  const [searchResults, setSearchResults] = React.useState([])
+  const handleChange = event => {
+    setSearchTerm(event.target.value)
+  }
+  let sortedData = listings.slice().sort(function (a, b) {
+    return b.count - a.count
+  })
+  console.log(sortedData)
+  React.useEffect(() => {
+    const results = sortedData.filter(
+      item =>
+        item.title.toLowerCase().includes(searchTerm) ||
+        item.description.toLowerCase().includes(searchTerm) ||
+        item.tags.includes(searchTerm)
+    )
+    setSearchResults(results)
+  }, [searchTerm])
+
+  
   const handleIncrementCount = async (id: string) => {
-    await incrementCount({ variables: { id } });
-    refetch();
-  };
-  console.log(data)
-  if(loading){
+    await incrementCount({ variables: { id } })
+    refetch()
+  }
+
+  if (loading) {
     return <h1>loading</h1>
   }
-  if(error){
+  if (error) {
     return <h1>error</h1>
   }
-   //const sortedData = data.listings.sort(function (a, b) {
- //   return b.count - a.count
- //})
+
   return (
     <div>
       <Head>
@@ -102,10 +119,15 @@ export default function Home(){
       <Nav />
       <div className='container'>
         <h1>Resources for Studying Japanese</h1>
+        <input
+          type='text'
+          placeholder='Search'
+          value={searchTerm}
+          onChange={handleChange}
+        />
         <table className='table is-fullwidth is-hoverable'>
           <tbody>
-            {data.listings.map((resource, index) =>
-              (
+            {sortedData.map((resource, _index) => (
               <TableRow key={resource.id}>
                 <TableData>
                   <img src={resource.image} alt='' />
@@ -116,21 +138,23 @@ export default function Home(){
                 <TableDataDescription>
                   {resource.description}
                 </TableDataDescription>
-                
+
                 <TableData>
                   <div className='field is-grouped is-grouped-multiline'>
-                  {resource.tags.map((tag, index) => (
-                    <div className='control'>
-                      <div className='tags has-addons'>
-                        <a className='tag is-link'>{tag}</a>
+                    {resource.tags.map((tag, index) => (
+                      <div className='control'>
+                        <div className='tags has-addons'>
+                          <a className='tag is-link'>{tag}</a>
+                        </div>
                       </div>
-                  </div>))}
-
+                    ))}
                   </div>
                 </TableData>
                 <TableData>
-                  👍 
-                  <h3 onClick={() => handleIncrementCount(resource.id)}>{resource.count}</h3>
+                  👍
+                  <h3 onClick={() => handleIncrementCount(resource.id)}>
+                    {resource.count}
+                  </h3>
                 </TableData>
               </TableRow>
             ))}
@@ -142,28 +166,25 @@ export default function Home(){
   )
 }
 
-
-export async function getStaticProps() {
+export async function getStaticProps () {
   const apolloClient = initializeApollo()
 
   await apolloClient.query({
     query: gql`
-     query getResources {
-    listings {
-      id
-      title
-      description
-      image
-      url
-      tags
-      count
-    }
-  }
-    `
-  });
-  console.log(apolloClient.cache)
+      query getResources {
+        listings {
+          id
+          title
+          description
+          image
+          url
+          tags
+          count
+        }
+      }
+    `,
+  })
   return {
-    props: {initialApolloState: apolloClient.cache.extract(),
-    },
+    props: { initialApolloState: apolloClient.cache.extract() },
   }
 }

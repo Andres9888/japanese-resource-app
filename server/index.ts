@@ -13,7 +13,6 @@ import compression from 'compression'
 import { ApolloServer } from 'apollo-server-express'
 import {typeDefs} from '~server/graphql/types/clientType'
 import {resolvers} from '~server/graphql/resolvers/clientResolver'
-import { connectDatabase } from '~server/database'
 import {schema} from '~lib/schema'
 
 const { PORT = '3000', NODE_ENV } = process.env

@@ -65,6 +65,7 @@
     "react": "16.10.2",
     "react-bulma-components": "^3.4.0",
     "react-dom": "16.10.2",
+    "react-table": "^7.6.3",
     "reactbulma": "^3.0.4",
     "sakura-js": "^1.1.1",
     "styled-components": "^4.4.1",

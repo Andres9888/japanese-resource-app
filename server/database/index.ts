@@ -7,9 +7,6 @@ const user = process.env.USER;
 const cluster = process.env.CLUSTER;
 const dbname = process.env.DBNAME
 
-console.log(USERPASSWORD, "userpassword in console")
-console.log(typeof USERPASSWORD, "userpassword in console")
-
 
 const url = `mongodb+srv://${user}:${USERPASSWORD}@${cluster}/${dbname}?retryWrites=true&w=majority`;
 
