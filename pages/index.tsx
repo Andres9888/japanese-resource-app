@@ -76,8 +76,9 @@ export default function Home () {
     const results = sortedData.filter(
       item =>
         item.title.toLowerCase().includes(searchTerm) ||
-        item.description.toLowerCase().includes(searchTerm) ||
-        item.tags.includes(searchTerm)
+        item.description.toLowerCase().includes(searchTerm) 
+        // need to get tags working to be case insensitve
+        //|| item.tags.includes(searchTerm)
     )
     setSearchResults(results)
   }, [searchTerm])
@@ -127,7 +128,7 @@ export default function Home () {
         />
         <table className='table is-fullwidth is-hoverable'>
           <tbody>
-            {sortedData.map((resource, _index) => (
+            {searchResults.map((resource, _index) => (
               <TableRow key={resource.id}>
                 <TableData>
                   <img src={resource.image} alt='' />
@@ -158,7 +159,6 @@ export default function Home () {
                 </TableData>
               </TableRow>
             ))}
-            <h1>Grammar</h1>
           </tbody>
         </table>
       </div>
