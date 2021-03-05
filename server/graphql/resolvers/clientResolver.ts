@@ -52,7 +52,7 @@ const logInViaGoogle = async (
     throw new Error("Google login error");
   }
   const db = await getDb();
-  const updateRes = await db.listings.findOneAndUpdate(
+  const updateRes = await db.users.findOneAndUpdate(
     { _id: userId },
     {
       $set: {
@@ -68,7 +68,7 @@ const logInViaGoogle = async (
   let viewer = updateRes.value;
 
   if (!viewer) {
-    const insertResult = await db.listings.insertOne({
+    const insertResult = await db.users.insertOne({
       _id: userId,
       token,
       name: userName,

@@ -18,6 +18,7 @@ export const connectDatabase = async () => {
   const db = client.db(dbname);
 
   return {
-    listings: db.collection("japanese-resources-collection")
+    listings: db.collection("japanese-resources-collection"),
+    users: db.collection('users')
   };
 };
