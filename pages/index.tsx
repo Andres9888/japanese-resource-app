@@ -5,6 +5,8 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 import Nav from '~views/components/Nav'
 import { initializeApollo } from '~lib/apolloClient'
 import styled from 'styled-components'
+//import Image from 'next/image'
+
 
 const LISTINGS = gql`
   query getResources {
@@ -19,6 +21,19 @@ const LISTINGS = gql`
     }
   }
 `
+
+const LOG_IN = gql`
+  mutation LogIn($input: LogInInput) {
+    logIn(input: $input) {
+      id
+      token
+      avatar
+      hasWallet
+      didRequest
+    }
+  }
+`;
+
 
 const INCREMENT_COUNT = gql`
   mutation incrementCount($id: ID!) {
@@ -36,11 +51,18 @@ const TableRow = styled.tr`
 
 const TableData = styled.td`
   display: flex;
+  flex-direction: column;
   border: none !important;
   font-size: 48px;
   font-weight: 700;
   align-self: center;
   font-family: 'Montserrat', sans-serif;
+  line-height: 1.5715;
+  
+    max-width: 364px;
+    overflow-wrap: break-word;
+
+  a{text-align:center;}
   img {
     max-width: 233px;
     border-radius: 6px;
@@ -49,28 +71,36 @@ const TableData = styled.td`
 const TableDataDescription = styled.td`
   border: none !important;
   font-family: 'Source Sans Pro', sans-serif;
+  max-width: 364px;
   display: flex;
+  
+line-height: 1.5715;
+  text-align:center;
+  flex-direction: column;
   font-size: 21px;
   font-weight: 400;
   align-self: center;
+  a{text-align:center;}
 `
 
-export default function Home () {
+export default function Home() {
   const {
     data: { listings },
     loading,
     error,
     refetch,
   } = useQuery(LISTINGS)
+
   const [incrementCount] = useMutation(INCREMENT_COUNT)
   const [searchTerm, setSearchTerm] = React.useState('')
   const [searchResults, setSearchResults] = React.useState([])
+
   const handleChange = event => {
     setSearchTerm(event.target.value)
   }
-   let sortedData = listings.slice().sort(function (a, b) {
-     return b.count - a.count
-   })
+  let sortedData = listings.slice().sort(function (a, b) {
+    return b.count - a.count
+  })
 
   React.useEffect(() => {
     const results = sortedData.filter(
@@ -165,7 +195,7 @@ export default function Home () {
   )
 }
 
-export async function getStaticProps () {
+export async function getStaticProps() {
   const apolloClient = initializeApollo()
 
   await apolloClient.query({

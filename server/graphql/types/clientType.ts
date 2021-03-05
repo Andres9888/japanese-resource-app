@@ -2,28 +2,38 @@
 import { gql } from '@apollo/client'
 
 export const typeDefs = gql`
-type Listing {
+  type Listing {
     id: ID!
     image: String!
     url: String!
     title: String!
     description: String!
-    tags:[String!]!
+    tags: [String!]!
     count: Int!
   }
 
-  type Query {
-    listings: [Listing!]!
+  type Viewer{
+    id: ID
+    token: String
+    avatar: String
+    hasWallet: Boolean
+    didRequest: Boolean!
+  }
+
+  input LogInInput {
+    code: String!
   }
   type CountResult {
-  acknowledged: Boolean
+    acknowledged: Boolean
   }
- type Mutation {
+  type Query {
+    listings: [Listing!]!
+    authUrl: String!
+  }
+
+  type Mutation {
     increment(id: ID!): CountResult
+    logIn(input: LogInInput): Viewer!
+    logOut: Viewer!
   }
 `
-
-
-
-  
-  
