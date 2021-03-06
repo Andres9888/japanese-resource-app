@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { useApollo } from '~lib/apolloClient'
 import '~styles/main.scss'
-import { Viewer } from '~@types/globalTypes.d.ts'
+import { Viewer } from '~@types/globalTypes'
 
 const initialViewer: Viewer = {
   id: null,

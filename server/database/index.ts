@@ -3,7 +3,7 @@ import USERPASSWORD from "./hidden"
 // Note: Need to add appropriate credentials here to make the connection
 // Note #2: Database credentials should never be committed to source code!
 const user = process.env.USER;
-//const userPassword = process.env.USERPASSWORD;
+const userPassword = process.env.USERPASSWORD;
 const cluster = process.env.CLUSTER;
 const dbname = process.env.DBNAME
 
