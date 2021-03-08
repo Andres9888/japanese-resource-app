@@ -8,9 +8,12 @@ import LogIn from '~views/ui/LogIn'
 
 
 
-function loginPage({setViewer}){
+function loginPage({setViewer,viewer}){
   return (
+    <div>
+    <Nav viewer={viewer}/>
     <LogIn setViewer={setViewer}/>
+    </div>
   )
 }
 

@@ -2,13 +2,19 @@ import React from 'react'
 import Link from 'next/link'
 import styles from './nav.module.scss'
 
-const Nav = () => (
+const Nav = ({viewer}) =>(
   <nav>
     <ul>
       <li>
         <Link href="/">
           <a>Home</a>
         </Link>
+      </li>
+      <li>
+        <Link href="/login">
+          <a>Login Page</a>
+        </Link>
+        {if(viewer)<h1>viwer here</h1>}
       </li>
     </ul>
 
