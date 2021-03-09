@@ -14,7 +14,9 @@ const Nav = ({viewer}) =>(
         <Link href="/login">
           <a>Login Page</a>
         </Link>
-        {if(viewer)<h1>viwer here</h1>}
+      </li>
+      <li>
+        <img src={viewer ? viewer.avatar : ""} alt=""/>
       </li>
     </ul>
 

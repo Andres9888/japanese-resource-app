@@ -2,7 +2,6 @@ import React from 'react'
 import Head from 'next/head'
 import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@apollo/react-hooks'
-import Nav from '~views/components/Nav'
 import { initializeApollo } from '~lib/apolloClient'
 import styled from 'styled-components'
 //import Image from 'next/image'
@@ -145,8 +144,7 @@ export default function Home() {
           rel='stylesheet'
         />
       </Head>
-
-      <Nav />
+      
       <div className='container'>
         <h1>Resources for Studying Japanese</h1>
         <input
