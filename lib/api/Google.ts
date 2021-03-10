@@ -1,9 +1,9 @@
 import { google } from 'googleapis'
-import {hidden} from './hidden'
+//import {hidden} from './hidden'
 const auth = new google.auth.OAuth2(
-  hidden.G_CLIENT_ID,
-  hidden.G_CLIENT_SECRET,
-  hidden.PUBLIC_URL
+  process.env.G_CLIENT_ID,
+  process.env.G_CLIENT_SECRET,
+  process.env.PUBLIC_URL
 )
 
 export const Google = {
