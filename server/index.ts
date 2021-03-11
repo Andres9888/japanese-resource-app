@@ -4,16 +4,16 @@ require('dotenv').config()
 // const routes = require('~server/core/nextRoutes')
 
 import express from 'express'
+import cookieParser from "cookie-parser";
 import next from 'next'
 import morgan from 'morgan'
 import helmet from 'helmet'
 import compression from 'compression'
 
-
 import { ApolloServer } from 'apollo-server-express'
-import {typeDefs} from '~server/graphql/types/clientType'
-import {resolvers} from '~server/graphql/resolvers/clientResolver'
-import {schema} from '~lib/schema'
+import { typeDefs } from '~server/graphql/types/clientType'
+import { resolvers } from '~server/graphql/resolvers/clientResolver'
+import { schema } from '~lib/schema'
 
 const { PORT = '3000', NODE_ENV } = process.env
 const port = parseInt(PORT, 10) || 3000
@@ -30,7 +30,7 @@ const playground = {
   endpoint: `http://localhost:3000/graphql`,
 }
 
-nextApp.prepare().then( async () => {
+nextApp.prepare().then(async () => {
   const server = express()
 
   //security
@@ -41,19 +41,18 @@ nextApp.prepare().then( async () => {
     morgan(':method :url :status :res[content-length] - :response-time ms')
   )
   server.use(compression())
-  
+
+  server.use(cookieParser(process.env.SECRET))
+
   //start apollo server
-  
+
   const apollo = new ApolloServer({
     typeDefs,
     resolvers,
+    content: ({ req, res }) => ({ req, res }),
     schema,
     playground,
-    }
-  
-  )
-  
-
+  })
 
   apollo.applyMiddleware({ app: server })
 

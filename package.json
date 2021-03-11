@@ -44,6 +44,7 @@
     "autoprefixer": "^9.8.6",
     "babel-register": "^6.26.0",
     "compression": "^1.7.4",
+    "cookie-parser": "^1.4.5",
     "cross-env": "^7.0.3",
     "crypto": "^1.0.1",
     "dotenv-webpack": "^1.8.0",
@@ -72,6 +73,7 @@
     "typescript": "^3.7.2"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.2",
     "@types/dotenv": "^8.2.0",
     "@types/enzyme": "^3.10.8",
     "@types/express": "^4.17.11",
