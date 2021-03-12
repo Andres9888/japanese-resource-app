@@ -4,6 +4,7 @@ require('dotenv').config()
 // const routes = require('~server/core/nextRoutes')
 
 import express from 'express'
+
 import cookieParser from "cookie-parser";
 import next from 'next'
 import morgan from 'morgan'
@@ -45,16 +46,22 @@ nextApp.prepare().then(async () => {
   server.use(cookieParser(process.env.SECRET))
 
   //start apollo server
+ 
+ 
+ 
+
+
+
 
   const apollo = new ApolloServer({
     typeDefs,
     resolvers,
-    content: ({ req, res }) => ({ req, res }),
+    content: async ({ req, res }) => ({ req, res }),
     schema,
     playground,
   })
 
-  apollo.applyMiddleware({ app: server })
+  apollo.applyMiddleware({ app: server})
 
   server.get('*', (req, res) => handle(req, res))
   // express().use(handler).listen(3000) //routes handle way
