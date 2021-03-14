@@ -94,7 +94,8 @@ const logInViaGoogle = async (code: string, token: string, res: Response) => {
 }
 
 const logInViaCookie = async (token: string, req: Request, res: Response) => {
-  const updateRes = await getDb().users.findOneAndUpdate(
+  const db = await getDb()
+  const updateRes = await db.users.findOneAndUpdate(
     { _id: req.signedCookies.viewer },
     { $set: { token } },
     { returnOriginal: false }
