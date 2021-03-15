@@ -31,7 +31,7 @@ const playground = {
   endpoint: `http://localhost:3000/graphql`,
 }
 
-nextApp.prepare().then(async () => {
+nextApp.prepare().then(() => {
   const server = express()
 
   //security
@@ -43,15 +43,10 @@ nextApp.prepare().then(async () => {
   )
   server.use(compression())
 
-  server.use(cookieParser(process.env.SECRET))
+  server.use(cookieParser("this-is-a-secret"))
 
   //start apollo server
  
- 
- 
-
-
-
 
   const apollo = new ApolloServer({
     typeDefs,
