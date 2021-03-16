@@ -82,7 +82,7 @@ line-height: 1.5715;
   a{text-align:center;}
 `
 
-export default function Home() {
+export default function Home({viewer}) {
   const {
     data: { listings },
     loading,
@@ -113,8 +113,9 @@ export default function Home() {
   }, [searchTerm, listings])
 
   const handleIncrementCount = async (id: string) => {
-    await incrementCount({ variables: { id } })
-    refetch()
+    if(viewer.id){await incrementCount({ variables: { id } })
+    refetch()}
+    else{alert("most login to vote")}
   }
 
   if (loading) {

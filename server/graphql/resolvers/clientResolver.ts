@@ -85,27 +85,27 @@ const logInViaGoogle = async (code: string, token: string, res: Response) => {
     viewer = insertResult.ops[0]
   }
 
-  res.cookie('viewer', userId, {
-    ...cookieOptions,
-    maxAge: 365 * 24 * 60 * 60 * 1000,
-  })
+  // res.cookie('viewer', userId, {
+  //   ...cookieOptions,
+  //   maxAge: 365 * 24 * 60 * 60 * 1000,
+  // })
 
   return viewer
 }
 
-const logInViaCookie = async (token: string, req: Request, res: Response) => {
-  const db = await getDb()
-  const updateRes = await db.users.findOneAndUpdate(
-    { _id: req.signedCookies.viewer },
-    { $set: { token } },
-    { returnOriginal: false }
-  )
-  let viewer = updateRes.value
-  if (!viewer) {
-    res.clearCookie('viewer', cookieOptions)
-  }
-  return viewer
-}
+// const logInViaCookie = async (token: string, req: Request, res: Response) => {
+//   const db = await getDb()
+//   const updateRes = await db.users.findOneAndUpdate(
+//     { _id: req.signedCookies.viewer },
+//     { $set: { token } },
+//     { returnOriginal: false }
+//   )
+//   let viewer = updateRes.value
+//   if (!viewer) {
+//     res.clearCookie('viewer', cookieOptions)
+//   }
+//   return viewer
+// }
 
 export const resolvers = {
   // Query
@@ -138,7 +138,7 @@ export const resolvers = {
 
         const viewer: User | undefined = code
           ? await logInViaGoogle(code, token)
-          : await logInViaCookie(code, token, req, res)
+          : undefined
 
         if (!viewer) {
           return { didRequest: true }
