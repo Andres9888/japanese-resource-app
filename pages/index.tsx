@@ -6,7 +6,6 @@ import { initializeApollo } from '~lib/apolloClient'
 import styled from 'styled-components'
 //import Image from 'next/image'
 
-
 const LISTINGS = gql`
   query getResources {
     listings {
@@ -31,8 +30,7 @@ const LOG_IN = gql`
       didRequest
     }
   }
-`;
-
+`
 
 const INCREMENT_COUNT = gql`
   mutation incrementCount($id: ID!) {
@@ -57,11 +55,13 @@ const TableData = styled.td`
   align-self: center;
   font-family: 'Montserrat', sans-serif;
   line-height: 1.5715;
-  
-    max-width: 364px;
-    overflow-wrap: break-word;
 
-  a{text-align:center;}
+  max-width: 364px;
+  overflow-wrap: break-word;
+
+  a {
+    text-align: center;
+  }
   img {
     max-width: 233px;
     border-radius: 6px;
@@ -72,17 +72,19 @@ const TableDataDescription = styled.td`
   font-family: 'Source Sans Pro', sans-serif;
   max-width: 364px;
   display: flex;
-  
-line-height: 1.5715;
-  text-align:center;
+
+  line-height: 1.5715;
+  text-align: center;
   flex-direction: column;
   font-size: 21px;
   font-weight: 400;
   align-self: center;
-  a{text-align:center;}
+  a {
+    text-align: center;
+  }
 `
 
-export default function Home({viewer}) {
+export default function Home ({ viewer }) {
   const {
     data: { listings },
     loading,
@@ -113,9 +115,12 @@ export default function Home({viewer}) {
   }, [searchTerm, listings])
 
   const handleIncrementCount = async (id: string) => {
-    if(viewer.id){await incrementCount({ variables: { id } })
-    refetch()}
-    else{alert("most login to vote")}
+    if (viewer.id) {
+      await incrementCount({ variables: { id } })
+      refetch()
+    } else {
+      alert('most login to vote')
+    }
   }
 
   if (loading) {
@@ -145,7 +150,7 @@ export default function Home({viewer}) {
           rel='stylesheet'
         />
       </Head>
-      
+
       <div className='container'>
         <h1>Resources for Studying Japanese</h1>
         <input
@@ -194,7 +199,7 @@ export default function Home({viewer}) {
   )
 }
 
-export async function getStaticProps() {
+export async function getStaticProps () {
   const apolloClient = initializeApollo()
 
   await apolloClient.query({

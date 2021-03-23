@@ -5,12 +5,12 @@ import { Google } from '~lib/api'
 import crypto from 'crypto'
 import { Request, Response } from 'express'
 
-const cookieOptions = {
-  httpOnly: true,
-  sameSite: true,
-  signed: true,
-  secure: process.env.NODE_ENV === 'development' ? false : true,
-}
+// const cookieOptions = {
+//   httpOnly: true,
+//   sameSite: true,
+//   signed: true,
+//   secure: process.env.NODE_ENV === 'development' ? false : true,
+// }
 
 const getDb = async () => {
   const db = await connectDatabase()
@@ -77,9 +77,7 @@ const logInViaGoogle = async (code: string, token: string, res: Response) => {
       name: userName,
       avatar: userAvatar,
       contact: userEmail,
-      income: 0,
-      bookings: [],
-      listings: [],
+      resources: [],
     })
 
     viewer = insertResult.ops[0]
@@ -130,6 +128,13 @@ export const resolvers = {
         { _id: new ObjectId(id) },
         { $inc: { count: 1 } }
       )
+    },
+    setUserVote: async (_root: undefined, { id }) => {
+      const db = await getDb()
+      return await db.users.updateOne(
+        { _id : id},
+        { $push: { resources: "setUserVote"} }
+    )
     },
     logIn: async (_root: undefined, { input }) => {
       try {

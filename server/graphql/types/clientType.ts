@@ -20,15 +20,6 @@ export const typeDefs = gql`
     didRequest: Boolean!
   }
 
-  type User {
-    id: ID!
-    name: String!
-    avatar: String!
-    contact: String!
-    hasWallet: Boolean!
-    income: Int
-  }
-
   input LogInInput {
     code: String!
   }
@@ -38,11 +29,10 @@ export const typeDefs = gql`
   type Query {
     listings: [Listing!]!
     authUrl: String!
-    user: String!
   }
-
   type Mutation {
     increment(id: ID!): CountResult
+    setUserVote(id: ID!): CountResult
     logIn(input: LogInInput): Viewer!
     logOut: Viewer!
   }
