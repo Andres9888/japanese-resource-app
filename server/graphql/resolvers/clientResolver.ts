@@ -122,20 +122,24 @@ export const resolvers = {
   },
   // Mutation
   Mutation: {
-    increment: async (_root: undefined, { id }: { id: string }) => {
+    increment: async (_root: undefined, { id, viewer, resource }: { id: string }) => {
       const db = await getDb()
       return await db.listings.updateOne(
         { _id: new ObjectId(id) },
         { $inc: { count: 1 } }
-      )
-    },
-    setUserVote: async (_root: undefined, { id }) => {
-      const db = await getDb()
-      return await db.users.updateOne(
-        { _id : id},
-        { $push: { resources: "setUserVote"} }
+      ),
+      db.users.updateOne(
+        { _id : viewer},
+        { $push: { resources: resource} }
     )
     },
+    // setUserVote: async (_root: undefined, { viewer, resource }) => {
+    //   const db = await getDb()
+    //   return await db.users.updateOne(
+    //     { _id : viewer},
+    //     { $push: { resources: resource} }
+    // )
+    // },
     logIn: async (_root: undefined, { input }) => {
       try {
         const code = input ? input.code : null

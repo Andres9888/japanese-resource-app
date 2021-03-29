@@ -20,25 +20,20 @@ const LISTINGS = gql`
   }
 `
 
-const LOG_IN = gql`
-  mutation LogIn($input: LogInInput) {
-    logIn(input: $input) {
-      id
-      token
-      avatar
-      hasWallet
-      didRequest
-    }
-  }
-`
-
 const INCREMENT_COUNT = gql`
-  mutation incrementCount($id: ID!) {
-    increment(id: $id) {
+  mutation incrementCount($id: ID!, $viewer: ID!, $resource: String!) {
+    increment(id: $id, viewer: $viewer, resource: $resource) {
       acknowledged
     }
   }
 `
+// const SET_USER_VOTE = gql`
+//   mutation setUserVote($viewer: ID! ,$resource: resourceInput) {
+//     setUserVote(viewer: $viewer , resource: $resource) {
+//       acknowledged
+//     }
+//   }
+// `
 
 const TableRow = styled.tr`
   display: flex;
@@ -93,6 +88,7 @@ export default function Home ({ viewer }) {
   } = useQuery(LISTINGS)
 
   const [incrementCount] = useMutation(INCREMENT_COUNT)
+  //const [setUserData] = useMutation(SET_USER_VOTE)
   const [searchTerm, setSearchTerm] = React.useState('')
   const [searchResults, setSearchResults] = React.useState([])
 
@@ -114,9 +110,16 @@ export default function Home ({ viewer }) {
     setSearchResults(results)
   }, [searchTerm, listings])
 
-  const handleIncrementCount = async (id: string) => {
+  const handleIncrementCount = async resource => {
     if (viewer.id) {
-      await incrementCount({ variables: { id } })
+      await incrementCount({
+        variables: {
+          id: resource.id,
+          viewer: viewer.id,
+          resource: resource.id
+        },
+      })
+      // await setUserData({variables :{viewer: viewer.id, resource: resource.title}})
       refetch()
     } else {
       alert('most login to vote')
@@ -186,7 +189,7 @@ export default function Home ({ viewer }) {
                 </TableData>
                 <TableData>
                   👍
-                  <h3 onClick={() => handleIncrementCount(resource.id)}>
+                  <h3 onClick={() => handleIncrementCount(resource)}>
                     {resource.count}
                   </h3>
                 </TableData>

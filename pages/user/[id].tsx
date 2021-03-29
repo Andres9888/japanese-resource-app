@@ -4,8 +4,6 @@ import gql from 'graphql-tag'
 import styled from 'styled-components'
 
 
-
-
 function userPage({}){
   return (
     <div>

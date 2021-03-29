@@ -23,6 +23,9 @@ export const typeDefs = gql`
   input LogInInput {
     code: String!
   }
+  input resourceInput {
+    resource: String!
+  }
   type CountResult {
     acknowledged: Boolean
   }
@@ -31,8 +34,7 @@ export const typeDefs = gql`
     authUrl: String!
   }
   type Mutation {
-    increment(id: ID!): CountResult
-    setUserVote(id: ID!): CountResult
+    increment(id: ID!,viewer: ID!, resource: String!): CountResult
     logIn(input: LogInInput): Viewer!
     logOut: Viewer!
   }
