@@ -112,6 +112,10 @@ export const resolvers = {
       const db = await getDb()
       return await db.listings.find({}).toArray()
     },
+    checkUserVote: async (_root: undefined, { id, resource }) => {
+      const db = await getDb()
+      return await db.users.find({ _id: id, resources: resource }).toArray()
+    },
     authUrl: (): string => {
       try {
         return Google.authUrl
@@ -122,16 +126,18 @@ export const resolvers = {
   },
   // Mutation
   Mutation: {
-    increment: async (_root: undefined, { id, viewer, resource }: { id: string }) => {
+    increment: async (
+      _root: undefined,
+      { id, viewer, resource }: { id: string }
+    ) => {
       const db = await getDb()
-      return await db.listings.updateOne(
-        { _id: new ObjectId(id) },
-        { $inc: { count: 1 } }
-      ),
-      db.users.updateOne(
-        { _id : viewer},
-        { $push: { resources: resource} }
-    )
+      return (
+        await db.listings.updateOne(
+          { _id: new ObjectId(id) },
+          { $inc: { count: 1 } }
+        ),
+        db.users.updateOne({ _id: viewer }, { $push: { resources: resource } })
+      )
     },
     // setUserVote: async (_root: undefined, { viewer, resource }) => {
     //   const db = await getDb()

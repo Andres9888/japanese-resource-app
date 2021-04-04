@@ -12,6 +12,13 @@ export const typeDefs = gql`
     count: Int!
   }
 
+  type User {
+    id: ID
+    token: String
+    avatar: String
+    resources: [String!]!
+  }
+
   type Viewer{
     id: ID
     token: String
@@ -32,6 +39,7 @@ export const typeDefs = gql`
   type Query {
     listings: [Listing!]!
     authUrl: String!
+    checkUserVote(id: ID!, resource: String!): [User!]!
   }
   type Mutation {
     increment(id: ID!,viewer: ID!, resource: String!): CountResult

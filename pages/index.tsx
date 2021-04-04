@@ -1,7 +1,7 @@
 import React from 'react'
 import Head from 'next/head'
 import gql from 'graphql-tag'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery, useMutation, useLazyQuery  } from '@apollo/react-hooks'
 import { initializeApollo } from '~lib/apolloClient'
 import styled from 'styled-components'
 //import Image from 'next/image'
@@ -16,6 +16,14 @@ const LISTINGS = gql`
       url
       tags
       count
+    }
+  }
+`
+
+const CHECK_USER_VOTE = gql`
+  query checkUserVoteID($id: ID!, $resource: String!) {
+    checkUserVote(id: $id, resource: $resource) {
+      resources
     }
   }
 `
@@ -87,6 +95,11 @@ export default function Home ({ viewer }) {
     refetch,
   } = useQuery(LISTINGS)
 
+  const [
+    getUserVotes, 
+    { loading: loadingUser, data: userVotes }
+   ] = useLazyQuery(CHECK_USER_VOTE)
+
   const [incrementCount] = useMutation(INCREMENT_COUNT)
   //const [setUserData] = useMutation(SET_USER_VOTE)
   const [searchTerm, setSearchTerm] = React.useState('')
@@ -111,20 +124,29 @@ export default function Home ({ viewer }) {
   }, [searchTerm, listings])
 
   const handleIncrementCount = async resource => {
-    if (viewer.id) {
-      await incrementCount({
-        variables: {
-          id: resource.id,
-          viewer: viewer.id,
-          resource: resource.id
-        },
-      })
+    //if (viewer.id) {
+      getUserVotes(
+        {
+         variables: {
+            id: "112016378414675480907",
+           resource: "6033fcb7913fe2f540b57a12"
+         },
+        }
+       )
+      // await incrementCount({
+      //   variables: {
+      //     id: resource.id,
+      //     viewer: viewer.id,
+      //     resource: resource.id,
+      //   },
+      // })
       // await setUserData({variables :{viewer: viewer.id, resource: resource.title}})
-      refetch()
-    } else {
-      alert('most login to vote')
-    }
-  }
+      //refetch()
+    } 
+    // else {
+    //   alert('most login to vote')
+    // }
+  //}
 
   if (loading) {
     return <h1>loading</h1>
