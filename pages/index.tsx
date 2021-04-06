@@ -1,7 +1,7 @@
 import React from 'react'
 import Head from 'next/head'
 import gql from 'graphql-tag'
-import { useQuery, useMutation, useLazyQuery  } from '@apollo/react-hooks'
+import { useQuery, useMutation, useLazyQuery } from '@apollo/react-hooks'
 import { initializeApollo } from '~lib/apolloClient'
 import styled from 'styled-components'
 //import Image from 'next/image'
@@ -96,9 +96,11 @@ export default function Home ({ viewer }) {
   } = useQuery(LISTINGS)
 
   const [
-    getUserVotes, 
-    { loading: loadingUser, data: userVotes }
-   ] = useLazyQuery(CHECK_USER_VOTE)
+    getUserVotes,
+    { loading: loadingUser, data: userVotes },
+  ] = useLazyQuery(CHECK_USER_VOTE, {
+    onCompleted: () => console.log(userVotes),
+  })
 
   const [incrementCount] = useMutation(INCREMENT_COUNT)
   //const [setUserData] = useMutation(SET_USER_VOTE)
@@ -124,29 +126,44 @@ export default function Home ({ viewer }) {
   }, [searchTerm, listings])
 
   const handleIncrementCount = async resource => {
-    //if (viewer.id) {
-      getUserVotes(
-        {
-         variables: {
-            id: "112016378414675480907",
-           resource: "6033fcb7913fe2f540b57a12"
-         },
+    if (viewer.id) {
+      const client = initializeApollo()
+
+      try {
+        const {
+          data: { checkUserVote: voteList },
+        } = await client.query({
+          query: CHECK_USER_VOTE,
+          variables: {
+            id: viewer.id,
+            resource: resource.id,
+          },
+        })
+        console.log(voteList)
+        let didVote
+        if (voteList.length) {
+          didVote = voteList[0].resources.some(item => item === resource.id)
+        } else {
+          didVote = false
         }
-       )
-      // await incrementCount({
-      //   variables: {
-      //     id: resource.id,
-      //     viewer: viewer.id,
-      //     resource: resource.id,
-      //   },
-      // })
-      // await setUserData({variables :{viewer: viewer.id, resource: resource.title}})
-      //refetch()
-    } 
-    // else {
-    //   alert('most login to vote')
-    // }
-  //}
+        console.log(didVote)
+        if(!didVote){
+        await incrementCount({
+          variables: {
+            id: resource.id,
+            viewer: viewer.id,
+            resource: resource.id,
+          },
+        })
+        refetch()}
+        else{
+          alert("already voted on this resource")
+        }
+      } catch {}
+    } else {
+      alert('most login to vote')
+    }
+  }
 
   if (loading) {
     return <h1>loading</h1>
@@ -154,7 +171,6 @@ export default function Home ({ viewer }) {
   if (error) {
     return <h1>error</h1>
   }
-
   return (
     <div>
       <Head>
@@ -175,7 +191,6 @@ export default function Home ({ viewer }) {
           rel='stylesheet'
         />
       </Head>
-
       <div className='container'>
         <h1>Resources for Studying Japanese</h1>
         <input
@@ -200,8 +215,11 @@ export default function Home ({ viewer }) {
 
                 <TableData>
                   <div className='field is-grouped is-grouped-multiline'>
-                    {resource.tags.map((tag, index) => (
-                      <div className='control'>
+                    {resource.tags.map(tag => (
+                      <div
+                        key={`${resource.id + '-' + tag}`}
+                        className='control'
+                      >
                         <div className='tags has-addons'>
                           <a className='tag is-link'>{tag}</a>
                         </div>
@@ -211,7 +229,11 @@ export default function Home ({ viewer }) {
                 </TableData>
                 <TableData>
                   👍
-                  <h3 onClick={() => handleIncrementCount(resource)}>
+                  <h3
+                    onClick={() => {
+                      handleIncrementCount(resource)
+                    }}
+                  >
                     {resource.count}
                   </h3>
                 </TableData>
