@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useState } from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { useApollo } from '~lib/apolloClient'

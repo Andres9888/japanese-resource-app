@@ -5,9 +5,6 @@ require('dotenv').config()
 
 import express from 'express'
 
-import cookieParser from "cookie-parser";
-import cors from "cors";
-
 import next from 'next'
 import morgan from 'morgan'
 import helmet from 'helmet'
@@ -35,8 +32,6 @@ const playground = {
 
 nextApp.prepare().then(() => {
   const server = express()
-  
-  server.use(cookieParser("this-is-a-secret"))
 
   //security
   server.use(helmet())
@@ -50,17 +45,10 @@ nextApp.prepare().then(() => {
 
   //start apollo server
  
-  let corsOptions = {
-    origin: "http://localhost:3000",
-    credentials: true
-  };
-  server.use(cors(corsOptions));
-
 
   const apollo = new ApolloServer({
     typeDefs,
     resolvers,
-    content: async ({ req, res }) => ({ req, res }),
     schema,
     playground,
   })
