@@ -27,7 +27,7 @@ const handle = nextApp.getRequestHandler()
 // const handle = routes.getRequestHandler(nextApp)
 
 const playground = {
-  endpoint: `http://localhost:3000/graphql`,
+  endpoint: `https://japanese-resource-app.vercel.app/graphql`,
 }
 
 nextApp.prepare().then(() => {
