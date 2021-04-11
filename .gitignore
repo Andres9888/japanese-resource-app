@@ -26,3 +26,5 @@ yarn-debug.log*
 yarn-error.log*
 server/database/hidden.ts
 lib/api/hidden.ts
+
+.vercel
