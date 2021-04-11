@@ -53,7 +53,7 @@ nextApp.prepare().then(() => {
     playground,
   })
 
-  apollo.applyMiddleware({ app: server, path: "/graphql", cors: false })
+  apollo.applyMiddleware({ app: server })
 
   server.get('/cookie', (req, res) => {
     res.cookie('cookie-test', "123456")
