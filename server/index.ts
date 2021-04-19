@@ -27,7 +27,7 @@ const handle = nextApp.getRequestHandler()
 // const handle = routes.getRequestHandler(nextApp)
 
 const playground = {
-  endpoint: `https://japanese-resource-app.vercel.app/graphql`,
+  endpoint: `/api/graphql`,
 }
 
 nextApp.prepare().then(() => {
@@ -54,11 +54,7 @@ nextApp.prepare().then(() => {
   })
 
   apollo.applyMiddleware({ app: server })
-
-  server.get('/cookie', (req, res) => {
-    res.cookie('cookie-test', "123456")
-    return handle(req, res)
-  })
+ 
 
   server.get('*', (req, res) => handle(req, res))
   // express().use(handler).listen(3000) //routes handle way

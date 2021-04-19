@@ -17,7 +17,7 @@ function createIsomorphicLink() {
   } else {
     // client
     const { HttpLink } = require("@apollo/client/link/http");
-    return new HttpLink({ uri: "/graphql", credentials: 'include' });
+    return new HttpLink({ uri: "/api/graphql" });
   }
 }
 
