@@ -53,7 +53,7 @@ nextApp.prepare().then(() => {
     playground,
   })
 
-  apollo.applyMiddleware({ app: server })
+  apollo.applyMiddleware({ app: server, path: "/api/graphql" })
  
 
   server.get('*', (req, res) => handle(req, res))
