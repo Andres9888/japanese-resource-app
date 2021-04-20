@@ -17,7 +17,7 @@ function createIsomorphicLink() {
   } else {
     // client
     const { HttpLink } = require("@apollo/client/link/http");
-    return new HttpLink({ uri: "https://japanese-resource-app.vercel.app/api/graphql" });
+    return new HttpLink({ uri: "/api/graphql" });
   }
 }
 
