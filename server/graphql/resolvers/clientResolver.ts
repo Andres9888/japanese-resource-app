@@ -136,7 +136,7 @@ export const resolvers = {
           { _id: new ObjectId(id) },
           { $inc: { count: 1 } }
         ),
-        db.users.updateOne({ _id: viewer }, { $push: { resources: resource } })
+        db.users.updateOne({ _id: viewer }, { $addToSet: { resources: resource } })
       )
     },
     // setUserVote: async (_root: undefined, { viewer, resource }) => {
