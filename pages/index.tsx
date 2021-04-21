@@ -246,6 +246,7 @@ export default function Home ({ viewer }) {
   )
 }
 
+
 export async function getStaticProps () {
   const apolloClient = initializeApollo()
 
@@ -266,5 +267,6 @@ export async function getStaticProps () {
   })
   return {
     props: { initialApolloState: apolloClient.cache.extract() },
+    revalidate: 1, 
   }
 }
