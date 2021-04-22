@@ -4,21 +4,10 @@ import gql from 'graphql-tag'
 import { useQuery, useMutation, useLazyQuery } from '@apollo/react-hooks'
 import { initializeApollo } from '~lib/apolloClient'
 import styled from 'styled-components'
+import {LISTINGS} from '~graphql/queries/queries'
 //import Image from 'next/image'
 
-const LISTINGS = gql`
-  query getResources {
-    listings {
-      id
-      title
-      description
-      image
-      url
-      tags
-      count
-    }
-  }
-`
+
 
 const CHECK_USER_VOTE = gql`
   query checkUserVoteID($id: ID!, $resource: String!) {
@@ -35,13 +24,6 @@ const INCREMENT_COUNT = gql`
     }
   }
 `
-// const SET_USER_VOTE = gql`
-//   mutation setUserVote($viewer: ID! ,$resource: resourceInput) {
-//     setUserVote(viewer: $viewer , resource: $resource) {
-//       acknowledged
-//     }
-//   }
-// `
 
 const TableRow = styled.tr`
   display: flex;
@@ -95,13 +77,7 @@ export default function Home ({ viewer }) {
     refetch,
   } = useQuery(LISTINGS)
 
-  const [
-    getUserVotes,
-    { loading: loadingUser, data: userVotes },
-  ] = useLazyQuery(CHECK_USER_VOTE, {
-    onCompleted: () => console.log(userVotes),
-  })
-
+  
   const [incrementCount] = useMutation(INCREMENT_COUNT)
   //const [setUserData] = useMutation(SET_USER_VOTE)
   const [searchTerm, setSearchTerm] = React.useState('')
@@ -132,6 +108,7 @@ export default function Home ({ viewer }) {
       try {
         const {
           data: { checkUserVote: voteList },
+          refetch: updateVote
         } = await client.query({
           query: CHECK_USER_VOTE,
           variables: {
@@ -139,25 +116,28 @@ export default function Home ({ viewer }) {
             resource: resource.id,
           },
         })
+
         console.log(voteList)
+
         let didVote
         if (voteList.length) {
           didVote = voteList[0].resources.some(item => item === resource.id)
         } else {
           didVote = false
         }
-        console.log(didVote)
-        if(!didVote){
-        await incrementCount({
-          variables: {
-            id: resource.id,
-            viewer: viewer.id,
-            resource: resource.id,
-          },
-        })
-        refetch()}
-        else{
-          alert("already voted on this resource")
+
+
+        if (!didVote) {
+          await incrementCount({
+            variables: {
+              id: resource.id,
+              viewer: viewer.id,
+              resource: resource.id,
+            },
+          })
+          refetch()
+        } else {
+          alert('already voted on this resource')
         }
       } catch {}
     } else {
@@ -246,7 +226,6 @@ export default function Home ({ viewer }) {
   )
 }
 
-
 export async function getStaticProps () {
   const apolloClient = initializeApollo()
 
@@ -267,6 +246,6 @@ export async function getStaticProps () {
   })
   return {
     props: { initialApolloState: apolloClient.cache.extract() },
-    revalidate: 1, 
+    revalidate: 1,
   }
 }
