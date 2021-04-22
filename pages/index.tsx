@@ -1,29 +1,11 @@
 import React from 'react'
 import Head from 'next/head'
-import gql from 'graphql-tag'
-import { useQuery, useMutation, useLazyQuery } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import { initializeApollo } from '~lib/apolloClient'
 import styled from 'styled-components'
-import {LISTINGS} from '~graphql/queries/queries'
+import { LISTINGS, CHECK_USER_VOTE } from '~graphql/queries/queries'
+import { INCREMENT_COUNT } from '~graphql/mutations/mutations'
 //import Image from 'next/image'
-
-
-
-const CHECK_USER_VOTE = gql`
-  query checkUserVoteID($id: ID!, $resource: String!) {
-    checkUserVote(id: $id, resource: $resource) {
-      resources
-    }
-  }
-`
-
-const INCREMENT_COUNT = gql`
-  mutation incrementCount($id: ID!, $viewer: ID!, $resource: String!) {
-    increment(id: $id, viewer: $viewer, resource: $resource) {
-      acknowledged
-    }
-  }
-`
 
 const TableRow = styled.tr`
   display: flex;
@@ -77,9 +59,7 @@ export default function Home ({ viewer }) {
     refetch,
   } = useQuery(LISTINGS)
 
-  
   const [incrementCount] = useMutation(INCREMENT_COUNT)
-  //const [setUserData] = useMutation(SET_USER_VOTE)
   const [searchTerm, setSearchTerm] = React.useState('')
   const [searchResults, setSearchResults] = React.useState([])
 
@@ -107,8 +87,7 @@ export default function Home ({ viewer }) {
 
       try {
         const {
-          data: { checkUserVote: voteList },
-          refetch: updateVote
+          data: { checkUserVote: voteList }
         } = await client.query({
           query: CHECK_USER_VOTE,
           variables: {
@@ -125,7 +104,6 @@ export default function Home ({ viewer }) {
         } else {
           didVote = false
         }
-
 
         if (!didVote) {
           await incrementCount({
@@ -230,19 +208,7 @@ export async function getStaticProps () {
   const apolloClient = initializeApollo()
 
   await apolloClient.query({
-    query: gql`
-      query getResources {
-        listings {
-          id
-          title
-          description
-          image
-          url
-          tags
-          count
-        }
-      }
-    `,
+    query: LISTINGS,
   })
   return {
     props: { initialApolloState: apolloClient.cache.extract() },

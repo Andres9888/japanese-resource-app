@@ -139,13 +139,6 @@ export const resolvers = {
         db.users.updateOne({ _id: viewer }, { $addToSet: { resources: resource } })
       )
     },
-    // setUserVote: async (_root: undefined, { viewer, resource }) => {
-    //   const db = await getDb()
-    //   return await db.users.updateOne(
-    //     { _id : viewer},
-    //     { $push: { resources: resource} }
-    // )
-    // },
     logIn: async (_root: undefined, { input }) => {
       try {
         const code = input ? input.code : null
