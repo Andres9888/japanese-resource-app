@@ -7,7 +7,7 @@ import { Viewer } from '~types/globalTypes'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 import { Card, Layout, Typography } from "antd";
-
+import 'antd/dist/antd.css'
 //import googleLogo from "/images/google_logo.jpg";
 
 const { Content } = Layout;
