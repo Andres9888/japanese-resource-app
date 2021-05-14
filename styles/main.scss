@@ -28,9 +28,9 @@
 }
 .app-header {
   display: flex;
-  background: #fff;
+  background: #fff !important;
   box-shadow: 0 2px 8px #f0f1f2;
-  padding: 0;
+  padding: 0 !important ;
 }
 .app-header__logo-search-section {
   display: flex;
