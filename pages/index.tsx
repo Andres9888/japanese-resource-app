@@ -2,10 +2,12 @@ import React from 'react'
 import Head from 'next/head'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { initializeApollo } from '~lib/apolloClient'
-import styled from 'styled-components'
 import { LISTINGS, CHECK_USER_VOTE } from '~graphql/queries/queries'
 import { INCREMENT_COUNT } from '~graphql/mutations/mutations'
-//import Image from 'next/image'
+import Nav from '~views/components/Nav'
+
+import styled from 'styled-components'
+
 
 const TableRow = styled.tr`
   display: flex;
@@ -60,6 +62,7 @@ export default function Home ({ viewer }) {
   } = useQuery(LISTINGS)
 
   const [incrementCount] = useMutation(INCREMENT_COUNT)
+  
   const [searchTerm, setSearchTerm] = React.useState('')
   const [searchResults, setSearchResults] = React.useState([])
 
@@ -80,6 +83,8 @@ export default function Home ({ viewer }) {
     )
     setSearchResults(results)
   }, [searchTerm, listings])
+
+ 
 
   const handleIncrementCount = async resource => {
     if (viewer.id) {
@@ -149,14 +154,9 @@ export default function Home ({ viewer }) {
           rel='stylesheet'
         />
       </Head>
+      <Nav viewer={viewer} searchTerm={searchTerm} handleChange={handleChange}/>
       <div className='container'>
         <h1>Resources for Studying Japanese</h1>
-        <input
-          type='text'
-          placeholder='Search'
-          value={searchTerm}
-          onChange={handleChange}
-        />
         <table className='table is-fullwidth is-hoverable'>
           <tbody>
             {searchResults.map((resource, _index) => (
