@@ -1,7 +1,7 @@
 import React from 'react'
 import LogIn from '~views/ui/LogIn'
 //import styled from 'styled-components'
-import Nav from '~views/components/Nav'
+import NavBlank from '~views/components/NavBlank'
 
 
 
@@ -10,7 +10,7 @@ import Nav from '~views/components/Nav'
 function loginPage({setViewer,viewer}){
   return (
     <div>
-    <Nav viewer={viewer}/>  
+    <NavBlank viewer={viewer}/>  
 
     <LogIn setViewer={setViewer}/>
     </div>
