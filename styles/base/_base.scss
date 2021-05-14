@@ -11,9 +11,7 @@ body {
   /* prevent abrupt change in smoothing when animations complete (only in Safari) */
   -webkit-backface-visibility: hidden;
   cursor: default;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  max-width: 100vw;
+    max-width: 100vw;
   margin: auto;
 }
 
