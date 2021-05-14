@@ -156,7 +156,6 @@ export default function Home ({ viewer }) {
       </Head>
       <Nav viewer={viewer} searchTerm={searchTerm} handleChange={handleChange}/>
       <div className='container'>
-        <h1>Resources for Studying Japanese</h1>
         <table className='table is-fullwidth is-hoverable'>
           <tbody>
             {searchResults.map((resource, _index) => (
