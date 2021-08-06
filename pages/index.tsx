@@ -5,7 +5,7 @@ import { initializeApollo } from '~lib/apolloClient'
 import { LISTINGS, CHECK_USER_VOTE } from '~graphql/queries/queries'
 import { INCREMENT_COUNT } from '~graphql/mutations/mutations'
 import Nav from '~views/components/Nav'
-
+import VoteButton from '~views/components/VoteButton'
 import styled from 'styled-components'
 
 
@@ -185,14 +185,8 @@ export default function Home ({ viewer }) {
                   </div>
                 </TableData>
                 <TableData>
-                  👍
-                  <h3
-                    onClick={() => {
-                      handleIncrementCount(resource)
-                    }}
-                  >
-                    {resource.count}
-                  </h3>
+                <VoteButton refetch={refetch} resource={resource} viewer={viewer} /> 
+                {resource.count}
                 </TableData>
               </TableRow>
             ))}
