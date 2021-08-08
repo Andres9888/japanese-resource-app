@@ -29,8 +29,9 @@ export default function Home ({ viewer }) {
   React.useEffect(() => {
     const results = sortedData.filter(
       item =>
-        item.title.toLowerCase().includes(searchTerm) ||
-        item.description.toLowerCase().includes(searchTerm)
+        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.description.toLowerCase().includes(searchTerm.toLowerCase())
+        || item.tags.includes(searchTerm.toLowerCase())
     )
     setSearchResults(results)
   }, [searchTerm, listings])
@@ -145,6 +146,7 @@ const TableData = styled.td`
   }
   .field{
     align-self: center;
+    text-transform:capitalize;
   }
   .field.is-grouped{
     flex-direction: column;
