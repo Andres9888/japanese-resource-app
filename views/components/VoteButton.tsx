@@ -40,4 +40,8 @@ const VoteButton = ({ resource, viewer, refetch }) => {
     }
     return (
     <button disabled={disabled} onClick={() => {handleIncrementCount(resource)}}>
-       
+        👍
+    </button>)
+}
+
+export default VoteButton
