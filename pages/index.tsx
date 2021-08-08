@@ -8,51 +8,6 @@ import Nav from '~views/components/Nav'
 import VoteButton from '~views/components/VoteButton'
 import styled from 'styled-components'
 
-
-const TableRow = styled.tr`
-  display: flex;
-  box-shadow: 1px 2px 4px rgb(0 0 0 / 3%);
-  border-radius: 6px;
-`
-
-const TableData = styled.td`
-  display: flex;
-  flex-direction: column;
-  border: none !important;
-  font-size: 48px;
-  font-weight: 700;
-  align-self: center;
-  font-family: 'Montserrat', sans-serif;
-  line-height: 1.5715;
-
-  max-width: 364px;
-  overflow-wrap: break-word;
-
-  a {
-    text-align: center;
-  }
-  img {
-    max-width: 233px;
-    border-radius: 6px;
-  }
-`
-const TableDataDescription = styled.td`
-  border: none !important;
-  font-family: 'Source Sans Pro', sans-serif;
-  max-width: 364px;
-  display: flex;
-
-  line-height: 1.5715;
-  text-align: center;
-  flex-direction: column;
-  font-size: 21px;
-  font-weight: 400;
-  align-self: center;
-  a {
-    text-align: center;
-  }
-`
-
 export default function Home ({ viewer }) {
   const {
     data: { listings },
@@ -61,8 +16,6 @@ export default function Home ({ viewer }) {
     refetch,
   } = useQuery(LISTINGS)
 
-  const [incrementCount] = useMutation(INCREMENT_COUNT)
-  
   const [searchTerm, setSearchTerm] = React.useState('')
   const [searchResults, setSearchResults] = React.useState([])
 
@@ -78,55 +31,9 @@ export default function Home ({ viewer }) {
       item =>
         item.title.toLowerCase().includes(searchTerm) ||
         item.description.toLowerCase().includes(searchTerm)
-      // need to get tags working to be case insensitve
-      //|| item.tags.includes(searchTerm)
     )
     setSearchResults(results)
   }, [searchTerm, listings])
-
- 
-
-  const handleIncrementCount = async resource => {
-    if (viewer.id) {
-      const client = initializeApollo()
-
-      try {
-        const {
-          data: { checkUserVote: voteList }
-        } = await client.query({
-          query: CHECK_USER_VOTE,
-          variables: {
-            id: viewer.id,
-            resource: resource.id,
-          },
-        })
-
-        console.log(voteList)
-
-        let didVote
-        if (voteList.length) {
-          didVote = voteList[0].resources.some(item => item === resource.id)
-        } else {
-          didVote = false
-        }
-
-        if (!didVote) {
-          await incrementCount({
-            variables: {
-              id: resource.id,
-              viewer: viewer.id,
-              resource: resource.id,
-            },
-          })
-          refetch()
-        } else {
-          alert('already voted on this resource')
-        }
-      } catch {}
-    } else {
-      alert('most login to vote')
-    }
-  }
 
   if (loading) {
     return <h1>loading</h1>
@@ -154,7 +61,11 @@ export default function Home ({ viewer }) {
           rel='stylesheet'
         />
       </Head>
-      <Nav viewer={viewer} searchTerm={searchTerm} handleChange={handleChange}/>
+      <Nav
+        viewer={viewer}
+        searchTerm={searchTerm}
+        handleChange={handleChange}
+      />
       <div className='container'>
         <table className='table is-fullwidth is-hoverable'>
           <tbody>
@@ -163,9 +74,9 @@ export default function Home ({ viewer }) {
                 <TableData>
                   <img src={resource.image} alt='' />
                 </TableData>
-                <TableData>
+                <TableDataTitle>
                   <a href={resource.url}>{resource.title}</a>
-                </TableData>
+                </TableDataTitle>
                 <TableDataDescription>
                   {resource.description}
                 </TableDataDescription>
@@ -185,8 +96,12 @@ export default function Home ({ viewer }) {
                   </div>
                 </TableData>
                 <TableData>
-                <VoteButton refetch={refetch} resource={resource} viewer={viewer} /> 
-                {resource.count}
+                  <VoteButton
+                    refetch={refetch}
+                    resource={resource}
+                    viewer={viewer}
+                  />
+                  <span>{resource.count}</span>
                 </TableData>
               </TableRow>
             ))}
@@ -196,6 +111,77 @@ export default function Home ({ viewer }) {
     </div>
   )
 }
+
+const TableRow = styled.tr`
+  display: flex;
+  box-shadow: 1px 2px 4px rgb(0 0 0 / 3%);
+  border-radius: 6px;
+`
+
+const TableData = styled.td`
+  display: flex;
+  flex-direction: column;
+  border: none !important;
+  font-size: 48px;
+  font-weight: 700;
+  align-self: center;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.5715;
+  
+
+  width:100%;
+  overflow-wrap: break-word;
+
+  a {
+    text-align: center;
+  }
+  
+  img {
+    max-width: 233px;
+    border-radius: 6px;
+  }
+  span{
+    align-self: center;
+  }
+  .field{
+    align-self: center;
+  }
+  .field.is-grouped{
+    flex-direction: column;
+  }
+`
+const TableDataTitle = styled.td`
+  display: flex;
+  flex-direction: column;
+  border: none !important;
+  font-size: 55px;
+  font-weight: 700;
+  align-self: center;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.5715;
+  
+
+  width:100%;
+  a {
+    text-align: center;
+  }
+`
+const TableDataDescription = styled.td`
+  border: none !important;
+  font-family: 'Source Sans Pro', sans-serif;
+  max-width: 377px;
+  display: flex;
+  width: 100%;
+  line-height: 1.5715;
+  text-align: center;
+  flex-direction: column;
+  font-size: 21px;
+  font-weight: 400;
+  align-self: center;
+  a {
+    text-align: center;
+  }
+`
 
 export async function getStaticProps () {
   const apolloClient = initializeApollo()

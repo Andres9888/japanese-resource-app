@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/react-hooks'
 import { CHECK_USER_VOTE } from '~graphql/queries/queries'
 import { INCREMENT_COUNT } from '~graphql/mutations/mutations'
 import { initializeApollo } from '~lib/apolloClient'
-
+import styled from 'styled-components'
 const VoteButton = ({ resource, viewer, refetch }) => {
   const [incrementCount] = useMutation(INCREMENT_COUNT)
   const [disabled, setDisabled] = useState(false)
@@ -39,15 +39,18 @@ const VoteButton = ({ resource, viewer, refetch }) => {
     }
   }
   return (
-    <button
+    <ThumbButton
       disabled={disabled}
       onClick={() => {
         handleIncrementCount(resource)
       }}
-    >
-      👍
-    </button>
+    > 👍
+    </ThumbButton>
   )
 }
+
+const ThumbButton = styled.button`
+  
+`
 
 export default VoteButton

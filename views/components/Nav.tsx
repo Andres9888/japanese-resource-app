@@ -29,7 +29,9 @@ const Nav = ({ viewer, searchTerm, handleChange  }) =>{
         <div className='app-header__logo-search-section'>
           <div className='app-header__logo'>
           <Link href="/">
-              <h1>home</h1>
+              <div>
+              <h1>Home</h1>
+              </div>
             </Link>
           </div>
           <div className='app-header__search-input'>
