@@ -1,9 +1,8 @@
 import React from 'react'
 import Head from 'next/head'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import { initializeApollo } from '~lib/apolloClient'
-import { LISTINGS, CHECK_USER_VOTE } from '~graphql/queries/queries'
-import { INCREMENT_COUNT } from '~graphql/mutations/mutations'
+import { LISTINGS } from '~graphql/queries/queries'
 import Nav from '~views/components/Nav'
 import VoteButton from '~views/components/VoteButton'
 import styled from 'styled-components'
@@ -128,8 +127,10 @@ const TableData = styled.td`
   align-self: center;
   font-family: 'Montserrat', sans-serif;
   line-height: 1.5715;
+  padding:0 !important;
   
-
+  padding-top: .5em !important;
+  padding-bottom: .5em !important;
   width:100%;
   overflow-wrap: break-word;
 
@@ -156,7 +157,7 @@ const TableDataTitle = styled.td`
   display: flex;
   flex-direction: column;
   border: none !important;
-  font-size: 55px;
+  font-size: 34px;
   font-weight: 700;
   align-self: center;
   font-family: 'Montserrat', sans-serif;
@@ -173,11 +174,11 @@ const TableDataDescription = styled.td`
   font-family: 'Source Sans Pro', sans-serif;
   max-width: 377px;
   display: flex;
-  width: 100%;
+  width: 200%;
   line-height: 1.5715;
   text-align: center;
   flex-direction: column;
-  font-size: 21px;
+  font-size: 18px;
   font-weight: 400;
   align-self: center;
   a {
