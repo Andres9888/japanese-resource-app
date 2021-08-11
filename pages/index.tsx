@@ -178,7 +178,7 @@ const TableDataDescription = styled.td`
   line-height: 1.5715;
   text-align: center;
   flex-direction: column;
-  font-size: 18px;
+  font-size: 21px;
   font-weight: 400;
   align-self: center;
   a {
