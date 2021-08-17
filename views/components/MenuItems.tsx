@@ -5,7 +5,7 @@ import { Avatar, Button, Icon, Menu } from "antd";
 
 const { Item, SubMenu } = Menu;
 
- const MenuItems = ({ viewer  }: Props) => {
+ const MenuItems = ({ viewer  }) => {
   
   const subMenuLogin =
   viewer.id && viewer.avatar ? (
