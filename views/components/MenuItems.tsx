@@ -3,12 +3,6 @@ import Link from 'next/link'
 
 import { Avatar, Button, Icon, Menu } from "antd";
 
-
-interface Props {
-  viewer: Viewer;
-  
-}
-
 const { Item, SubMenu } = Menu;
 
  const MenuItems = ({ viewer  }: Props) => {
