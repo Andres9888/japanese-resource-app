@@ -1,46 +1,39 @@
 import React from 'react'
 import Link from 'next/link'
-import styles from './nav.module.scss'
 import { Layout, Avatar, Affix, Input, Button, Icon, Menu } from 'antd'
-
-
+import MenuItems from '~views/components/MenuItems'
+import { useRouter } from 'next/router'
 
 const { Header } = Layout
-
+const { Search } = Input
 const { Item, SubMenu } = Menu
 
-const NavBlank = ({ viewer }) =>{
-  const subMenuLogin =
-    viewer.id && viewer.avatar ? (
-      <SubMenu title={<Avatar src={viewer.avatar} />}>
-      </SubMenu>
-    ) : (
-      <Item key="/login">
-      <Link href="/login">
-          <Button type="primary">Sign In</Button>
-        </Link>
-      </Item>
-    );
-  
-  
-  return(
+const NavBlank = ({ viewer  }) => {
+  const router = useRouter()
+
+  console.log(router)
+  return (
     <Affix offsetTop={0} className='app__affix-header'>
       <Header className='app-header'>
         <div className='app-header__logo-search-section'>
           <div className='app-header__logo'>
-          <Link href="/">
-              <h1>Home</h1>
+            <Link href='/'>
+              <div>
+              <Icon type="home" />
+              </div>
             </Link>
           </div>
+          
         </div>
-        <div className="app-header__menu-section">
-        <Menu mode="horizontal" selectable={false} className="menu">
-        {subMenuLogin}
-    </Menu>
+        <div className='app-header__menu-section'>
+          <MenuItems viewer={viewer} />
         </div>
       </Header>
-    </Affix>)}
-    
+    </Affix>
+  )
+}
 
+
+    
 
 export default NavBlank

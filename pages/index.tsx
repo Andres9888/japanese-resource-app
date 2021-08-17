@@ -29,8 +29,8 @@ export default function Home ({ viewer }) {
     const results = sortedData.filter(
       item =>
         item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.description.toLowerCase().includes(searchTerm.toLowerCase())
-        || item.tags.includes(searchTerm.toLowerCase())
+        item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.tags.includes(searchTerm.toLowerCase())
     )
     setSearchResults(results)
   }, [searchTerm, listings])
@@ -112,6 +112,18 @@ export default function Home ({ viewer }) {
   )
 }
 
+export async function getStaticProps () {
+  const apolloClient = initializeApollo()
+
+  await apolloClient.query({
+    query: LISTINGS,
+  })
+  return {
+    props: { initialApolloState: apolloClient.cache.extract() },
+    revalidate: 1,
+  }
+}
+
 const TableRow = styled.tr`
   display: flex;
   box-shadow: 1px 2px 4px rgb(0 0 0 / 3%);
@@ -127,29 +139,29 @@ const TableData = styled.td`
   align-self: center;
   font-family: 'Montserrat', sans-serif;
   line-height: 1.5715;
-  padding:0 !important;
-  
-  padding-top: .5em !important;
-  padding-bottom: .5em !important;
-  width:100%;
+  padding: 0 !important;
+
+  padding-top: 0.5em !important;
+  padding-bottom: 0.5em !important;
+  width: 100%;
   overflow-wrap: break-word;
 
   a {
     text-align: center;
   }
-  
+
   img {
     max-width: 233px;
     border-radius: 6px;
   }
-  span{
+  span {
     align-self: center;
   }
-  .field{
+  .field {
     align-self: center;
-    text-transform:capitalize;
+    text-transform: capitalize;
   }
-  .field.is-grouped{
+  .field.is-grouped {
     flex-direction: column;
   }
 `
@@ -162,9 +174,8 @@ const TableDataTitle = styled.td`
   align-self: center;
   font-family: 'Montserrat', sans-serif;
   line-height: 1.5715;
-  
 
-  width:100%;
+  width: 100%;
   a {
     text-align: center;
   }
@@ -185,15 +196,3 @@ const TableDataDescription = styled.td`
     text-align: center;
   }
 `
-
-export async function getStaticProps () {
-  const apolloClient = initializeApollo()
-
-  await apolloClient.query({
-    query: LISTINGS,
-  })
-  return {
-    props: { initialApolloState: apolloClient.cache.extract() },
-    revalidate: 1,
-  }
-}
