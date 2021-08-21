@@ -36,12 +36,12 @@
         "allowTypedFunctionExpressions": true
       }
     ],
-    "graphql/template-strings": [
+    /*"graphql/template-strings": [
       "error",
       {
         "env": "literal"
       }
-    ],
+    ],*/
     "better-styled-components/sort-declarations-alphabetically": 2
   },
   "settings": {

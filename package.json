@@ -24,7 +24,9 @@
     "test:unit": "jest --config tests/jest.unit.config.js",
     "test:integration": "jest --config tests/jest.integration.config.js",
     "test:watch": "jest --watch --no-cache",
-    "eslint:fix": "eslint . --fix --ignore-path .gitignore"
+    "eslint:fix": "eslint . --fix --ignore-path .gitignore",
+    "codegen:schema": "npx apollo client:download-schema --endpoint=http://localhost:3000/api/graphql",
+    "codegen:generate": "npx apollo client:codegen --localSchemaFile=schema.json --includes=graphql/**/*.ts --target=typescript"
   },
   "engines": {
     "node": "^14.16.1",

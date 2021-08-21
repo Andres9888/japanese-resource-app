@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 require('dotenv').config()
 // if you want to use nextRoutes
 // const routes = require('~server/core/nextRoutes')
@@ -33,7 +33,7 @@ const playground = {
 nextApp.prepare().then(() => {
   const server = express()
 
-  //security
+  // security
   server.use(helmet())
 
   // Generate logs
@@ -42,9 +42,7 @@ nextApp.prepare().then(() => {
   )
   server.use(compression())
 
-
-  //start apollo server
- 
+  // start apollo server
 
   const apollo = new ApolloServer({
     typeDefs,
@@ -53,8 +51,7 @@ nextApp.prepare().then(() => {
     playground,
   })
 
-  apollo.applyMiddleware({ app: server, path: "/api/graphql" })
- 
+  apollo.applyMiddleware({ app: server, path: '/api/graphql' })
 
   server.get('*', (req, res) => handle(req, res))
   // express().use(handler).listen(3000) //routes handle way

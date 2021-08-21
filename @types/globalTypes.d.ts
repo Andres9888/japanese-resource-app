@@ -1,14 +1,14 @@
-export interface exampleType {
+export interface Viewer {
   _id?: string
-  name: string
-  username: string
+  token?: string
   avatar?: string
+  walletId?: string | null
+  didRequest: boolean
 }
 
-export interface Viewer {
-  id: string | null;
-  token: string | null;
-  avatar: string | null;
-  hasWallet: boolean | null;
-  didRequest: boolean;
+export interface Listing {
+  _id: ObjectId;
+  title: string;
+  description: string;
+  image: string;
 }

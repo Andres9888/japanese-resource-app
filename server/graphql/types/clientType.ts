@@ -19,7 +19,7 @@ export const typeDefs = gql`
     resources: [String!]!
   }
 
-  type Viewer{
+  type Viewer {
     id: ID
     token: String
     avatar: String
@@ -42,7 +42,7 @@ export const typeDefs = gql`
     checkUserVote(id: ID!, resource: String!): [User!]!
   }
   type Mutation {
-    increment(id: ID!,viewer: ID!, resource: String!): CountResult
+    increment(id: ID!, viewer: ID!, resource: String!): CountResult
     logIn(input: LogInInput): Viewer!
     logOut: Viewer!
   }
