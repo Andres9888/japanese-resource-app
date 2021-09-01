@@ -1,16 +1,11 @@
-// @ts-nocheck
+/* eslint-disable import/prefer-default-export */
+//@ts-nocheck
 import { ObjectId } from 'mongodb'
 import { connectDatabase } from '~server/database'
 import { Google } from '~lib/api'
 import crypto from 'crypto'
+import {checkUserVoteIDVariables} from '~graphql/queries/__generated__/checkUserVoteID'
 
-
-// const cookieOptions = {
-//   httpOnly: true,
-//   sameSite: true,
-//   signed: true,
-//   secure: process.env.NODE_ENV === 'development' ? false : true,
-// }
 
 const getDb = async () => {
   const db = await connectDatabase()
@@ -83,38 +78,33 @@ const logInViaGoogle = async (code: string, token: string, res: Response) => {
     viewer = insertResult.ops[0]
   }
 
-  // res.cookie('viewer', userId, {
-  //   ...cookieOptions,
-  //   maxAge: 365 * 24 * 60 * 60 * 1000,
-  // })
+  
 
   return viewer
 }
 
-// const logInViaCookie = async (token: string, req: Request, res: Response) => {
-//   const db = await getDb()
-//   const updateRes = await db.users.findOneAndUpdate(
-//     { _id: req.signedCookies.viewer },
-//     { $set: { token } },
-//     { returnOriginal: false }
-//   )
-//   let viewer = updateRes.value
-//   if (!viewer) {
-//     res.clearCookie('viewer', cookieOptions)
-//   }
-//   return viewer
-// }
+
 
 export const resolvers = {
-  // Query
-  Query: {
+    Query: {
     listings: async (_root: undefined, _args: {}) => {
-      const db = await getDb()
-      return await db.listings.find({}).toArray()
+      try {
+        const db = await getDb()
+        return db.listings.find({}).toArray()
+      } catch (error) {
+        throw new Error(`Failed to query listings: ${error}`)
+      }
     },
-    checkUserVote: async (_root: undefined, { id, resource }) => {
+    checkUserVote: async (
+      _root: undefined,
+      { id, resource }: checkUserVoteIDVariables
+    ) => {
+      try {
       const db = await getDb()
-      return await db.users.find({ _id: id, resources: resource }).toArray()
+      return db.users.find({ _id: id, resources: resource }).toArray()}
+      catch(error){
+        throw new Error(`Failed to query userVote: ${error}`)
+      }
     },
     authUrl: (): string => {
       try {
@@ -124,7 +114,7 @@ export const resolvers = {
       }
     },
   },
-  // Mutation
+  
   Mutation: {
     increment: async (
       _root: undefined,
@@ -136,7 +126,10 @@ export const resolvers = {
           { _id: new ObjectId(id) },
           { $inc: { count: 1 } }
         ),
-        db.users.updateOne({ _id: viewer }, { $addToSet: { resources: resource } })
+        db.users.updateOne(
+          { _id: viewer },
+          { $addToSet: { resources: resource } }
+        )
       )
     },
     logIn: async (_root: undefined, { input }) => {

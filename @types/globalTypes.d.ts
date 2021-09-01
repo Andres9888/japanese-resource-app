@@ -7,8 +7,8 @@ export interface Viewer {
 }
 
 export interface Listing {
-  _id: ObjectId;
-  title: string;
-  description: string;
-  image: string;
+  _id: ObjectId
+  title: string
+  description: string
+  image: string
 }
