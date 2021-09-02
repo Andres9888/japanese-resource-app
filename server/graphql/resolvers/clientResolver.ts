@@ -4,8 +4,7 @@ import { ObjectId } from 'mongodb'
 import { connectDatabase } from '~server/database'
 import { Google } from '~lib/api'
 import crypto from 'crypto'
-import {checkUserVoteIDVariables} from '~graphql/queries/__generated__/checkUserVoteID'
-
+import { checkUserVoteIDVariables } from '~graphql/queries/__generated__/checkUserVoteID'
 
 const getDb = async () => {
   const db = await connectDatabase()
@@ -78,15 +77,11 @@ const logInViaGoogle = async (code: string, token: string, res: Response) => {
     viewer = insertResult.ops[0]
   }
 
-  
-
   return viewer
 }
 
-
-
 export const resolvers = {
-    Query: {
+  Query: {
     listings: async (_root: undefined, _args: {}) => {
       try {
         const db = await getDb()
@@ -100,9 +95,9 @@ export const resolvers = {
       { id, resource }: checkUserVoteIDVariables
     ) => {
       try {
-      const db = await getDb()
-      return db.users.find({ _id: id, resources: resource }).toArray()}
-      catch(error){
+        const db = await getDb()
+        return db.users.find({ _id: id, resources: resource }).toArray()
+      } catch (error) {
         throw new Error(`Failed to query userVote: ${error}`)
       }
     },
@@ -114,7 +109,7 @@ export const resolvers = {
       }
     },
   },
-  
+
   Mutation: {
     increment: async (
       _root: undefined,
