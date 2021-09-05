@@ -26,10 +26,12 @@ const Nav = ({ viewer, searchTerm, handleChange }) => {
         '',],
         bindInputFocusEvents: true,
         attr: 'placeholder',
-        typeSpeed: 100,
-        backSpeed: 100,
-        
-        
+        typeSpeed: 25,
+        backSpeed: 25,
+        cursorChar: '_',
+        startDelay: 700,
+        smartBackspace: true,
+      showCursor: true,
     };
 
     // New Typed instance
