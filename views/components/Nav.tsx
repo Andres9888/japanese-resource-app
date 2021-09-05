@@ -29,7 +29,7 @@ const Nav = ({ viewer, searchTerm, handleChange }) => {
         typeSpeed: 25,
         backSpeed: 25,
         cursorChar: '_',
-        startDelay: 850,
+        startDelay: 1000,
         smartBackspace: true,
       showCursor: true,
     };
