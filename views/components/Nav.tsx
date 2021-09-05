@@ -1,17 +1,46 @@
-import React from 'react'
+import React, { useEffect }from 'react'
 import Link from 'next/link'
-import { Layout, Avatar, Affix, Input, Button, Icon, Menu } from 'antd'
+import { Layout, Affix, Input, Icon } from 'antd'
 import MenuItems from '~views/components/MenuItems'
 import { useRouter } from 'next/router'
+import Typed from 'typed.js';
 
 const { Header } = Layout
 const { Search } = Input
-const { Item, SubMenu } = Menu
 
 const Nav = ({ viewer, searchTerm, handleChange }) => {
   const router = useRouter()
+  
+  let typedStrings = "test"
 
-  console.log(router)
+  useEffect(() => {
+
+    // Options for the Typed object
+    const options = {
+      strings: [
+        'Hey, If you need to find something just search and it will filter it',
+        'For Example',
+        'Guides',
+        'Grammar',
+        'Tool',
+        '',],
+        bindInputFocusEvents: true,
+        attr: 'placeholder',
+        typeSpeed: 100,
+        backSpeed: 100,
+        
+        
+    };
+
+    // New Typed instance
+    const typed = new Typed('.ant-input', options);
+
+    // Destroy Typed instance on unmounting the component to prevent memory leaks
+    return () => {
+        typed.destroy();
+    };
+}, []);
+  
   return (
     <Affix offsetTop={0} className='app__affix-header'>
       <Header className='app-header'>
@@ -19,7 +48,7 @@ const Nav = ({ viewer, searchTerm, handleChange }) => {
           <div className='app-header__logo'>
             <Link href='/'>
               <div>
-              <Icon type="home" />
+                <Icon type='home' />
               </div>
             </Link>
           </div>
@@ -27,7 +56,7 @@ const Nav = ({ viewer, searchTerm, handleChange }) => {
             <div className='app-header__search-input'>
               <Search
                 type='text'
-                placeholder='Search'
+                placeholder='Search to filter what you are looking for'
                 value={searchTerm}
                 onChange={handleChange}
               />
