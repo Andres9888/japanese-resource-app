@@ -4,7 +4,6 @@ import { ApolloProvider } from '@apollo/react-hooks'
 import { useApollo } from '~lib/apolloClient'
 import '~styles/main.scss'
 import { Viewer } from '~@types/globalTypes'
-import Footer from '~views/components/Footer'
 
 const initialViewer: Viewer = {
   id: null,
@@ -20,7 +19,6 @@ export default function App ({ Component, pageProps }) {
   return (
     <ApolloProvider client={apolloClient}>
       <Component {...pageProps} viewer={viewer} setViewer={setViewer} />
-      <Footer />
-    </ApolloProvider>
+          </ApolloProvider>
   )
 }
