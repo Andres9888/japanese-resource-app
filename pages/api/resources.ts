@@ -1,6 +1,6 @@
 import { connectDatabase } from '~server/database'
 
-export default async (req, res) => {
+export default async (_req, res) => {
   try {
     const db = await connectDatabase()
     const resources = await db.listings.find({}).toArray()

@@ -15,7 +15,9 @@
     "plugin:react/recommended",
     "plugin:prettier/recommended",
     "prettier",
-    "prettier/react"
+    "prettier/react",
+    "plugin:import/errors",
+    "plugin:import/warnings"
   ],
   "plugins": [
     "@typescript-eslint",
