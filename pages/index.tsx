@@ -72,17 +72,15 @@ export default function Home ({ viewer }) {
             {searchResults.map((resource, _index) => (
               <TableRow key={resource.id}>
                 <TableData>
-                <a href={resource.url}>
-                  <img src={resource.image} alt='' />
+                  <a href={resource.url}>
+                    <img src={resource.image} alt='' />
                   </a>
                 </TableData>
                 <TableDataTitle>
                   <a href={resource.url}>{resource.title}</a>
                 </TableDataTitle>
                 <TableDataDescription>
-                <a href={resource.url}>
-                  {resource.description}
-                  </a>
+                  <a href={resource.url}>{resource.description}</a>
                 </TableDataDescription>
                 <TableData>
                   <div className='field is-grouped is-grouped-multiline'>
@@ -151,6 +149,7 @@ const TableData = styled.td`
 
   a {
     text-align: center;
+   
   }
 
   img {
@@ -181,10 +180,12 @@ const TableDataTitle = styled.td`
   width: 100%;
   a {
     text-align: center;
+    color:black;
+
   }
   a:hover {
-  text-decoration: underline;
-}
+    text-decoration: underline;
+  }
 `
 const TableDataDescription = styled.td`
   border: none !important;
@@ -200,5 +201,7 @@ const TableDataDescription = styled.td`
   align-self: center;
   a {
     text-align: center;
+    color:black;
+
   }
 `
