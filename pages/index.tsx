@@ -1,11 +1,11 @@
 import React from 'react'
 import Head from 'next/head'
 import { useQuery } from '@apollo/react-hooks'
+import styled from 'styled-components'
 import { initializeApollo } from '~lib/apolloClient'
 import { LISTINGS } from '~graphql/queries/queries'
 import Nav from '~views/components/Nav'
 import VoteButton from '~views/components/VoteButton'
-import styled from 'styled-components'
 
 export default function Home ({ viewer }) {
   const {
@@ -72,15 +72,18 @@ export default function Home ({ viewer }) {
             {searchResults.map((resource, _index) => (
               <TableRow key={resource.id}>
                 <TableData>
+                <a href={resource.url}>
                   <img src={resource.image} alt='' />
+                  </a>
                 </TableData>
                 <TableDataTitle>
                   <a href={resource.url}>{resource.title}</a>
                 </TableDataTitle>
                 <TableDataDescription>
+                <a href={resource.url}>
                   {resource.description}
+                  </a>
                 </TableDataDescription>
-
                 <TableData>
                   <div className='field is-grouped is-grouped-multiline'>
                     {resource.tags.map(tag => (
@@ -179,6 +182,9 @@ const TableDataTitle = styled.td`
   a {
     text-align: center;
   }
+  a:hover {
+  text-decoration: underline;
+}
 `
 const TableDataDescription = styled.td`
   border: none !important;
