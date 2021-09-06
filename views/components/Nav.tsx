@@ -10,8 +10,6 @@ const { Search } = Input
 
 const Nav = ({ viewer, searchTerm, handleChange }) => {
   const router = useRouter()
-  
-  let typedStrings = "test"
 
   useEffect(() => {
 
@@ -20,7 +18,7 @@ const Nav = ({ viewer, searchTerm, handleChange }) => {
       strings: [
         'Hey, If you need to find something just search and it will filter it',
         'For Example',
-        'Guides',
+        'Guide',
         'Grammar',
         'Tool',
         '',],
