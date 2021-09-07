@@ -21,7 +21,7 @@ export default function Home ({ viewer }) {
   const handleChange = event => {
     setSearchTerm(event.target.value)
   }
-  let sortedData = listings.slice().sort(function (a, b) {
+  const sortedData = listings.slice().sort(function (a, b) {
     return b.count - a.count
   })
 
@@ -42,7 +42,7 @@ export default function Home ({ viewer }) {
     return <h1>error</h1>
   }
   return (
-    <div>
+    <>
       <Head>
         <title>Japanese Resources Site</title>
         <link rel='icon' href='/favicon.ico' />
@@ -66,12 +66,8 @@ export default function Home ({ viewer }) {
         searchTerm={searchTerm}
         handleChange={handleChange}
       />
-      <Table
-        searchResults={searchResults}
-        refetch={refetch}
-        viewer={viewer}
-      />
-    </div>
+      <Table searchResults={searchResults} refetch={refetch} viewer={viewer} />
+    </>
   )
 }
 
