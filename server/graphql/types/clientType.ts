@@ -1,5 +1,5 @@
 //scalar IsoDate #declered for all .graphql files
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client';
 
 export const typeDefs = gql`
   type Listing {
@@ -40,10 +40,11 @@ export const typeDefs = gql`
     listings: [Listing!]!
     authUrl: String!
     checkUserVote(id: ID!, resource: String!): [User!]!
+    getUserResourceIds(id: ID!): [User!]!
   }
   type Mutation {
     increment(id: ID!, viewer: ID!, resource: String!): CountResult
     logIn(input: LogInInput): Viewer!
     logOut: Viewer!
   }
-`
+`;

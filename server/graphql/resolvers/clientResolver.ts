@@ -1,33 +1,33 @@
 /* eslint-disable import/prefer-default-export */
 //@ts-nocheck
-import { ObjectId } from 'mongodb'
-import { connectDatabase } from '~server/database'
-import { Google } from '~lib/api'
-import crypto from 'crypto'
-import { checkUserVoteIDVariables } from '~graphql/queries/__generated__/checkUserVoteID'
+import { ObjectId } from 'mongodb';
+import { connectDatabase } from '~server/database';
+import { Google } from '~lib/api';
+import crypto from 'crypto';
+import { checkUserVoteIDVariables } from '~graphql/queries/__generated__/checkUserVoteID';
 
 const getDb = async () => {
-  const db = await connectDatabase()
-  return db
-}
+  const db = await connectDatabase();
+  return db;
+};
 
 const logInViaGoogle = async (code: string, token: string, res: Response) => {
-  const { user } = await Google.logIn(code)
+  const { user } = await Google.logIn(code);
 
   if (!user) {
-    throw new Error('Google login error')
+    throw new Error('Google login error');
   }
 
   // Name/Photo/Email Lists
-  const userNamesList = user.names && user.names.length ? user.names : null
-  const userPhotosList = user.photos && user.photos.length ? user.photos : null
+  const userNamesList = user.names && user.names.length ? user.names : null;
+  const userPhotosList = user.photos && user.photos.length ? user.photos : null;
   const userEmailsList =
     user.emailAddresses && user.emailAddresses.length
       ? user.emailAddresses
-      : null
+      : null;
 
   // User Display Name
-  const userName = userNamesList ? userNamesList[0].displayName : null
+  const userName = userNamesList ? userNamesList[0].displayName : null;
 
   // User Id
   const userId =
@@ -35,20 +35,20 @@ const logInViaGoogle = async (code: string, token: string, res: Response) => {
     userNamesList[0].metadata &&
     userNamesList[0].metadata.source
       ? userNamesList[0].metadata.source.id
-      : null
+      : null;
 
   // User Avatar
   const userAvatar =
-    userPhotosList && userPhotosList[0].url ? userPhotosList[0].url : null
+    userPhotosList && userPhotosList[0].url ? userPhotosList[0].url : null;
 
   // User Email
   const userEmail =
-    userEmailsList && userEmailsList[0].value ? userEmailsList[0].value : null
+    userEmailsList && userEmailsList[0].value ? userEmailsList[0].value : null;
 
   if (!userId || !userName || !userAvatar || !userEmail) {
-    throw new Error('Google login error')
+    throw new Error('Google login error');
   }
-  const db = await getDb()
+  const db = await getDb();
   const updateRes = await db.users.findOneAndUpdate(
     { _id: userId },
     {
@@ -60,9 +60,9 @@ const logInViaGoogle = async (code: string, token: string, res: Response) => {
       },
     },
     { returnOriginal: false }
-  )
+  );
 
-  let viewer = updateRes.value
+  let viewer = updateRes.value;
 
   if (!viewer) {
     const insertResult = await db.users.insertOne({
@@ -72,22 +72,22 @@ const logInViaGoogle = async (code: string, token: string, res: Response) => {
       avatar: userAvatar,
       contact: userEmail,
       resources: [],
-    })
+    });
 
-    viewer = insertResult.ops[0]
+    viewer = insertResult.ops[0];
   }
 
-  return viewer
-}
+  return viewer;
+};
 
 export const resolvers = {
   Query: {
     listings: async (_root: undefined, _args: {}) => {
       try {
-        const db = await getDb()
-        return db.listings.find({}).toArray()
+        const db = await getDb();
+        return db.listings.find({}).toArray();
       } catch (error) {
-        throw new Error(`Failed to query listings: ${error}`)
+        throw new Error(`Failed to query listings: ${error}`);
       }
     },
     checkUserVote: async (
@@ -95,17 +95,25 @@ export const resolvers = {
       { id, resource }: checkUserVoteIDVariables
     ) => {
       try {
-        const db = await getDb()
-        return db.users.find({ _id: id, resources: resource }).toArray()
+        const db = await getDb();
+        return db.users.find({ _id: id, resources: resource }).toArray();
       } catch (error) {
-        throw new Error(`Failed to query userVote: ${error}`)
+        throw new Error(`Failed to query userVote: ${error}`);
+      }
+    },
+    getUserResourceIds: async (_root: undefined, { id }) => {
+      try {
+        const db = await getDb();
+        return db.users.find({ _id: id }).toArray();
+      } catch (error) {
+        throw new Error(`Failed to query user resources Ids: ${error}`);
       }
     },
     authUrl: (): string => {
       try {
-        return Google.authUrl
+        return Google.authUrl;
       } catch {
-        throw new Error('Failed to Query google auth url')
+        throw new Error('Failed to Query google auth url');
       }
     },
   },
@@ -115,7 +123,7 @@ export const resolvers = {
       _root: undefined,
       { id, viewer, resource }: { id: string }
     ) => {
-      const db = await getDb()
+      const db = await getDb();
       return (
         await db.listings.updateOne(
           { _id: new ObjectId(id) },
@@ -125,19 +133,19 @@ export const resolvers = {
           { _id: viewer },
           { $addToSet: { resources: resource } }
         )
-      )
+      );
     },
     logIn: async (_root: undefined, { input }) => {
       try {
-        const code = input ? input.code : null
-        const token = crypto.randomBytes(16).toString('hex')
+        const code = input ? input.code : null;
+        const token = crypto.randomBytes(16).toString('hex');
 
         const viewer: User | undefined = code
           ? await logInViaGoogle(code, token)
-          : undefined
+          : undefined;
 
         if (!viewer) {
-          return { didRequest: true }
+          return { didRequest: true };
         }
 
         return {
@@ -146,16 +154,16 @@ export const resolvers = {
           avatar: viewer.avatar,
           walletId: viewer.walletId,
           didRequest: true,
-        }
+        };
       } catch (error) {
-        throw new Error(`Failed to log in: ${error}`)
+        throw new Error(`Failed to log in: ${error}`);
       }
     },
     logOut: (): Viewer => {
       try {
-        return { didRequest: true }
+        return { didRequest: true };
       } catch (error) {
-        throw new Error(`Failed to log out: ${error}`)
+        throw new Error(`Failed to log out: ${error}`);
       }
     },
   },
@@ -164,10 +172,10 @@ export const resolvers = {
   },
   Viewer: {
     id: (viewer: Viewer): string | undefined => {
-      return viewer._id
+      return viewer._id;
     },
     hasWallet: (viewer: Viewer): boolean | undefined => {
-      return viewer.walletId ? true : undefined
+      return viewer.walletId ? true : undefined;
     },
   },
-}
+};

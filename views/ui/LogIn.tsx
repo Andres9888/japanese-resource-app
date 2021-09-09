@@ -6,13 +6,11 @@ import { initializeApollo } from '~lib/apolloClient'
 import { Viewer } from '~types/globalTypes'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
-import { Card, Layout, Typography } from "antd";
+import { Card, Layout, Typography } from 'antd'
 import 'antd/dist/antd.css'
-//import googleLogo from "/images/google_logo.jpg";
 
-const { Content } = Layout;
-const { Text, Title } = Typography;
-
+const { Content } = Layout
+const { Text, Title } = Typography
 
 interface Props {
   setViewer: (viewer: Viewer) => void
@@ -75,7 +73,7 @@ const LogIn = ({ setViewer }: Props) => {
     } catch {}
   }
 
-  return(
+  return (
     <Content className="log-in">
       <Card className="log-in-card">
         <div className="log-in-card__intro">
@@ -87,23 +85,31 @@ const LogIn = ({ setViewer }: Props) => {
           <Title level={3} className="log-in-card__intro-title">
             Log in to Japanese Resource App!
           </Title>
-          <Text>Sign in with Google to start voting and keeping track of liked resources</Text>
+          <Text>
+            Sign in with Google to start voting and keeping track of liked
+            resources
+          </Text>
         </div>
-        <button onClick={handleAuthorize} className="log-in-card__google-button">
+        <button
+          onClick={handleAuthorize}
+          className="log-in-card__google-button"
+        >
           <img
             src="/static/images/google_logo.jpg"
             alt="Google Logo"
             className="log-in-card__google-button-logo"
           />
-          <span className="log-in-card__google-button-text">Sign in with Google</span>
+          <span className="log-in-card__google-button-text">
+            Sign in with Google
+          </span>
         </button>
         <Text type="secondary">
-          Note: By signing in, you'll be redirected to the Google consent form to sign in
-          with your Google account.
+          Note: By signing in, you'll be redirected to the Google consent form
+          to sign in with your Google account.
         </Text>
       </Card>
     </Content>
-    )
+  )
 }
 
 export default LogIn

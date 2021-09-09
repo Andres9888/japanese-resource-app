@@ -1,20 +1,16 @@
-import React from 'react'
-import LogIn from '~views/ui/LogIn'
+/* eslint-disable import/extensions */
+import React from 'react';
+import LogIn from '~views/ui/LogIn';
 //import styled from 'styled-components'
-import NavBlank from '~views/components/NavBlank'
+import NavBlank from '~views/components/NavBlank';
 
-
-
-
-
-function loginPage({setViewer,viewer}){
+function loginPage({ setViewer, viewer }) {
   return (
     <div>
-    <NavBlank viewer={viewer}/>  
-
-    <LogIn setViewer={setViewer}/>
+      <NavBlank viewer={viewer} />
+      <LogIn setViewer={setViewer} />
     </div>
-  )
+  );
 }
 
-export default loginPage
+export default loginPage;

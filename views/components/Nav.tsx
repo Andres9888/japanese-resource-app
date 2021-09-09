@@ -1,9 +1,9 @@
-import React, { useEffect }from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
 import { Layout, Affix, Input, Icon } from 'antd'
 import MenuItems from '~views/components/MenuItems'
 import { useRouter } from 'next/router'
-import Typed from 'typed.js';
+import Typed from 'typed.js'
 
 const { Header } = Layout
 const { Search } = Input
@@ -12,7 +12,6 @@ const Nav = ({ viewer, searchTerm, handleChange }) => {
   const router = useRouter()
 
   useEffect(() => {
-
     // Options for the Typed object
     const options = {
       strings: [
@@ -21,26 +20,27 @@ const Nav = ({ viewer, searchTerm, handleChange }) => {
         'Guide',
         'Grammar',
         'Tool',
-        '',],
-        bindInputFocusEvents: true,
-        attr: 'placeholder',
-        typeSpeed: 25,
-        backSpeed: 25,
-        cursorChar: '_',
-        startDelay: 1000,
-        smartBackspace: true,
+        '',
+      ],
+      bindInputFocusEvents: true,
+      attr: 'placeholder',
+      typeSpeed: 25,
+      backSpeed: 25,
+      cursorChar: '_',
+      startDelay: 1000,
+      smartBackspace: true,
       showCursor: true,
-    };
+    }
 
     // New Typed instance
-    const typed = new Typed('.ant-input', options);
+    const typed = new Typed('.ant-input', options)
 
     // Destroy Typed instance on unmounting the component to prevent memory leaks
     return () => {
-        typed.destroy();
-    };
-}, []);
-  
+      typed.destroy()
+    }
+  }, [])
+
   return (
     <Affix offsetTop={0} className='app__affix-header'>
       <Header className='app-header'>

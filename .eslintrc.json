@@ -15,9 +15,7 @@
     "plugin:react/recommended",
     "plugin:prettier/recommended",
     "prettier",
-    "prettier/react",
-    "plugin:import/errors",
-    "plugin:import/warnings"
+    "prettier/react"
   ],
   "plugins": [
     "@typescript-eslint",
@@ -30,7 +28,15 @@
     "prettier/prettier": "error",
     "no-var": "warn",
     "no-console": "off",
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    ],
     "@typescript-eslint/explicit-function-return-type": [
       "error",
       {

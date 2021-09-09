@@ -13,12 +13,12 @@ const initialViewer: Viewer = {
   didRequest: false,
 }
 
-export default function App ({ Component, pageProps }) {
+export default function App({ Component, pageProps }) {
   const [viewer, setViewer] = useState<Viewer>(initialViewer)
   const apolloClient = useApollo(pageProps.initialApolloState)
   return (
     <ApolloProvider client={apolloClient}>
       <Component {...pageProps} viewer={viewer} setViewer={setViewer} />
-          </ApolloProvider>
+    </ApolloProvider>
   )
 }
