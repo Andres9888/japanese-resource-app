@@ -5,6 +5,7 @@ import { Avatar, Card, Divider, Typography } from 'antd';
 import NavBlank from '~views/components/NavBlank';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_USER_RESOURCES_IDS, RESOURCES } from '~graphql/queries/queries';
+import { EmailShareButton } from 'react-share';
 
 const { Paragraph, Text, Title } = Typography;
 
@@ -39,12 +40,6 @@ function userPage({ viewer }) {
             <Avatar size={100} src={viewer.avatar} />
           </div>
           <Divider />
-          <div className="user-profile__details">
-            <Title level={4}>Details</Title>
-            <Paragraph>
-              Name: <Text strong />
-            </Paragraph>
-          </div>
         </Card>
       </div>
       <div className="container">
@@ -67,7 +62,15 @@ function userPage({ viewer }) {
                     {resource.description}
                   </a>
                 </TableDataDescription>
-                <TableData></TableData>
+                <TableData>
+                  <EmailShareButton
+                    subject="hey check out these cool japanese resources"
+                    body={`${resource.title}: ${resource.url}`}
+                    separator=":"
+                  >
+                    <h2>email link</h2>
+                  </EmailShareButton>
+                </TableData>
               </TableRow>
             ))}
           </tbody>
