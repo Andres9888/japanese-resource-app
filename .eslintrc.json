@@ -15,8 +15,9 @@
     "plugin:react/recommended",
     "plugin:prettier/recommended",
     "prettier",
-    "prettier/react"
-  ],
+    "prettier/react",
+"plugin:@next/next/recommended"
+ ],
   "plugins": [
     "@typescript-eslint",
     "react",
