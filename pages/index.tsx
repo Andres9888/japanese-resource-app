@@ -63,6 +63,7 @@ export default function Home({ viewer }) {
         src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"
         strategy="lazyOnload"
         onLoad={() => {
+          // @ts-ignore
           kofiWidgetOverlay.draw('andres9888', {
             'type': 'floating-chat',
             'floating-chat.donateButton.text': 'Buy me Coffee',
