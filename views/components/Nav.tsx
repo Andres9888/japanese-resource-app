@@ -53,14 +53,12 @@ const Nav = ({ viewer, searchTerm, handleChange }) => {
             </Link>
           </div>
           {router.asPath === '/' ? (
-            <div className="app-header__search-input" style={{width:'100%'}}>
               <Search
                 type='text'
                 placeholder='Search to filter what you are looking for'
                 value={searchTerm}
                 onChange={handleChange}
               />
-            </div>
           ) : (
             <div></div>
           )}
