@@ -67,6 +67,7 @@ function userPage({ viewer }) {
                     subject="hey check out these cool japanese resources"
                     body={`${resource.title}: ${resource.url}`}
                     separator=":"
+                    url={resource.url}
                   >
                     <h2>email link</h2>
                   </EmailShareButton>
