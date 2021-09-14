@@ -53,7 +53,7 @@ const Nav = ({ viewer, searchTerm, handleChange }) => {
             </Link>
           </div>
           {router.asPath === '/' ? (
-            <div className='app-header__search-input'>
+            <div className="app-header__search-input">
               <Search
                 type='text'
                 placeholder='Search to filter what you are looking for'
