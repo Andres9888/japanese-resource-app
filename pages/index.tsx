@@ -5,6 +5,7 @@ import { initializeApollo } from '~lib/apolloClient';
 import { RESOURCES } from '~graphql/queries/queries';
 import Nav from '~views/components/Nav';
 import Table from '~views/components/Table';
+import Script from 'next/script'
 
 export default function Home({ viewer }) {
   const {
@@ -58,6 +59,18 @@ export default function Home({ viewer }) {
           rel="stylesheet"
         />
       </Head>
+      <Script
+        src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"
+        strategy="lazyOnload"
+        onLoad={() => {
+          kofiWidgetOverlay.draw('andres9888', {
+            'type': 'floating-chat',
+            'floating-chat.donateButton.text': 'Buy me Coffee',
+            'floating-chat.donateButton.background-color': '#1890ff',
+            'floating-chat.donateButton.text-color': '#fff',
+          })
+        }}
+      />
       <Nav
         viewer={viewer}
         searchTerm={searchTerm}
