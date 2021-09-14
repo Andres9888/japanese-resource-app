@@ -48,17 +48,17 @@ function userPage({ viewer }) {
             {filtered.map((resource, _index) => (
               <TableRow key={resource.id}>
                 <TableData>
-                  <a href={resource.url} target="_blank">
+                  <a href={resource.url} target="_blank" rel="noreferrer">
                     <img src={resource.image} alt="" />
                   </a>
                 </TableData>
                 <TableDataTitle>
-                  <a href={resource.url} target="_blank">
+                  <a href={resource.url} target="_blank" rel="noreferrer">
                     {resource.title}
                   </a>
                 </TableDataTitle>
                 <TableDataDescription>
-                  <a href={resource.url} target="_blank">
+                  <a href={resource.url} target="_blank" rel="noreferrer">
                     {resource.description}
                   </a>
                 </TableDataDescription>
