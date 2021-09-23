@@ -1,11 +1,13 @@
 import React from 'react';
-import Head from 'next/head';
+
 import { useQuery } from '@apollo/react-hooks';
-import { initializeApollo } from '~lib/apolloClient';
+import Head from 'next/head';
+import Script from 'next/script';
+
 import { RESOURCES } from '~graphql/queries/queries';
+import { initializeApollo } from '~lib/apolloClient';
 import Nav from '~views/components/Nav';
 import Table from '~views/components/Table';
-import Script from 'next/script'
 
 export default function Home({ viewer }) {
   const {
@@ -43,21 +45,6 @@ export default function Home({ viewer }) {
     <>
       <Head>
         <title>Japanese Resources Site</title>
-        <link rel="icon" href="/favicon.ico" />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
-        />
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap"
-          rel="stylesheet"
-        />
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap"
-          rel="stylesheet"
-        />
       </Head>
       <Script
         src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"
@@ -65,19 +52,19 @@ export default function Home({ viewer }) {
         onLoad={() => {
           // @ts-ignore
           kofiWidgetOverlay.draw('andres9888', {
-            'type': 'floating-chat',
+            type: 'floating-chat',
             'floating-chat.donateButton.text': 'Buy me Coffee',
             'floating-chat.donateButton.background-color': '#1890ff',
             'floating-chat.donateButton.text-color': '#fff',
-          })
+          });
         }}
       />
       <Nav
-        viewer={viewer}
-        searchTerm={searchTerm}
         handleChange={handleChange}
+        searchTerm={searchTerm}
+        viewer={viewer}
       />
-      <Table searchResults={searchResults} refetch={refetch} viewer={viewer} />
+      <Table refetch={refetch} searchResults={searchResults} viewer={viewer} />
     </>
   );
 }

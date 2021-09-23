@@ -1,15 +1,17 @@
-import React, { useEffect } from 'react'
-import Link from 'next/link'
-import { Layout, Affix, Input, Icon } from 'antd'
-import MenuItems from '~views/components/MenuItems'
-import { useRouter } from 'next/router'
-import Typed from 'typed.js'
+import React, { useEffect } from 'react';
 
-const { Header } = Layout
-const { Search } = Input
+import { Layout, Affix, Input, Icon } from 'antd';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import Typed from 'typed.js';
+
+import MenuItems from '~views/components/MenuItems';
+
+const { Header } = Layout;
+const { Search } = Input;
 
 const Nav = ({ viewer, searchTerm, handleChange }) => {
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     // Options for the Typed object
@@ -30,45 +32,45 @@ const Nav = ({ viewer, searchTerm, handleChange }) => {
       startDelay: 1000,
       smartBackspace: true,
       showCursor: true,
-    }
+    };
 
     // New Typed instance
-    const typed = new Typed('.ant-input', options)
+    const typed = new Typed('.ant-input', options);
 
     // Destroy Typed instance on unmounting the component to prevent memory leaks
     return () => {
-      typed.destroy()
-    }
-  }, [])
+      typed.destroy();
+    };
+  }, []);
 
   return (
-    <Affix offsetTop={0} className='app__affix-header'>
-      <Header className='app-header'>
-        <div className='app-header__logo-search-section'>
-          <div className='app-header__logo'>
-            <Link href='/'>
+    <Affix className="app__affix-header" offsetTop={0}>
+      <Header className="app-header">
+        <div className="app-header__logo-search-section">
+          <div className="app-header__logo">
+            <Link href="/">
               <div>
-                <Icon type='home' />
+                <Icon type="home" />
               </div>
             </Link>
           </div>
           {router.asPath === '/' ? (
-              <Search
-                type='text'
-                placeholder='Search to filter what you are looking for'
-                value={searchTerm}
-                onChange={handleChange}
-              />
+            <Search
+              placeholder="Search to filter what you are looking for"
+              type="text"
+              value={searchTerm}
+              onChange={handleChange}
+            />
           ) : (
-            <div></div>
+            <div />
           )}
         </div>
-        <div className='app-header__menu-section'>
+        <div className="app-header__menu-section">
           <MenuItems viewer={viewer} />
         </div>
       </Header>
     </Affix>
-  )
-}
+  );
+};
 
-export default Nav
+export default Nav;

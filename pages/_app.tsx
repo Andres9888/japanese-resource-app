@@ -1,9 +1,13 @@
-//@ts-nocheck
-import React, { useState } from 'react';
-import { ApolloProvider } from '@apollo/react-hooks';
-import { useApollo } from '~lib/apolloClient';
+// @ts-nocheck
 import '~styles/main.scss';
+
+import { useState } from 'react';
+
+import { ApolloProvider } from '@apollo/react-hooks';
+import Head from 'next/head';
+
 import { Viewer } from '~@types/globalTypes';
+import { useApollo } from '~lib/apolloClient';
 
 const initialViewer: Viewer = {
   id: null,
@@ -18,7 +22,24 @@ export default function App({ Component, pageProps }) {
   const apolloClient = useApollo(pageProps.initialApolloState);
   return (
     <ApolloProvider client={apolloClient}>
-      <Component {...pageProps} viewer={viewer} setViewer={setViewer} />
+      <Head>
+        <link href="/favicon.ico" rel="icon" />
+        <link
+          href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
+          rel="stylesheet"
+        />
+        <link href="https://fonts.gstatic.com" rel="preconnect" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap"
+          rel="stylesheet"
+        />
+        <link href="https://fonts.gstatic.com" rel="preconnect" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+      <Component {...pageProps} setViewer={setViewer} viewer={viewer} />
     </ApolloProvider>
   );
 }

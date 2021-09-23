@@ -16,16 +16,63 @@
     "plugin:prettier/recommended",
     "prettier",
     "prettier/react",
-"plugin:@next/next/recommended"
- ],
+    "plugin:@next/next/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings"
+  ],
   "plugins": [
     "@typescript-eslint",
     "react",
     "prettier",
     "graphql",
-    "better-styled-components"
+    "better-styled-components",
+    "import"
   ],
   "rules": {
+    "react/jsx-sort-props": [
+      "error",
+      {
+        "callbacksLast": true,
+        "shorthandFirst": true,
+        "shorthandLast": false,
+        "ignoreCase": false,
+        "noSortAlphabetically": false,
+        "reservedFirst": true
+      }
+    ],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          [
+            "parent",
+            "sibling"
+          ],
+          "index",
+          "object",
+          "type"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": [
+          "react"
+        ],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ],
+    "import/prefer-default-export": "off",
     "prettier/prettier": "error",
     "no-var": "warn",
     "no-console": "off",

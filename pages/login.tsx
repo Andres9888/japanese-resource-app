@@ -1,8 +1,6 @@
 /* eslint-disable import/extensions */
-import React from 'react';
-import LogIn from '~views/ui/LogIn';
-//import styled from 'styled-components'
 import NavBlank from '~views/components/NavBlank';
+import LogIn from '~views/ui/LogIn';
 
 function loginPage({ setViewer, viewer }) {
   return (
