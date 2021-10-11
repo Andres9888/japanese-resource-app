@@ -1,14 +1,13 @@
 export interface Viewer {
-  _id?: string
-  token?: string
-  avatar?: string
-  walletId?: string | null
-  didRequest: boolean
+  id?: string;
+  token?: string;
+  avatar?: string;
+  didRequest: boolean;
 }
 
 export interface Listing {
-  _id: ObjectId
-  title: string
-  description: string
-  image: string
+  _id: ObjectId;
+  title: string;
+  description: string;
+  image: string;
 }

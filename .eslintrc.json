@@ -29,6 +29,11 @@
     "import"
   ],
   "rules": {
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "import/no-unresolved": "off",
+    "import/extensions": "off",
+    "react/react-in-jsx-scope": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "react/jsx-sort-props": [
       "error",
       {
@@ -81,15 +86,10 @@
       {
         "extensions": [
           ".js",
-          ".jsx"
+          ".jsx",
+          ".ts",
+          ".tsx"
         ]
-      }
-    ],
-    "@typescript-eslint/explicit-function-return-type": [
-      "error",
-      {
-        "allowExpressions": true,
-        "allowTypedFunctionExpressions": true
       }
     ],
     /*"graphql/template-strings": [

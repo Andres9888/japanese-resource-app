@@ -1,4 +1,3 @@
-// @ts-nocheck
 import '~styles/main.scss';
 
 import { useState } from 'react';
@@ -6,14 +5,13 @@ import { useState } from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
 import Head from 'next/head';
 
-import { Viewer } from '~@types/globalTypes';
 import { useApollo } from '~lib/apolloClient';
+import { Viewer } from '~types/globalTypes';
 
 const initialViewer: Viewer = {
   id: null,
   token: null,
   avatar: null,
-  hasWallet: null,
   didRequest: false,
 };
 
