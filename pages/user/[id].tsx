@@ -1,15 +1,19 @@
 import React from 'react';
 
-import styled from 'styled-components';
-import { Avatar, Card, Divider, Typography } from 'antd';
-import NavBlank from '~views/components/NavBlank';
 import { useQuery } from '@apollo/react-hooks';
-import { GET_USER_RESOURCES_IDS, RESOURCES } from '~graphql/queries/queries';
+import { Avatar, Card, Divider } from 'antd';
 import { EmailShareButton } from 'react-share';
+import styled from 'styled-components';
 
-const { Paragraph, Text, Title } = Typography;
+import { GET_USER_RESOURCES_IDS, RESOURCES } from '~graphql/queries/queries';
+import { Viewer } from '~types/globalTypes';
+import NavBlank from '~views/components/NavBlank';
 
-function userPage({ viewer }) {
+interface Props {
+  viewer: Viewer;
+  // setViewer: (viewer: Viewer) => void;
+}
+function userPage({ viewer }: Props) {
   const { data, loading, error, refetch } = useQuery(GET_USER_RESOURCES_IDS, {
     variables: { id: viewer.id },
   });
@@ -48,25 +52,25 @@ function userPage({ viewer }) {
             {filtered.map((resource, _index) => (
               <TableRow key={resource.id}>
                 <TableData>
-                  <a href={resource.url} target="_blank" rel="noreferrer">
-                    <img src={resource.image} alt="" />
+                  <a href={resource.url} rel="noreferrer" target="_blank">
+                    <img alt="" src={resource.image} />
                   </a>
                 </TableData>
                 <TableDataTitle>
-                  <a href={resource.url} target="_blank" rel="noreferrer">
+                  <a href={resource.url} rel="noreferrer" target="_blank">
                     {resource.title}
                   </a>
                 </TableDataTitle>
                 <TableDataDescription>
-                  <a href={resource.url} target="_blank" rel="noreferrer">
+                  <a href={resource.url} rel="noreferrer" target="_blank">
                     {resource.description}
                   </a>
                 </TableDataDescription>
                 <TableData>
                   <EmailShareButton
-                    subject="hey check out these cool japanese resources"
                     body={`${resource.title}: ${resource.url}`}
                     separator=":"
+                    subject="hey check out these cool japanese resources"
                     url={resource.url}
                   >
                     <h2>email link</h2>

@@ -1,4 +1,4 @@
-//scalar IsoDate #declered for all .graphql files
+// scalar IsoDate #declered for all .graphql files
 import { gql } from '@apollo/client';
 
 export const typeDefs = gql`

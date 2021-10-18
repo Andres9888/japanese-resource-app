@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/prop-types */
 import '~styles/main.scss';
 
 import { useState } from 'react';
@@ -19,6 +21,7 @@ export default function App({ Component, pageProps }) {
   const [viewer, setViewer] = useState<Viewer>(initialViewer);
   const apolloClient = useApollo(pageProps.initialApolloState);
   return (
+    // @ts-ignore
     <ApolloProvider client={apolloClient}>
       <Head>
         <link href="/favicon.ico" rel="icon" />

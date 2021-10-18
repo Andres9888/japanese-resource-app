@@ -1,18 +1,18 @@
-import { ApolloServer } from 'apollo-server-express'
-//import { ApolloServer } from 'apollo-server-micro'
+import { ApolloServer } from 'apollo-server-express';
+// import { ApolloServer } from 'apollo-server-micro'
 
-import {typeDefs} from '~server/graphql/types/clientType'
-import {resolvers} from '~server/graphql/resolvers/clientResolver'
-import { connectDatabase } from '~server/database'
-import {schema} from '~lib/schema'
+import { schema } from '~lib/schema';
+import { connectDatabase } from '~server/database';
+import { resolvers } from '~server/graphql/resolvers/clientResolver';
+import { typeDefs } from '~server/graphql/types/clientType';
 
-const { PORT = 3000 } = process.env
+const { PORT = 3000 } = process.env;
 
 const playground = {
   endpoint: `http://localhost:${PORT}/graphql`,
-}
+};
 
-let db
+let db;
 
 const apollo = new ApolloServer({
   typeDefs,
@@ -22,20 +22,13 @@ const apollo = new ApolloServer({
   context: async () => {
     if (!db) {
       try {
-        db = await connectDatabase()}
-      catch (e) {
-        console.log('error no db', e)
+        db = await connectDatabase();
+      } catch (e) {
+        console.log('error no db', e);
       }
     }
-    return { db }
-  }
-}
+    return { db };
+  },
+});
 
-)
-
-
-
-
-
-
-export default apollo
+export default apollo;

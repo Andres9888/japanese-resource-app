@@ -1,11 +1,12 @@
-import React from 'react'
-import Head from 'next/head'
+import React from 'react';
 
-import Footer from '~views/components/Footer'
+import Head from 'next/head';
+
+import Footer from '~views/components/Footer';
 
 interface IProps {
-  title?: string
-  children: React.ReactNode
+  title?: string;
+  children: React.ReactNode;
 }
 
 const MainLayout: React.FC<IProps> = ({ title, children }) => (
@@ -13,12 +14,12 @@ const MainLayout: React.FC<IProps> = ({ title, children }) => (
     <Head>
       <title>{title}</title>
       <meta charSet="utf-8" />
-      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      <meta content="initial-scale=1.0, width=device-width" name="viewport" />
     </Head>
     {children}
 
     <Footer />
   </div>
-)
+);
 
-export default MainLayout
+export default MainLayout;

@@ -6,10 +6,15 @@ import Script from 'next/script';
 
 import { RESOURCES } from '~graphql/queries/queries';
 import { initializeApollo } from '~lib/apolloClient';
+import { Viewer } from '~types/globalTypes';
 import Nav from '~views/components/Nav';
 import Table from '~views/components/Table';
 
-export default function Home({ viewer }) {
+interface Props {
+  viewer: Viewer;
+  // setViewer: (viewer: Viewer) => void;
+}
+export default function Home({ viewer }: Props) {
   const {
     data: { listings },
     loading,

@@ -1,6 +1,6 @@
-const routes = require('next-routes')
+const Routes = require('next-routes');
 
-const routerObj = new routes().add('homeRoute', '/', 'index')
+const routerObj = new Routes().add('homeRoute', '/', 'index');
 
-export const { Link } = routerObj
-export default routerObj
+export const { Link } = routerObj;
+export default routerObj;

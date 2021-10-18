@@ -1,4 +1,4 @@
-import { GraphQLScalarType } from 'graphql'
+import { GraphQLScalarType } from 'graphql';
 
 export default {
   IsoDate: new GraphQLScalarType({
@@ -6,13 +6,12 @@ export default {
     description: 'A date and time, represented as an ISO-8601 string',
     serialize: value => {
       if (value instanceof Date) {
-        return value.toISOString()
-      } else {
-        return value
+        return value.toISOString();
       }
+      return value;
     },
     parseValue: value => new Date(value),
-    //@ts-ignore
+    // @ts-ignore
     parseLiteral: ast => new Date(ast.value),
   }),
-}
+};

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import styled from 'styled-components';
+
 import VoteButton from '~views/components/VoteButton';
 
 export default function Table({ viewer, searchResults, refetch }) {
@@ -11,17 +12,17 @@ export default function Table({ viewer, searchResults, refetch }) {
           {searchResults.map((resource, _index) => (
             <TableRow key={resource.id}>
               <TableData>
-                <a href={resource.url} target="_blank">
-                  <img src={resource.image} alt="" />
+                <a href={resource.url} rel="noreferrer" target="_blank">
+                  <img alt="" src={resource.image} />
                 </a>
               </TableData>
               <TableDataTitle>
-                <a href={resource.url} target="_blank">
+                <a href={resource.url} rel="noreferrer" target="_blank">
                   {resource.title}
                 </a>
               </TableDataTitle>
               <TableDataDescription>
-                <a href={resource.url} target="_blank">
+                <a href={resource.url} rel="noreferrer" target="_blank">
                   {resource.description}
                 </a>
               </TableDataDescription>

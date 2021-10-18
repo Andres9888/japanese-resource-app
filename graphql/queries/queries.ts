@@ -22,9 +22,9 @@ export const CHECK_USER_VOTE = gql`
 `;
 
 export const GET_USER_RESOURCES_IDS = gql`
-query getUserResourcesIds($id: ID!) {
-  getUserResourceIds(id: $id) {
-    resources
+  query getUserResourcesIds($id: ID!) {
+    getUserResourceIds(id: $id) {
+      resources
+    }
   }
-}`
-
+`;

@@ -1,4 +1,4 @@
-import * as path from 'path'
+import * as path from 'path';
 
 module.exports = {
   verbose: true,
@@ -7,4 +7,4 @@ module.exports = {
   globalSetup: path.join(__dirname, './global-setup.js'),
   globalTeardown: path.join(__dirname, './global-teardown.js'),
   testEnvironment: 'node',
-}
+};

@@ -1,17 +1,20 @@
 /* eslint-disable import/prefer-default-export */
-//@ts-nocheck
-import { ObjectId } from 'mongodb';
-import { connectDatabase } from '~server/database';
-import { Google } from '~lib/api';
+
 import crypto from 'crypto';
+
+import { ObjectId } from 'mongodb';
+
+import { incrementCountVariables } from '~graphql/mutations/__generated__/incrementCount';
 import { checkUserVoteIDVariables } from '~graphql/queries/__generated__/checkUserVoteID';
+import { Google } from '~lib/api';
+import { connectDatabase } from '~server/database';
 
 const getDb = async () => {
   const db = await connectDatabase();
   return db;
 };
 
-const logInViaGoogle = async (code: string, token: string, res: Response) => {
+const logInViaGoogle = async (code: string, token: string, _res: Response) => {
   const { user } = await Google.logIn(code);
 
   if (!user) {
@@ -121,7 +124,7 @@ export const resolvers = {
   Mutation: {
     increment: async (
       _root: undefined,
-      { id, viewer, resource }: { id: string }
+      { id, viewer, resource }: incrementCountVariables
     ) => {
       const db = await getDb();
       return (
