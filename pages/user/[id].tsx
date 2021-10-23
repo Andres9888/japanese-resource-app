@@ -53,7 +53,12 @@ function userPage({ viewer }: Props) {
               <TableRow key={resource.id}>
                 <TableData>
                   <a href={resource.url} rel="noreferrer" target="_blank">
-                    <Image alt="" src={resource.image} />
+                    <Image
+                      alt=""
+                      height={200}
+                      src={resource.image}
+                      width={200}
+                    />
                   </a>
                 </TableData>
                 <TableDataTitle>

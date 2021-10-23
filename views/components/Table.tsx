@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { getResources } from '~graphql/queries/__generated__/getResources';
 import { Viewer } from '~types/globalTypes';
 import VoteButton from '~views/components/VoteButton';
+import Image from 'next/image';
 
 interface Props {
   viewer: Viewer;
@@ -22,7 +23,9 @@ export default function Table({ viewer, searchResults, refetch }: Props) {
             <TableRow key={resource.id}>
               <TableData>
                 <a href={resource.url} rel="noreferrer" target="_blank">
-                  <img alt="" src={resource.image} />
+                  <Image height={200}
+                      
+                      width={200} alt="" src={resource.image} />
                 </a>
               </TableData>
               <TableDataTitle>

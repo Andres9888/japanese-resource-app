@@ -5,6 +5,7 @@ import React, { useEffect, useRef } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { Card, Layout, Typography } from 'antd';
 import gql from 'graphql-tag';
+import Image from 'next/image';
 import styled from 'styled-components';
 
 import { initializeApollo } from '~lib/apolloClient';
@@ -94,11 +95,14 @@ const LogIn = ({ setViewer }: Props) => {
         </div>
         <button
           className="log-in-card__google-button"
+          type="button"
           onClick={handleAuthorize}
         >
-          <img
+          <Image
             alt="Google Logo"
             className="log-in-card__google-button-logo"
+            height={43}
+            width={43}
             src="/static/images/google_logo.jpg"
           />
           <span className="log-in-card__google-button-text">
