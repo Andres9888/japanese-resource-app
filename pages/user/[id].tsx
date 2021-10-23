@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useQuery } from '@apollo/react-hooks';
 import { Avatar, Card, Divider } from 'antd';
+import Image from 'next/image';
 import { EmailShareButton } from 'react-share';
 import styled from 'styled-components';
 
@@ -52,7 +53,7 @@ function userPage({ viewer }: Props) {
               <TableRow key={resource.id}>
                 <TableData>
                   <a href={resource.url} rel="noreferrer" target="_blank">
-                    <img alt="" src={resource.image} />
+                    <Image alt="" src={resource.image} />
                   </a>
                 </TableData>
                 <TableDataTitle>
