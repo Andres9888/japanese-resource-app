@@ -24,6 +24,11 @@ export default function App({ Component, pageProps }) {
     // @ts-ignore
     <ApolloProvider client={apolloClient}>
       <Head>
+        <title>Japanese Resources</title>
+        <meta
+          content="Finding Quality Japanese Resources can be hard to find in the beginning. This site is here to make it easier for you. I currated a list of Japanese study material that I found useful and wanted to share. You can search and filter what type of resources and vote, track, and share the resources you like."
+          name="description"
+        />
         <link href="/favicon.ico" rel="icon" />
         <link
           href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
