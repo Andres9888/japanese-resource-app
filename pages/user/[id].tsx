@@ -14,7 +14,7 @@ interface Props {
   // setViewer: (viewer: Viewer) => void;
 }
 function userPage({ viewer }: Props) {
-  const { data, loading, error, refetch } = useQuery(GET_USER_RESOURCES_IDS, {
+  const { data, loading, error } = useQuery(GET_USER_RESOURCES_IDS, {
     variables: { id: viewer.id },
   });
 

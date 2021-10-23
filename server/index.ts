@@ -1,6 +1,10 @@
 // @ts-nocheck
+/* eslint-disable */
+// disable linting for this file to fix .env from not loading google oauth client id
+
 // if you want to use nextRoutes
 // const routes = require('~server/core/nextRoutes')
+require('dotenv').config();
 
 import { ApolloServer } from 'apollo-server-express';
 import compression from 'compression';
@@ -12,8 +16,6 @@ import next from 'next';
 import { schema } from '~lib/schema';
 import { resolvers } from '~server/graphql/resolvers/clientResolver';
 import { typeDefs } from '~server/graphql/types/clientType';
-// eslint-disable-next-line import/no-extraneous-dependencies
-require('dotenv').config();
 
 const { PORT = '3000', NODE_ENV } = process.env;
 const port = parseInt(PORT, 10) || 3000;
