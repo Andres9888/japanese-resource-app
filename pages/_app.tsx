@@ -1,16 +1,18 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
 import '~styles/main.scss';
-
 import { useState, useEffect } from 'react';
 
 import { ApolloProvider } from '@apollo/react-hooks';
+import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import { useApollo } from '~lib/apolloClient';
-import * as ga from '~lib/ga';
+import * as gtag from '~lib/gtag';
 import { Viewer } from '~types/globalTypes';
+
+const isProduction = process.env.NODE_ENV === 'production';
 
 const initialViewer: Viewer = {
   id: null,
@@ -19,19 +21,15 @@ const initialViewer: Viewer = {
   didRequest: false,
 };
 
-export default function App({ Component, pageProps }) {
+export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   useEffect(() => {
-    const handleRouteChange = url => {
-      ga.pageview(url);
+    const handleRouteChange = (url: URL) => {
+      /* invoke analytics function only for production */
+      if (isProduction) gtag.pageview(url);
     };
-    // When the component is mounted, subscribe to router changes
-    // and log those page views
     router.events.on('routeChangeComplete', handleRouteChange);
-
-    // If the component is unmounted, unsubscribe
-    // from the event with the `off` method
     return () => {
       router.events.off('routeChangeComplete', handleRouteChange);
     };
@@ -62,22 +60,6 @@ export default function App({ Component, pageProps }) {
         <link
           href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap"
           rel="stylesheet"
-        />
-        <script
-          async
-          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
-              page_path: window.location.pathname,
-            });
-          `,
-          }}
         />
       </Head>
       <Component {...pageProps} setViewer={setViewer} viewer={viewer} />
