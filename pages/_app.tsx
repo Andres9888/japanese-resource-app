@@ -2,12 +2,14 @@
 /* eslint-disable react/prop-types */
 import '~styles/main.scss';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { ApolloProvider } from '@apollo/react-hooks';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 import { useApollo } from '~lib/apolloClient';
+import * as ga from '~lib/ga';
 import { Viewer } from '~types/globalTypes';
 
 const initialViewer: Viewer = {
@@ -18,6 +20,23 @@ const initialViewer: Viewer = {
 };
 
 export default function App({ Component, pageProps }) {
+  const router = useRouter();
+
+  useEffect(() => {
+    const handleRouteChange = url => {
+      ga.pageview(url);
+    };
+    // When the component is mounted, subscribe to router changes
+    // and log those page views
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    // If the component is unmounted, unsubscribe
+    // from the event with the `off` method
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
+
   const [viewer, setViewer] = useState<Viewer>(initialViewer);
   const apolloClient = useApollo(pageProps.initialApolloState);
   return (
@@ -43,6 +62,22 @@ export default function App({ Component, pageProps }) {
         <link
           href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap"
           rel="stylesheet"
+        />
+        <script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
+              page_path: window.location.pathname,
+            });
+          `,
+          }}
         />
       </Head>
       <Component {...pageProps} setViewer={setViewer} viewer={viewer} />
