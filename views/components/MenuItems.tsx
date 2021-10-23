@@ -3,9 +3,16 @@ import React from 'react';
 import { Avatar, Button, Menu } from 'antd';
 import Link from 'next/link';
 
+import { Viewer } from '~types/globalTypes';
+
+interface Props {
+  viewer: Viewer;
+  // setViewer: (viewer: Viewer) => void;
+}
+
 const { Item, SubMenu } = Menu;
 
-const MenuItems = ({ viewer }) => {
+const MenuItems = ({ viewer }: Props) => {
   const subMenuLogin =
     viewer.id && viewer.avatar ? (
       <SubMenu title={<Avatar src={viewer.avatar} />}>

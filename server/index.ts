@@ -12,7 +12,7 @@ import next from 'next';
 import { schema } from '~lib/schema';
 import { resolvers } from '~server/graphql/resolvers/clientResolver';
 import { typeDefs } from '~server/graphql/types/clientType';
-
+// eslint-disable-next-line import/no-extraneous-dependencies
 require('dotenv').config();
 
 const { PORT = '3000', NODE_ENV } = process.env;

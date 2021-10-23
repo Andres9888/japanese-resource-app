@@ -5,12 +5,19 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Typed from 'typed.js';
 
+import { Viewer } from '~types/globalTypes';
 import MenuItems from '~views/components/MenuItems';
+
+interface Props {
+  viewer: Viewer;
+  searchTerm: string;
+  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
 
 const { Header } = Layout;
 const { Search } = Input;
 
-const Nav = ({ viewer, searchTerm, handleChange }) => {
+const Nav = ({ viewer, searchTerm, handleChange }: Props) => {
   const router = useRouter();
 
   useEffect(() => {

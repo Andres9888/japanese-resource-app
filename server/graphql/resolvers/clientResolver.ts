@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-
+// @ts-nocheck
 import crypto from 'crypto';
 
 import { ObjectId } from 'mongodb';
@@ -8,13 +8,14 @@ import { incrementCountVariables } from '~graphql/mutations/__generated__/increm
 import { checkUserVoteIDVariables } from '~graphql/queries/__generated__/checkUserVoteID';
 import { Google } from '~lib/api';
 import { connectDatabase } from '~server/database';
+import { Viewer } from '~types/globalTypes';
 
 const getDb = async () => {
   const db = await connectDatabase();
   return db;
 };
 
-const logInViaGoogle = async (code: string, token: string, _res: Response) => {
+const logInViaGoogle = async (code: string, token: string) => {
   const { user } = await Google.logIn(code);
 
   if (!user) {
@@ -76,7 +77,7 @@ const logInViaGoogle = async (code: string, token: string, _res: Response) => {
       contact: userEmail,
       resources: [],
     });
-
+    // eslint-disable-next-line prefer-destructuring
     viewer = insertResult.ops[0];
   }
 
@@ -85,7 +86,7 @@ const logInViaGoogle = async (code: string, token: string, _res: Response) => {
 
 export const resolvers = {
   Query: {
-    listings: async (_root: undefined, _args: {}) => {
+    listings: async () => {
       try {
         const db = await getDb();
         return db.listings.find({}).toArray();

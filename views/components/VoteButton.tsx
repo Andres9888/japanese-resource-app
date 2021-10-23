@@ -4,13 +4,23 @@ import { useMutation } from '@apollo/react-hooks';
 import styled from 'styled-components';
 
 import { INCREMENT_COUNT } from '~graphql/mutations/mutations';
+// eslint-disable-next-line camelcase
+import { getResources_listings } from '~graphql/queries/__generated__/getResources';
 import { CHECK_USER_VOTE } from '~graphql/queries/queries';
 import { initializeApollo } from '~lib/apolloClient';
+import { Viewer } from '~types/globalTypes';
 
-const VoteButton = ({ resource, viewer, refetch }) => {
+interface Props {
+  viewer: Viewer;
+  // eslint-disable-next-line camelcase
+  resource: getResources_listings;
+  refetch: () => Promise<void>;
+}
+
+const VoteButton = ({ resource, viewer, refetch }: Props) => {
   const [incrementCount] = useMutation(INCREMENT_COUNT);
   const [disabled, setDisabled] = useState(false);
-
+  // eslint-disable-next-line no-shadow
   const handleIncrementCount = async resource => {
     if (viewer.id) {
       const client = initializeApollo();

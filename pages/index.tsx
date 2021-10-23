@@ -1,9 +1,12 @@
+// @ts-nocheck
+
 import React from 'react';
 
 import { useQuery } from '@apollo/react-hooks';
 import Head from 'next/head';
 import Script from 'next/script';
 
+import { getResources } from '~graphql/queries/__generated__/getResources';
 import { RESOURCES } from '~graphql/queries/queries';
 import { initializeApollo } from '~lib/apolloClient';
 import { Viewer } from '~types/globalTypes';
@@ -20,7 +23,7 @@ export default function Home({ viewer }: Props) {
     loading,
     error,
     refetch,
-  } = useQuery(RESOURCES);
+  } = useQuery<getResources>(RESOURCES);
 
   const [searchTerm, setSearchTerm] = React.useState('');
   const [searchResults, setSearchResults] = React.useState([]);

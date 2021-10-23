@@ -1,16 +1,19 @@
 import React from 'react';
 
-import { Layout, Avatar, Affix, Input, Button, Icon, Menu } from 'antd';
+import { Layout, Affix, Icon } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+import { Viewer } from '~types/globalTypes';
 import MenuItems from '~views/components/MenuItems';
 
-const { Header } = Layout;
-const { Search } = Input;
-const { Item, SubMenu } = Menu;
+interface Props {
+  viewer: Viewer;
+}
 
-const NavBlank = ({ viewer }) => {
+const { Header } = Layout;
+
+const NavBlank = ({ viewer }: Props) => {
   const router = useRouter();
 
   console.log(router);

@@ -1,15 +1,24 @@
+// @ts-nocheck
 import React from 'react';
 
 import styled from 'styled-components';
 
+import { getResources } from '~graphql/queries/__generated__/getResources';
+import { Viewer } from '~types/globalTypes';
 import VoteButton from '~views/components/VoteButton';
 
-export default function Table({ viewer, searchResults, refetch }) {
+interface Props {
+  viewer: Viewer;
+  searchResults: getResources;
+  refetch: () => Promise<void>;
+}
+
+export default function Table({ viewer, searchResults, refetch }: Props) {
   return (
     <div className="container">
       <table className="table is-fullwidth is-hoverable">
         <tbody>
-          {searchResults.map((resource, _index) => (
+          {searchResults.map(resource => (
             <TableRow key={resource.id}>
               <TableData>
                 <a href={resource.url} rel="noreferrer" target="_blank">
@@ -31,7 +40,7 @@ export default function Table({ viewer, searchResults, refetch }) {
                   {resource.tags.map(tag => (
                     <div key={`${`${resource.id}-${tag}`}`} className="control">
                       <div className="tags has-addons">
-                        <a className="tag is-link">{tag}</a>
+                        <span className="tag is-link">{tag}</span>
                       </div>
                     </div>
                   ))}
