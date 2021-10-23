@@ -15,7 +15,6 @@ import Table from '~views/components/Table';
 
 interface Props {
   viewer: Viewer;
-  // setViewer: (viewer: Viewer) => void;
 }
 export default function Home({ viewer }: Props) {
   const {
