@@ -52,6 +52,10 @@ export default function Home({ viewer }: Props) {
     <>
       <Head>
         <title>Japanese Resources Site</title>
+        <meta
+          content="Q7vgw_JZpE7XtVGSpkL6ZpLx3745jU_LDc6YVFzU3T8"
+          name="google-site-verification"
+        />
       </Head>
       <Script
         src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"
