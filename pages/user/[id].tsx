@@ -11,7 +11,6 @@ import NavBlank from '~views/components/NavBlank';
 
 interface Props {
   viewer: Viewer;
-  // setViewer: (viewer: Viewer) => void;
 }
 function userPage({ viewer }: Props) {
   const { data, loading, error } = useQuery(GET_USER_RESOURCES_IDS, {
