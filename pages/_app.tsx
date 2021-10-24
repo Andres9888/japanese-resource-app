@@ -1,18 +1,15 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
 import '~styles/main.scss';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import { ApolloProvider } from '@apollo/react-hooks';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
+import Script from 'next/script';
 
 import { useApollo } from '~lib/apolloClient';
-import * as gtag from '~lib/gtag';
 import { Viewer } from '~types/globalTypes';
-
-const isProduction = process.env.NODE_ENV === 'production';
 
 const initialViewer: Viewer = {
   id: null,
@@ -22,24 +19,27 @@ const initialViewer: Viewer = {
 };
 
 export default function App({ Component, pageProps }: AppProps) {
-  const router = useRouter();
-
-  useEffect(() => {
-    const handleRouteChange = (url: URL) => {
-      /* invoke analytics function only for production */
-      if (isProduction) gtag.pageview(url);
-    };
-    router.events.on('routeChangeComplete', handleRouteChange);
-    return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
-    };
-  }, [router.events]);
-
   const [viewer, setViewer] = useState<Viewer>(initialViewer);
   const apolloClient = useApollo(pageProps.initialApolloState);
   return (
     // @ts-ignore
     <ApolloProvider client={apolloClient}>
+      {/* Global Site Tag (gtag.js) - Google Analytics */}
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-XJJPHGTZE8"
+        strategy="lazyOnload"
+      />
+
+      <Script strategy="lazyOnload">
+        {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-XJJPHGTZE8', {
+              page_path: window.location.pathname,
+            });
+                `}
+      </Script>
       <Head>
         <title>Japanese Resources</title>
         <meta
