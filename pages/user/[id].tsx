@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useQuery } from '@apollo/react-hooks';
 import { Avatar, Card, Divider } from 'antd';
+import axios from 'axios';
 import Image from 'next/image';
 import { EmailShareButton } from 'react-share';
 import styled from 'styled-components';
@@ -17,12 +18,29 @@ function userPage({ viewer }: Props) {
   const { data, loading, error } = useQuery(GET_USER_RESOURCES_IDS, {
     variables: { id: viewer.id },
   });
-
+  const [recommendation, setRecommendation] = useState(null);
   const {
     data: dataResources,
     loading: loadingResources,
     error: errorResources,
   } = useQuery(RESOURCES);
+
+  useEffect(() => {
+    const getRecommendation = async () => {
+      try {
+        const response = await axios.get(
+          `/api/recommendation?user=${viewer.id}`
+        );
+        console.log(response);
+        setRecommendation(response.data);
+      } catch (err) {
+        // get response with a status code not in range 2xx
+        console.log(err);
+      }
+    };
+
+    getRecommendation();
+  }, []);
 
   if (loading || loadingResources) {
     return <h2>loading</h2>;
@@ -30,10 +48,16 @@ function userPage({ viewer }: Props) {
   if (error || errorResources) {
     <h2>error</h2>;
   }
-
   const filtered = dataResources.listings.filter(
     resource => data.getUserResourceIds[0].resources.indexOf(resource.id) > -1
   );
+
+  const filtered2 = dataResources.listings.filter(
+    resource => resource.id === recommendation
+  );
+  console.log(dataResources.listings);
+
+  console.log(filtered2);
 
   return (
     <div>
@@ -47,9 +71,40 @@ function userPage({ viewer }: Props) {
         </Card>
       </div>
       <div className="container">
+        <Header>Recommended Resources</Header>
         <table className="table is-fullwidth is-hoverable">
           <tbody>
-            {filtered.map((resource, _index) => (
+            {filtered2.map(resource => (
+              <TableRow key={resource.id}>
+                <TableData>
+                  <a href={resource.url} rel="noreferrer" target="_blank">
+                    <Image
+                      alt=""
+                      height={200}
+                      src={resource.image}
+                      width={200}
+                    />
+                  </a>
+                </TableData>
+                <TableDataTitle>
+                  <a href={resource.url} rel="noreferrer" target="_blank">
+                    {resource.title}
+                  </a>
+                </TableDataTitle>
+                <TableDataDescription>
+                  <a href={resource.url} rel="noreferrer" target="_blank">
+                    {resource.description}
+                  </a>
+                </TableDataDescription>
+              </TableRow>
+            ))}
+          </tbody>
+        </table>
+        <Divider />
+        <Header>Your Liked Resources</Header>
+        <table className="table is-fullwidth is-hoverable">
+          <tbody>
+            {filtered.map(resource => (
               <TableRow key={resource.id}>
                 <TableData>
                   <a href={resource.url} rel="noreferrer" target="_blank">
@@ -91,6 +146,12 @@ function userPage({ viewer }: Props) {
 }
 
 export default userPage;
+
+const Header = styled.h2`
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+`;
 
 const TableRow = styled.tr`
   border-radius: 6px;

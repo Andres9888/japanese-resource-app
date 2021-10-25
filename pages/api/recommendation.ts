@@ -43,21 +43,28 @@ export default async (req, res) => {
 
     const stringResources = resources.map(element => JSON.stringify(element));
 
-    console.log([['empty', ...stringResources], ...reviewData]);
-
     const kNNRecommender = new KNNRecommender([
       ['emptycorner', ...stringResources],
       ...reviewData,
     ]);
-    kNNRecommender.initializeRecommender().then(() => {
-      const userRecommendations = kNNRecommender.generateNNewUniqueRecommendationsForUserId(
-        `${req.query.user}`
-      );
-      console.log(
-        `new recommendation for ${req.query.user} ${userRecommendations[0].itemId}`
-      );
-      res.status(200).json({ recommendation: userRecommendations[0].itemId });
-    });
+
+    kNNRecommender
+      .initializeRecommender()
+      .then(() => {
+        const userRecommendations = kNNRecommender.generateNNewUniqueRecommendationsForUserId(
+          req.query.user
+        );
+        console.log(
+          `new recommendation for ${req.query.user} ${userRecommendations[0].itemId}`
+        );
+        res.status(200).send(userRecommendations[0].itemId);
+      })
+      .catch(err => {
+        console.error(err);
+        return res.status(400).send({
+          message: `${err}`,
+        });
+      });
   } catch (error) {
     throw new Error(`Failed to query listings: ${error}`);
   }
