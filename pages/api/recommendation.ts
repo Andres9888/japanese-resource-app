@@ -11,7 +11,7 @@ const agg = [
   },
 ];
 
-export default async (_req, res) => {
+export default async (req, res) => {
   try {
     const db = await connectDatabase();
     const resources = await db.listings.distinct('_id', {});
@@ -51,13 +51,13 @@ export default async (_req, res) => {
     ]);
     kNNRecommender.initializeRecommender().then(() => {
       const userRecommendations = kNNRecommender.generateNNewUniqueRecommendationsForUserId(
-        '101486254571069117979'
+        `${req.query.user}`
       );
       console.log(
-        `new recommendation for 101486254571069117979 ${userRecommendations[0].itemId}`
+        `new recommendation for ${req.query.user} ${userRecommendations[0].itemId}`
       );
+      res.status(200).json({ recommendation: userRecommendations[0].itemId });
     });
-    res.status(200).json({ resources, users, reviewData });
   } catch (error) {
     throw new Error(`Failed to query listings: ${error}`);
   }
