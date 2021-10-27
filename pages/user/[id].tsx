@@ -60,15 +60,14 @@ function userPage({ viewer }: Props) {
     <div>
       <NavBlank viewer={viewer} />
       <div className="user-profile">
-        <Card className="user-profile__card">
-          <div className="user-profile__avatar">
-            <Avatar size={100} src={viewer.avatar} />
-          </div>
-          <Divider />
-        </Card>
+        <Divider />
+        <div className="user-profile__avatar">
+          <Avatar size={100} src={viewer.avatar} />
+        </div>
+        <Divider />
       </div>
       <div className="container">
-        <Header>Recommended Resources</Header>
+        <Header>You Might Like This Resource Below</Header>
         <table className="table is-fullwidth is-hoverable">
           <tbody>
             {filtered2.map(resource => (
@@ -145,7 +144,8 @@ function userPage({ viewer }: Props) {
 export default userPage;
 
 const Header = styled.h2`
-  font-size: 18px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 34px;
   font-weight: bold;
   text-align: center;
 `;
