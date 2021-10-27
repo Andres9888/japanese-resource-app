@@ -55,9 +55,6 @@ function userPage({ viewer }: Props) {
   const filtered2 = dataResources.listings.filter(
     resource => resource.id === recommendation
   );
-  console.log(dataResources.listings);
-
-  console.log(filtered2);
 
   return (
     <div>

@@ -7,7 +7,6 @@ import { Viewer } from '~types/globalTypes';
 
 interface Props {
   viewer: Viewer;
-  // setViewer: (viewer: Viewer) => void;
 }
 
 const { Item, SubMenu } = Menu;
@@ -17,7 +16,7 @@ const MenuItems = ({ viewer }: Props) => {
     viewer.id && viewer.avatar ? (
       <SubMenu title={<Avatar src={viewer.avatar} />}>
         <Item key="/user">
-          <Link href="/user/1">Profile</Link>
+          <Link href={`/user/${viewer.id}`}>Profile</Link>
         </Item>
       </SubMenu>
     ) : (
