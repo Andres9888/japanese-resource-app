@@ -4,10 +4,10 @@ import React, { useEffect, useRef } from 'react';
 
 import { useMutation } from '@apollo/react-hooks';
 import { Card, Layout, Typography } from 'antd';
-import gql from 'graphql-tag';
 import Image from 'next/image';
-import styled from 'styled-components';
 
+import { LOG_IN } from '~graphql/mutations/mutations';
+import { AUTH_URL } from '~graphql/queries/queries';
 import { initializeApollo } from '~lib/apolloClient';
 import { Viewer } from '~types/globalTypes';
 import 'antd/dist/antd.css';
@@ -18,29 +18,6 @@ const { Text, Title } = Typography;
 interface Props {
   setViewer: (viewer: Viewer) => void;
 }
-
-const AUTH_URL = gql`
-  query AuthUrl {
-    authUrl
-  }
-`;
-
-const LOG_IN = gql`
-  mutation LogIn($input: LogInInput) {
-    logIn(input: $input) {
-      id
-      token
-      avatar
-      hasWallet
-      didRequest
-    }
-  }
-`;
-
-const LogInButton = styled.button`
-  border: 1px gray solid;
-  font-size: 48px;
-`;
 
 const LogIn = ({ setViewer }: Props) => {
   const client = initializeApollo();
