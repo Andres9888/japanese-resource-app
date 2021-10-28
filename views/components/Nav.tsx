@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 
-import { Layout, Affix, Input, Icon } from 'antd';
+import { Layout, Affix, Icon } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Typed from 'typed.js';
 
+import SearchBar from '~features/searchBar';
 import { Viewer } from '~types/globalTypes';
 import MenuItems from '~views/components/MenuItems';
 
@@ -15,7 +16,6 @@ interface Props {
 }
 
 const { Header } = Layout;
-const { Search } = Input;
 
 const Nav = ({ viewer, searchTerm, handleChange }: Props) => {
   const router = useRouter();
@@ -62,12 +62,7 @@ const Nav = ({ viewer, searchTerm, handleChange }: Props) => {
             </Link>
           </div>
           {router.asPath === '/' ? (
-            <Search
-              placeholder="Search to filter what you are looking for"
-              type="text"
-              value={searchTerm}
-              onChange={handleChange}
-            />
+            <SearchBar handleChange={handleChange} searchTerm={searchTerm} />
           ) : (
             <div />
           )}

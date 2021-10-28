@@ -20,6 +20,9 @@
     "noImplicitAny": false,
     "baseUrl": "./",
     "paths": {
+      "~features/*": [
+        "./features/*"
+      ],
       "~types/*": [
         "./@types/*"
       ],

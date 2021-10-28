@@ -102,8 +102,8 @@ const LogIn = ({ setViewer }: Props) => {
             alt="Google Logo"
             className="log-in-card__google-button-logo"
             height={43}
-            width={43}
             src="/static/images/google_logo.jpg"
+            width={43}
           />
           <span className="log-in-card__google-button-text">
             Sign in with Google
