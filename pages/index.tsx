@@ -75,7 +75,9 @@ export default function Home({ viewer }: Props) {
         strategy="lazyOnload"
         onLoad={() => {
           // @ts-ignore
-          var sakura = new Sakura('body', {
+
+          window.sakura = new Sakura('body', {
+            maxSize:30,
             colors: [
               {
                 gradientColorStart: 'rgba(255, 183, 197, 0.9)',
@@ -94,8 +96,12 @@ export default function Home({ viewer }: Props) {
               },
             ],
           });
+          window.sakura.stop(true);
         }}
-      />
+        
+      >
+      
+      </Script> 
 
       <Nav
         handleChange={handleChange}

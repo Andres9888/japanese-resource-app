@@ -4,9 +4,9 @@ import React from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
 
+import VoteButton from '~features/voteButton';
 import { getResources } from '~graphql/queries/__generated__/getResources';
 import { Viewer } from '~types/globalTypes';
-import VoteButton from '~views/components/VoteButton';
 
 interface Props {
   viewer: Viewer;
