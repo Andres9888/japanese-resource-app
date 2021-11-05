@@ -28,3 +28,9 @@ export const GET_USER_RESOURCES_IDS = gql`
     }
   }
 `;
+
+export const AUTH_URL = gql`
+  query AuthUrl {
+    authUrl
+  }
+`;

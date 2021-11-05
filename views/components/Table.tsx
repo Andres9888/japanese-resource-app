@@ -1,12 +1,12 @@
 // @ts-nocheck
 import React from 'react';
 
+import Image from 'next/image';
 import styled from 'styled-components';
 
 import { getResources } from '~graphql/queries/__generated__/getResources';
 import { Viewer } from '~types/globalTypes';
 import VoteButton from '~views/components/VoteButton';
-import Image from 'next/image';
 
 interface Props {
   viewer: Viewer;
@@ -23,9 +23,7 @@ export default function Table({ viewer, searchResults, refetch }: Props) {
             <TableRow key={resource.id}>
               <TableData>
                 <a href={resource.url} rel="noreferrer" target="_blank">
-                  <Image height={200}
-                      
-                      width={200} alt="" src={resource.image} />
+                  <Image alt="" height={200} src={resource.image} width={200} />
                 </a>
               </TableData>
               <TableDataTitle>

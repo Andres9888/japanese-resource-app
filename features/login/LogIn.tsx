@@ -1,15 +1,21 @@
-// @ts-nocheck
-
 import React, { useEffect, useRef } from 'react';
 
 import { useMutation } from '@apollo/react-hooks';
-import { Card, Layout, Typography } from 'antd';
-import gql from 'graphql-tag';
+import { Card, Layout, Typography, Spin } from 'antd';
 import Image from 'next/image';
-import styled from 'styled-components';
+import { useRouter } from 'next/router';
 
+import {
+  LogIn as LogInData,
+  LogInVariables,
+} from '~graphql/mutations/__generated__/LogIn';
+import { LOG_IN } from '~graphql/mutations/mutations';
+import { AuthUrl as AuthUrlData } from '~graphql/queries/__generated__/AuthUrl';
+import { AUTH_URL } from '~graphql/queries/queries';
 import { initializeApollo } from '~lib/apolloClient';
+import { displaySuccessNotification, displayErrorMessage } from '~lib/utils';
 import { Viewer } from '~types/globalTypes';
+import { ErrorBanner } from '~views/components/ErrorBanner';
 import 'antd/dist/antd.css';
 
 const { Content } = Layout;
@@ -19,31 +25,9 @@ interface Props {
   setViewer: (viewer: Viewer) => void;
 }
 
-const AUTH_URL = gql`
-  query AuthUrl {
-    authUrl
-  }
-`;
-
-const LOG_IN = gql`
-  mutation LogIn($input: LogInInput) {
-    logIn(input: $input) {
-      id
-      token
-      avatar
-      hasWallet
-      didRequest
-    }
-  }
-`;
-
-const LogInButton = styled.button`
-  border: 1px gray solid;
-  font-size: 48px;
-`;
-
 const LogIn = ({ setViewer }: Props) => {
   const client = initializeApollo();
+  const router = useRouter();
   const [
     logIn,
     { data: logInData, loading: logInLoading, error: logInError },
@@ -51,6 +35,7 @@ const LogIn = ({ setViewer }: Props) => {
     onCompleted: data => {
       if (data && data.logIn && data.logIn.token) {
         setViewer(data.logIn);
+        displaySuccessNotification("You've successfully logged in!");
       }
     },
   });
@@ -73,11 +58,29 @@ const LogIn = ({ setViewer }: Props) => {
         query: AUTH_URL,
       });
       window.location.href = data.authUrl;
-    } catch {}
+    } catch {
+      displayErrorMessage(
+        "Sorry! We weren't able to log you in. Please try again later!"
+      );
+    }
   };
+  if (logInLoading) {
+    return (
+      <Content className="log-in">
+        <Spin size="large" tip="Logging you in..." />
+      </Content>
+    );
+  }
+  if (logInData && logInData.logIn) {
+    router.push('/');
+  }
+  const logInErrorBannerElement = logInError ? (
+    <ErrorBanner description="Sorry! We weren't able to log you in. Please try again later!" />
+  ) : null;
 
   return (
     <Content className="log-in">
+      {logInErrorBannerElement}
       <Card className="log-in-card">
         <div className="log-in-card__intro">
           <Title className="log-in-card__intro-title" level={3}>
@@ -102,16 +105,16 @@ const LogIn = ({ setViewer }: Props) => {
             alt="Google Logo"
             className="log-in-card__google-button-logo"
             height={43}
-            width={43}
             src="/static/images/google_logo.jpg"
+            width={43}
           />
           <span className="log-in-card__google-button-text">
             Sign in with Google
           </span>
         </button>
         <Text type="secondary">
-          Note: By signing in, you'll be redirected to the Google consent form
-          to sign in with your Google account.
+          Note: By signing in, you`&apos;`ll be redirected to the Google consent
+          form to sign in with your Google account.
         </Text>
       </Card>
     </Content>
