@@ -13,9 +13,15 @@ import { Viewer } from '~types/globalTypes';
 import Nav from '~views/components/Nav';
 import Table from '~views/components/Table';
 
+declare global {
+  interface Window {
+    sakura: any;
+  }
+}
 interface Props {
   viewer: Viewer;
 }
+
 export default function Home({ viewer }: Props) {
   const {
     data: { listings },
@@ -77,7 +83,7 @@ export default function Home({ viewer }: Props) {
           // @ts-ignore
 
           window.sakura = new Sakura('body', {
-            maxSize:30,
+            maxSize: 30,
             colors: [
               {
                 gradientColorStart: 'rgba(255, 183, 197, 0.9)',
@@ -98,10 +104,7 @@ export default function Home({ viewer }: Props) {
           });
           window.sakura.stop(true);
         }}
-        
-      >
-      
-      </Script> 
+      />
 
       <Nav
         handleChange={handleChange}
