@@ -44,8 +44,8 @@ const VoteButton = ({ resource, viewer, refetch }: Props) => {
         });
 
         setDisabled(!disabled);
-        window.sakura.start(true);
         refetch();
+        window.sakura.start(true);
       } else {
         alert('already voted on this resource');
       }
