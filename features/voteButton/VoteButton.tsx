@@ -21,7 +21,7 @@ const VoteButton = ({ resource, viewer, refetch }: Props) => {
   const [incrementCount] = useMutation(INCREMENT_COUNT);
   const [disabled, setDisabled] = useState(false);
   // eslint-disable-next-line no-shadow
-  const handleIncrementCount = async resource => {
+  const handleIncrementCount = async (resource) => {
     if (viewer.id) {
       const client = initializeApollo();
       const {
@@ -42,8 +42,9 @@ const VoteButton = ({ resource, viewer, refetch }: Props) => {
             resource: resource.id,
           },
         });
-        window.sakura.start(true)
+
         setDisabled(!disabled);
+        window.sakura.start(true);
         refetch();
       } else {
         alert('already voted on this resource');
