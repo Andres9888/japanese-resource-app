@@ -116,8 +116,8 @@ export const resolvers = {
     authUrl: (): string => {
       try {
         return Google.authUrl;
-      } catch {
-        throw new Error('Failed to Query google auth url');
+      } catch (error) {
+        throw new Error(`Failed to get authUrl ${error}`);
       }
     },
   },
@@ -127,17 +127,21 @@ export const resolvers = {
       _root: undefined,
       { id, viewer, resource }: incrementCountVariables
     ) => {
-      const db = await getDb();
-      return (
-        await db.listings.updateOne(
-          { _id: new ObjectId(id) },
-          { $inc: { count: 1 } }
-        ),
-        db.users.updateOne(
-          { _id: viewer },
-          { $addToSet: { resources: resource } }
-        )
-      );
+      try {
+        const db = await getDb();
+        return (
+          await db.listings.updateOne(
+            { _id: new ObjectId(id) },
+            { $inc: { count: 1 } }
+          ),
+          db.users.updateOne(
+            { _id: viewer },
+            { $addToSet: { resources: resource } }
+          )
+        );
+      } catch (error) {
+        throw new Error(`Failed to Vote : ${error}`);
+      }
     },
     logIn: async (_root: undefined, { input }) => {
       try {

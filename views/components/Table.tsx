@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 import VoteButton from '~features/voteButton';
 import { getResources } from '~graphql/queries/__generated__/getResources';
+import { GET_USER_RESOURCES_IDS } from '~graphql/queries/queries';
 import { Viewer } from '~types/globalTypes';
 
 interface Props {

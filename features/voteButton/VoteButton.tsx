@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 import styled from 'styled-components';
 
+import {
+  incrementCount as incrementCountData,
+  incrementCountVariables,
+} from '~graphql/mutations/__generated__/incrementCount';
 import { INCREMENT_COUNT } from '~graphql/mutations/mutations';
 // eslint-disable-next-line camelcase
 import { getResources_listings } from '~graphql/queries/__generated__/getResources';
-import { CHECK_USER_VOTE } from '~graphql/queries/queries';
+import { GET_USER_RESOURCES_IDS } from '~graphql/queries/queries';
 import { initializeApollo } from '~lib/apolloClient';
+import { displaySuccessNotification, displayErrorMessage } from '~lib/utils';
 import { Viewer } from '~types/globalTypes';
+// import { getUserResourcesIds } from '../../graphql/queries/__generated__/getUserResourcesIds';
 
 interface Props {
   viewer: Viewer;
@@ -18,23 +24,27 @@ interface Props {
 }
 
 const VoteButton = ({ resource, viewer, refetch }: Props) => {
-  const [incrementCount] = useMutation(INCREMENT_COUNT);
+  const [incrementCount] = useMutation<
+    incrementCountData,
+    incrementCountVariables
+  >(INCREMENT_COUNT);
+
+  const [
+    getUserResourcesIds,
+    { data, refetch: refetchUserResourcesIds, loading, error },
+  ] = useLazyQuery(GET_USER_RESOURCES_IDS);
+
   const [disabled, setDisabled] = useState(false);
   // eslint-disable-next-line no-shadow
-  const handleIncrementCount = async (resource) => {
+  const handleIncrementCount = async resource => {
     if (viewer.id) {
-      const client = initializeApollo();
-      const {
-        data: { checkUserVote: didVote },
-      } = await client.query({
-        query: CHECK_USER_VOTE,
-        variables: {
-          id: viewer.id,
-          resource: resource.id,
-        },
-      });
+      getUserResourcesIds({ variables: { id: viewer.id } });
 
-      if (didVote.length === 0) {
+      const didVote = await data.getUserResourcesIds.userResourcesIds[0].some(
+        votedResource => votedResource === resource.id
+      );
+
+      if (!didVote && !disabled) {
         await incrementCount({
           variables: {
             id: resource.id,
@@ -42,15 +52,16 @@ const VoteButton = ({ resource, viewer, refetch }: Props) => {
             resource: resource.id,
           },
         });
-
-        setDisabled(!disabled);
-        refetch();
-        window.sakura.start(true);
       } else {
-        alert('already voted on this resource');
+        displayErrorMessage('already voted on this resource');
       }
+
+      refetchUserResourcesIds();
+      // setDisabled(true);
+      refetch();
+      // window.sakura.start(true);
     } else {
-      alert('most login to vote');
+      displayErrorMessage('most login to vote');
     }
   };
   return (

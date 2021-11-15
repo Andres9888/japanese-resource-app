@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useQuery } from '@apollo/react-hooks';
-import { Avatar, Card, Divider } from 'antd';
+import { Avatar, Divider } from 'antd';
 import axios from 'axios';
 import Image from 'next/image';
 import { EmailShareButton } from 'react-share';
