@@ -3,6 +3,8 @@ import React from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import styled from 'styled-components';
 
+import { getUserResourcesIds as getUserResourcesIdsData } from '../../graphql/queries/__generated__/getUserResourcesIds';
+
 import {
   incrementCount as incrementCountData,
   incrementCountVariables,
@@ -12,13 +14,14 @@ import { INCREMENT_COUNT } from '~graphql/mutations/mutations';
 import { getResources_listings } from '~graphql/queries/__generated__/getResources';
 import { displayErrorMessage } from '~lib/utils';
 import { Viewer } from '~types/globalTypes';
-// import { getUserResourcesIds } from '../../graphql/queries/__generated__/getUserResourcesIds';
 
 interface Props {
   viewer: Viewer;
   // eslint-disable-next-line camelcase
   resource: getResources_listings;
+  userResourcesIds: getUserResourcesIdsData;
   refetch: () => Promise<void>;
+  refetchUserResourcesIds: () => Promise<void>;
 }
 
 const VoteButton = ({

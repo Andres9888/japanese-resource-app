@@ -7,6 +7,11 @@ import Image from 'next/image';
 import { EmailShareButton } from 'react-share';
 import styled from 'styled-components';
 
+import {
+  getUserResourcesIds as getUserResourceIdsData,
+  getUserResourcesIdsVariables,
+} from '../../graphql/queries/__generated__/getUserResourcesIds';
+
 import { GET_USER_RESOURCES_IDS, RESOURCES } from '~graphql/queries/queries';
 import { Viewer } from '~types/globalTypes';
 import NavBlank from '~views/components/NavBlank';
@@ -15,7 +20,10 @@ interface Props {
   viewer: Viewer;
 }
 function userPage({ viewer }: Props) {
-  const { data, loading, error } = useQuery(GET_USER_RESOURCES_IDS, {
+  const { data, loading, error } = useQuery<
+    getUserResourceIdsData,
+    getUserResourcesIdsVariables
+  >(GET_USER_RESOURCES_IDS, {
     variables: { id: viewer.id },
   });
   const [recommendation, setRecommendation] = useState(null);

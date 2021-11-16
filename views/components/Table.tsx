@@ -5,6 +5,11 @@ import { useQuery } from '@apollo/react-hooks';
 import Image from 'next/image';
 import styled from 'styled-components';
 
+import {
+  getUserResourcesIds as getUserResourceIdsData,
+  getUserResourcesIdsVariables,
+} from '../../graphql/queries/__generated__/getUserResourcesIds';
+
 import VoteButton from '~features/voteButton';
 import { getResources } from '~graphql/queries/__generated__/getResources';
 import { GET_USER_RESOURCES_IDS } from '~graphql/queries/queries';
@@ -18,13 +23,13 @@ interface Props {
 }
 
 export default function Table({ viewer, searchResults, refetch }: Props) {
-  const { data, loading, refetch: refetchUserResourcesIds } = useQuery(
-    GET_USER_RESOURCES_IDS,
-    {
-      variables: { id: viewer.id },
-      skip: !viewer.id,
-    }
-  );
+  const { data, loading, refetch: refetchUserResourcesIds } = useQuery<
+    getUserResourceIdsData,
+    getUserResourcesIdsVariables
+  >(GET_USER_RESOURCES_IDS, {
+    variables: { id: viewer.id },
+    skip: !viewer.id,
+  });
 
   const renderVoteButton = resource => {
     if (loading) {
