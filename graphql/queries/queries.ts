@@ -13,13 +13,6 @@ export const RESOURCES = gql`
     }
   }
 `;
-export const CHECK_USER_VOTE = gql`
-  query checkUserVoteID($id: ID!, $resource: String!) {
-    checkUserVote(id: $id, resource: $resource) {
-      resources
-    }
-  }
-`;
 
 export const GET_USER_RESOURCES_IDS = gql`
   query getUserResourcesIds($id: ID!) {

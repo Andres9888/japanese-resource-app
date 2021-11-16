@@ -94,17 +94,6 @@ export const resolvers = {
         throw new Error(`Failed to query listings: ${error}`);
       }
     },
-    checkUserVote: async (
-      _root: undefined,
-      { id, resource }: checkUserVoteIDVariables
-    ) => {
-      try {
-        const db = await getDb();
-        return db.users.find({ _id: id, resources: resource }).toArray();
-      } catch (error) {
-        throw new Error(`Failed to query userVote: ${error}`);
-      }
-    },
     getUserResourceIds: async (_root: undefined, { id }) => {
       try {
         const db = await getDb();

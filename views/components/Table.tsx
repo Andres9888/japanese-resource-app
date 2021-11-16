@@ -1,12 +1,14 @@
 // @ts-nocheck
 import React from 'react';
 
+import { useQuery } from '@apollo/react-hooks';
 import Image from 'next/image';
 import styled from 'styled-components';
 
 import VoteButton from '~features/voteButton';
 import { getResources } from '~graphql/queries/__generated__/getResources';
 import { GET_USER_RESOURCES_IDS } from '~graphql/queries/queries';
+import { displayErrorMessage } from '~lib/utils';
 import { Viewer } from '~types/globalTypes';
 
 interface Props {
@@ -16,6 +18,49 @@ interface Props {
 }
 
 export default function Table({ viewer, searchResults, refetch }: Props) {
+  const { data, loading, refetch: refetchUserResourcesIds } = useQuery(
+    GET_USER_RESOURCES_IDS,
+    {
+      variables: { id: viewer.id },
+      skip: !viewer.id,
+    }
+  );
+
+  const renderVoteButton = resource => {
+    if (loading) {
+      return null;
+    }
+
+    if (data) {
+      return (
+        <>
+          <VoteButton
+            refetch={refetch}
+            refetchUserResourcesIds={refetchUserResourcesIds}
+            resource={resource}
+            userResourcesIds={data}
+            viewer={viewer}
+          />
+          <span>{resource.count}</span>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <ThumbButton
+          onClick={() => {
+            displayErrorMessage('most login to vote');
+          }}
+        >
+          {' '}
+          👍
+        </ThumbButton>
+        <span>{resource.count}</span>
+      </>
+    );
+  };
+
   return (
     <div className="container">
       <table className="table is-fullwidth is-hoverable">
@@ -48,14 +93,7 @@ export default function Table({ viewer, searchResults, refetch }: Props) {
                   ))}
                 </div>
               </TableData>
-              <TableData>
-                <VoteButton
-                  refetch={refetch}
-                  resource={resource}
-                  viewer={viewer}
-                />
-                <span>{resource.count}</span>
-              </TableData>
+              <TableData>{renderVoteButton(resource)}</TableData>
             </TableRow>
           ))}
         </tbody>
@@ -141,3 +179,5 @@ const TableDataDescription = styled.td`
     text-align: center;
   }
 `;
+
+const ThumbButton = styled.button``;

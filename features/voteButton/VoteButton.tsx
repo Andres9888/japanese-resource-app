@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { useMutation, useLazyQuery } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import styled from 'styled-components';
 
 import {
@@ -10,9 +10,7 @@ import {
 import { INCREMENT_COUNT } from '~graphql/mutations/mutations';
 // eslint-disable-next-line camelcase
 import { getResources_listings } from '~graphql/queries/__generated__/getResources';
-import { GET_USER_RESOURCES_IDS } from '~graphql/queries/queries';
-import { initializeApollo } from '~lib/apolloClient';
-import { displaySuccessNotification, displayErrorMessage } from '~lib/utils';
+import { displayErrorMessage } from '~lib/utils';
 import { Viewer } from '~types/globalTypes';
 // import { getUserResourcesIds } from '../../graphql/queries/__generated__/getUserResourcesIds';
 
@@ -23,28 +21,27 @@ interface Props {
   refetch: () => Promise<void>;
 }
 
-const VoteButton = ({ resource, viewer, refetch }: Props) => {
+const VoteButton = ({
+  resource,
+  viewer,
+  refetch,
+  refetchUserResourcesIds,
+  userResourcesIds,
+}: Props) => {
   const [incrementCount] = useMutation<
     incrementCountData,
     incrementCountVariables
   >(INCREMENT_COUNT);
 
-  const [
-    getUserResourcesIds,
-    { data, refetch: refetchUserResourcesIds, loading, error },
-  ] = useLazyQuery(GET_USER_RESOURCES_IDS);
-
-  const [disabled, setDisabled] = useState(false);
   // eslint-disable-next-line no-shadow
   const handleIncrementCount = async resource => {
     if (viewer.id) {
-      getUserResourcesIds({ variables: { id: viewer.id } });
-
-      const didVote = await data.getUserResourcesIds.userResourcesIds[0].some(
+      console.log(userResourcesIds);
+      const didVote = userResourcesIds.getUserResourceIds[0].resources.some(
         votedResource => votedResource === resource.id
       );
 
-      if (!didVote && !disabled) {
+      if (!didVote) {
         await incrementCount({
           variables: {
             id: resource.id,
@@ -52,21 +49,18 @@ const VoteButton = ({ resource, viewer, refetch }: Props) => {
             resource: resource.id,
           },
         });
+        refetch();
+        refetchUserResourcesIds();
+        // window.sakura.start(true);
       } else {
         displayErrorMessage('already voted on this resource');
       }
-
-      refetchUserResourcesIds();
-      // setDisabled(true);
-      refetch();
-      // window.sakura.start(true);
     } else {
       displayErrorMessage('most login to vote');
     }
   };
   return (
     <ThumbButton
-      disabled={disabled}
       onClick={() => {
         handleIncrementCount(resource);
       }}
