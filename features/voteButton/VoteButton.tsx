@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useMutation } from '@apollo/react-hooks';
 import styled from 'styled-components';
@@ -35,6 +35,7 @@ const VoteButton = ({
     incrementCountData,
     incrementCountVariables
   >(INCREMENT_COUNT);
+  const [disabled, setDisabled] = useState(false);
 
   // eslint-disable-next-line no-shadow
   const handleIncrementCount = async resource => {
@@ -52,6 +53,7 @@ const VoteButton = ({
             resource: resource.id,
           },
         });
+        setDisabled(!disabled);
         refetch();
         refetchUserResourcesIds();
         // window.sakura.start(true);
@@ -64,6 +66,7 @@ const VoteButton = ({
   };
   return (
     <ThumbButton
+      disabled={disabled}
       onClick={() => {
         handleIncrementCount(resource);
       }}
