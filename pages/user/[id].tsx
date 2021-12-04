@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { Avatar, Divider } from 'antd';
 import axios from 'axios';
 import Image from 'next/image';
-import { EmailShareButton } from 'react-share';
+import { EmailShareButton, EmailIcon } from 'react-share';
 import styled from 'styled-components';
 
 import {
@@ -137,7 +137,8 @@ function userPage({ viewer }: Props) {
                     subject="hey check out these cool japanese resources"
                     url={resource.url}
                   >
-                    <h2>email link</h2>
+                    <EmailIcon round size={55} />
+                    <h3>Share</h3>
                   </EmailShareButton>
                 </TableData>
               </TableRow>
