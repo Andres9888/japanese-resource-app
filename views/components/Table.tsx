@@ -2,6 +2,7 @@
 import React from 'react';
 
 import { useQuery } from '@apollo/react-hooks';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import styled from 'styled-components';
 
@@ -71,7 +72,12 @@ export default function Table({ viewer, searchResults, refetch }: Props) {
       <table className="table is-fullwidth is-hoverable">
         <tbody>
           {searchResults.map(resource => (
-            <TableRow key={resource.id}>
+            <TableRow
+              key={resource.id}
+              whileHover={{
+                scale: 1.02,
+              }}
+            >
               <TableData>
                 <a href={resource.url} rel="noreferrer" target="_blank">
                   <Image alt="" height={200} src={resource.image} width={200} />
@@ -107,7 +113,7 @@ export default function Table({ viewer, searchResults, refetch }: Props) {
   );
 }
 
-const TableRow = styled.tr`
+const TableRow = styled(motion.tr)`
   border-radius: 6px;
   box-shadow: 1px 2px 4px rgb(0 0 0 / 3%);
   display: flex;
