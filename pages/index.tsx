@@ -49,7 +49,14 @@ export default function Home({ viewer }: Props) {
   }, [searchTerm, listings]);
 
   if (loading) {
-    return <h1>loading</h1>;
+    return (
+      <Image
+        alt=""
+        height={116}
+        src="https://res.cloudinary.com/andres9888/image/upload/v1638654801/flat_750x_075_f-pad_750x1000_f8f8f8_sh4wbg.jpg"
+        width={538}
+      />
+    );
   }
   if (error) {
     return <h1>error</h1>;
@@ -58,10 +65,7 @@ export default function Home({ viewer }: Props) {
     <>
       <Head>
         <title>Japanese Resources Site</title>
-        <meta
-          content="Q7vgw_JZpE7XtVGSpkL6ZpLx3745jU_LDc6YVFzU3T8"
-          name="google-site-verification"
-        />
+        <meta content="Q7vgw_JZpE7XtVGSpkL6ZpLx3745jU_LDc6YVFzU3T8" name="google-site-verification" />
       </Head>
       <Script
         src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"
@@ -106,11 +110,7 @@ export default function Home({ viewer }: Props) {
         }}
       />
 
-      <Nav
-        handleChange={handleChange}
-        searchTerm={searchTerm}
-        viewer={viewer}
-      />
+      <Nav handleChange={handleChange} searchTerm={searchTerm} viewer={viewer} />
       <Table refetch={refetch} searchResults={searchResults} viewer={viewer} />
     </>
   );

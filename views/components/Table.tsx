@@ -2,14 +2,11 @@
 import React from 'react';
 
 import { useQuery } from '@apollo/react-hooks';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import styled from 'styled-components';
 
-import {
-  getUserResourcesIds as getUserResourceIdsData,
-  getUserResourcesIdsVariables,
-} from '../../graphql/queries/__generated__/getUserResourcesIds';
+import { getUserResourcesIds as getUserResourceIdsData, getUserResourcesIdsVariables } from '../../graphql/queries/__generated__/getUserResourcesIds';
 
 import VoteButton from '~features/voteButton';
 import { getResources } from '~graphql/queries/__generated__/getResources';
@@ -24,10 +21,7 @@ interface Props {
 }
 
 export default function Table({ viewer, searchResults, refetch }: Props) {
-  const { data, loading, refetch: refetchUserResourcesIds } = useQuery<
-    getUserResourceIdsData,
-    getUserResourcesIdsVariables
-  >(GET_USER_RESOURCES_IDS, {
+  const { data, loading, refetch: refetchUserResourcesIds } = useQuery<getUserResourceIdsData, getUserResourcesIdsVariables>(GET_USER_RESOURCES_IDS, {
     variables: { id: viewer.id },
     skip: !viewer.id,
   });
@@ -55,6 +49,9 @@ export default function Table({ viewer, searchResults, refetch }: Props) {
     return (
       <>
         <ThumbButton
+          whileHover={{
+            scale: 1.02,
+          }}
           onClick={() => {
             displayErrorMessage('most login to vote');
           }}
@@ -117,6 +114,10 @@ const TableRow = styled(motion.tr)`
   border-radius: 6px;
   box-shadow: 1px 2px 4px rgb(0 0 0 / 3%);
   display: flex;
+  &:hover {
+    background-color: #fef4f438 !important;
+    border: 1px #fb898759 groove;
+  }
 `;
 
 const TableData = styled.td`
@@ -191,4 +192,4 @@ const TableDataDescription = styled.td`
   }
 `;
 
-const ThumbButton = styled.button``;
+const ThumbButton = styled(motion.button)``;

@@ -39,10 +39,9 @@ function userPage({ viewer }: Props) {
         const response = await axios.get(
           `/api/recommendation?user=${viewer.id}`
         );
-        console.log(response);
+
         setRecommendation(response.data);
       } catch (err) {
-        // get response with a status code not in range 2xx
         console.log(err);
       }
     };
@@ -51,16 +50,23 @@ function userPage({ viewer }: Props) {
   }, []);
 
   if (loading || loadingResources) {
-    return <h2>loading</h2>;
+    return (
+      <Image
+        alt=""
+        height={116}
+        src="https://res.cloudinary.com/andres9888/image/upload/v1638654801/flat_750x_075_f-pad_750x1000_f8f8f8_sh4wbg.jpg"
+        width={538}
+      />
+    );
   }
   if (error || errorResources) {
     <h2>error</h2>;
   }
-  const filtered = dataResources.listings.filter(
+  const userVotedResources = dataResources.listings.filter(
     resource => data.getUserResourceIds[0].resources.indexOf(resource.id) > -1
   );
 
-  const filtered2 = dataResources.listings.filter(
+  const recommendedResource = dataResources.listings.filter(
     resource => resource.id === recommendation
   );
 
@@ -78,7 +84,7 @@ function userPage({ viewer }: Props) {
         <Header>You Might Like This Resource Below</Header>
         <table className="table is-fullwidth is-hoverable">
           <tbody>
-            {filtered2.map(resource => (
+            {recommendedResource.map(resource => (
               <TableRow key={resource.id}>
                 <TableData>
                   <a href={resource.url} rel="noreferrer" target="_blank">
@@ -108,7 +114,7 @@ function userPage({ viewer }: Props) {
         <Header>Your Liked Resources</Header>
         <table className="table is-fullwidth is-hoverable">
           <tbody>
-            {filtered.map(resource => (
+            {userVotedResources.map(resource => (
               <TableRow key={resource.id}>
                 <TableData>
                   <a href={resource.url} rel="noreferrer" target="_blank">

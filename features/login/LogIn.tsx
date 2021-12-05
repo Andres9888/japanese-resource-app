@@ -5,10 +5,7 @@ import { Card, Layout, Typography, Spin } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-import {
-  LogIn as LogInData,
-  LogInVariables,
-} from '~graphql/mutations/__generated__/LogIn';
+import { LogIn as LogInData, LogInVariables } from '~graphql/mutations/__generated__/LogIn';
 import { LOG_IN } from '~graphql/mutations/mutations';
 import { AuthUrl as AuthUrlData } from '~graphql/queries/__generated__/AuthUrl';
 import { AUTH_URL } from '~graphql/queries/queries';
@@ -28,10 +25,7 @@ interface Props {
 const LogIn = ({ setViewer }: Props) => {
   const client = initializeApollo();
   const router = useRouter();
-  const [
-    logIn,
-    { data: logInData, loading: logInLoading, error: logInError },
-  ] = useMutation<LogInData, LogInVariables>(LOG_IN, {
+  const [logIn, { data: logInData, loading: logInLoading, error: logInError }] = useMutation<LogInData, LogInVariables>(LOG_IN, {
     onCompleted: data => {
       if (data && data.logIn && data.logIn.token) {
         setViewer(data.logIn);
@@ -59,9 +53,7 @@ const LogIn = ({ setViewer }: Props) => {
       });
       window.location.href = data.authUrl;
     } catch {
-      displayErrorMessage(
-        "Sorry! We weren't able to log you in. Please try again later!"
-      );
+      displayErrorMessage("Sorry! We weren't able to log you in. Please try again later!");
     }
   };
   if (logInLoading) {
@@ -74,9 +66,7 @@ const LogIn = ({ setViewer }: Props) => {
   if (logInData && logInData.logIn) {
     router.push('/');
   }
-  const logInErrorBannerElement = logInError ? (
-    <ErrorBanner description="Sorry! We weren't able to log you in. Please try again later!" />
-  ) : null;
+  const logInErrorBannerElement = logInError ? <ErrorBanner description="Sorry! We weren't able to log you in. Please try again later!" /> : null;
 
   return (
     <Content className="log-in">
@@ -91,31 +81,13 @@ const LogIn = ({ setViewer }: Props) => {
           <Title className="log-in-card__intro-title" level={3}>
             Log in to Japanese Resource App!
           </Title>
-          <Text>
-            Sign in with Google to start voting and keeping track of liked
-            resources
-          </Text>
+          <Text>Sign in with Google to start voting and keeping track of liked resources</Text>
         </div>
-        <button
-          className="log-in-card__google-button"
-          type="button"
-          onClick={handleAuthorize}
-        >
-          <Image
-            alt="Google Logo"
-            className="log-in-card__google-button-logo"
-            height={43}
-            src="/static/images/google_logo.jpg"
-            width={43}
-          />
-          <span className="log-in-card__google-button-text">
-            Sign in with Google
-          </span>
+        <button className="log-in-card__google-button" type="button" onClick={handleAuthorize}>
+          <Image alt="Google Logo" className="log-in-card__google-button-logo" height={43} src="/static/images/google_logo.jpg" width={43} />
+          <span className="log-in-card__google-button-text">Sign in with Google</span>
         </button>
-        <Text type="secondary">
-          Note: By signing in, you`&apos;`ll be redirected to the Google consent
-          form to sign in with your Google account.
-        </Text>
+        <Text type="secondary">Note: By signing in, you`&apos;`ll be redirected to the Google consent form to sign in with your Google account.</Text>
       </Card>
     </Content>
   );
