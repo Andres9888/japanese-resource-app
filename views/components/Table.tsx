@@ -90,7 +90,7 @@ export default function Table({ viewer, searchResults, refetch }: Props) {
                   {resource.description}
                 </a>
               </TableDataDescription>
-              <TableData>
+              <TableDataTags>
                 <div className="field is-grouped is-grouped-multiline">
                   {resource.tags.map(tag => (
                     <div key={`${`${resource.id}-${tag}`}`} className="control">
@@ -100,8 +100,8 @@ export default function Table({ viewer, searchResults, refetch }: Props) {
                     </div>
                   ))}
                 </div>
-              </TableData>
-              <TableData>{renderVoteButton(resource)}</TableData>
+              </TableDataTags>
+              <TableDataVoteContainer>{renderVoteButton(resource)}</TableDataVoteContainer>
             </TableRow>
           ))}
         </tbody>
@@ -155,6 +155,7 @@ const TableData = styled.td`
     flex-direction: column;
   }
 `;
+
 const TableDataTitle = styled.td`
   align-self: center;
   border: none !important;
@@ -162,6 +163,15 @@ const TableDataTitle = styled.td`
   flex-direction: column;
   font-family: 'Montserrat', sans-serif;
   font-size: 34px;
+  @media (max-width: 800px) {
+    font-size: 21px;
+  }
+  @media (max-width: 600px) {
+    font-size: 16px;
+  }
+  @media (max-width: 600px) {
+    font-size: 12px;
+  }
   font-weight: 700;
   line-height: 1.5715;
 
@@ -181,6 +191,15 @@ const TableDataDescription = styled.td`
   flex-direction: column;
   font-family: 'Source Sans Pro', sans-serif;
   font-size: 21px;
+  @media (max-width: 800px) {
+    font-size: 16px;
+  }
+  @media (max-width: 600px) {
+    font-size: 12px;
+  }
+  @media (max-width: 400px) {
+    font-size: 10px;
+  }
   font-weight: 400;
   line-height: 1.5715;
   max-width: 377px;
@@ -189,6 +208,92 @@ const TableDataDescription = styled.td`
   a {
     color: black;
     text-align: center;
+  }
+`;
+const TableDataTags = styled.td`
+  align-self: center;
+  border: none !important;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 48px;
+
+  font-weight: 700;
+  line-height: 1.5715;
+  overflow-wrap: break-word;
+
+  padding: 0 !important;
+  padding-bottom: 0.5em !important;
+  padding-top: 0.5em !important;
+  width: 100%;
+
+  a {
+    text-align: center;
+  }
+
+  img {
+    border-radius: 6px;
+    max-width: 233px;
+  }
+  span {
+    align-self: center;
+  }
+  .field {
+    align-self: center;
+    text-transform: capitalize;
+  }
+  .field.is-grouped {
+    flex-direction: column;
+  }
+  .tag {
+    @media (max-width: 800px) {
+      font-size: 10px !important;
+    }
+    @media (max-width: 600px) {
+      font-size: 8px !important;
+    }
+  }
+`;
+
+const TableDataVoteContainer = styled.td`
+  align-self: center;
+  border: none !important;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 48px;
+  @media (max-width: 800px) {
+    font-size: 34px;
+  }
+  @media (max-width: 600px) {
+    font-size: 21px;
+  }
+  font-weight: 700;
+  line-height: 1.5715;
+  overflow-wrap: break-word;
+
+  padding: 0 !important;
+  padding-bottom: 0.5em !important;
+  padding-top: 0.5em !important;
+  width: 100%;
+
+  a {
+    text-align: center;
+  }
+
+  img {
+    border-radius: 6px;
+    max-width: 233px;
+  }
+  span {
+    align-self: center;
+  }
+  .field {
+    align-self: center;
+    text-transform: capitalize;
+  }
+  .field.is-grouped {
+    flex-direction: column;
   }
 `;
 

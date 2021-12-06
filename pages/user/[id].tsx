@@ -7,10 +7,7 @@ import Image from 'next/image';
 import { EmailShareButton, EmailIcon } from 'react-share';
 import styled from 'styled-components';
 
-import {
-  getUserResourcesIds as getUserResourceIdsData,
-  getUserResourcesIdsVariables,
-} from '../../graphql/queries/__generated__/getUserResourcesIds';
+import { getUserResourcesIds as getUserResourceIdsData, getUserResourcesIdsVariables } from '../../graphql/queries/__generated__/getUserResourcesIds';
 
 import { GET_USER_RESOURCES_IDS, RESOURCES } from '~graphql/queries/queries';
 import { Viewer } from '~types/globalTypes';
@@ -20,25 +17,16 @@ interface Props {
   viewer: Viewer;
 }
 function userPage({ viewer }: Props) {
-  const { data, loading, error } = useQuery<
-    getUserResourceIdsData,
-    getUserResourcesIdsVariables
-  >(GET_USER_RESOURCES_IDS, {
+  const { data, loading, error } = useQuery<getUserResourceIdsData, getUserResourcesIdsVariables>(GET_USER_RESOURCES_IDS, {
     variables: { id: viewer.id },
   });
   const [recommendation, setRecommendation] = useState(null);
-  const {
-    data: dataResources,
-    loading: loadingResources,
-    error: errorResources,
-  } = useQuery(RESOURCES);
+  const { data: dataResources, loading: loadingResources, error: errorResources } = useQuery(RESOURCES);
 
   useEffect(() => {
     const getRecommendation = async () => {
       try {
-        const response = await axios.get(
-          `/api/recommendation?user=${viewer.id}`
-        );
+        const response = await axios.get(`/api/recommendation?user=${viewer.id}`);
 
         setRecommendation(response.data);
       } catch (err) {
@@ -62,13 +50,9 @@ function userPage({ viewer }: Props) {
   if (error || errorResources) {
     <h2>error</h2>;
   }
-  const userVotedResources = dataResources.listings.filter(
-    resource => data.getUserResourceIds[0].resources.indexOf(resource.id) > -1
-  );
+  const userVotedResources = dataResources.listings.filter(resource => data.getUserResourceIds[0].resources.indexOf(resource.id) > -1);
 
-  const recommendedResource = dataResources.listings.filter(
-    resource => resource.id === recommendation
-  );
+  const recommendedResource = dataResources.listings.filter(resource => resource.id === recommendation);
 
   return (
     <div>
@@ -88,12 +72,7 @@ function userPage({ viewer }: Props) {
               <TableRow key={resource.id}>
                 <TableData>
                   <a href={resource.url} rel="noreferrer" target="_blank">
-                    <Image
-                      alt=""
-                      height={200}
-                      src={resource.image}
-                      width={200}
-                    />
+                    <Image alt="" height={200} src={resource.image} width={200} />
                   </a>
                 </TableData>
                 <TableDataTitle>
@@ -118,12 +97,7 @@ function userPage({ viewer }: Props) {
               <TableRow key={resource.id}>
                 <TableData>
                   <a href={resource.url} rel="noreferrer" target="_blank">
-                    <Image
-                      alt=""
-                      height={200}
-                      src={resource.image}
-                      width={200}
-                    />
+                    <Image alt="" height={200} src={resource.image} width={200} />
                   </a>
                 </TableData>
                 <TableDataTitle>
@@ -143,8 +117,8 @@ function userPage({ viewer }: Props) {
                     subject="hey check out these cool japanese resources"
                     url={resource.url}
                   >
-                    <EmailIcon round size={55} />
-                    <h3>Share</h3>
+                    <EmailIcon round size={32} />
+                    <ShareHeader>Share</ShareHeader>
                   </EmailShareButton>
                 </TableData>
               </TableRow>
@@ -213,6 +187,15 @@ const TableDataTitle = styled.td`
   flex-direction: column;
   font-family: 'Montserrat', sans-serif;
   font-size: 34px;
+  @media (max-width: 800px) {
+    font-size: 21px;
+  }
+  @media (max-width: 600px) {
+    font-size: 16px;
+  }
+  @media (max-width: 600px) {
+    font-size: 12px;
+  }
   font-weight: 700;
   line-height: 1.5715;
 
@@ -232,6 +215,15 @@ const TableDataDescription = styled.td`
   flex-direction: column;
   font-family: 'Source Sans Pro', sans-serif;
   font-size: 21px;
+  @media (max-width: 800px) {
+    font-size: 16px;
+  }
+  @media (max-width: 600px) {
+    font-size: 12px;
+  }
+  @media (max-width: 400px) {
+    font-size: 10px;
+  }
   font-weight: 400;
   line-height: 1.5715;
   max-width: 377px;
@@ -241,4 +233,20 @@ const TableDataDescription = styled.td`
     color: black;
     text-align: center;
   }
+`;
+
+const ShareHeader = styled.h3`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 34px;
+  @media (max-width: 800px) {
+    font-size: 21px;
+  }
+  @media (max-width: 600px) {
+    font-size: 16px;
+  }
+  @media (max-width: 600px) {
+    font-size: 12px;
+  }
+  font-weight: bold;
+  text-align: center;
 `;
