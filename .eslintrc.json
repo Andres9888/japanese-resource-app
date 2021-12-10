@@ -18,7 +18,8 @@
     "prettier/react",
     "plugin:@next/next/recommended",
     "plugin:import/errors",
-    "plugin:import/warnings"
+    "plugin:import/warnings",
+    "plugin:sonarjs/recommended"
   ],
   "plugins": [
     "@typescript-eslint",
@@ -26,7 +27,10 @@
     "prettier",
     "graphql",
     "better-styled-components",
-    "import"
+    "import",
+    "sonarjs",
+    "unicorn",
+    "smells"
   ],
   "rules": {
     "no-use-before-define": "off",

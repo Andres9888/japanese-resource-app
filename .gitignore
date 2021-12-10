@@ -29,3 +29,5 @@ server/database/hidden.ts
 lib/api/hidden.ts
 
 .vercel
+
+/.history

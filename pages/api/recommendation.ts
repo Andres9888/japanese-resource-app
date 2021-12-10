@@ -43,20 +43,13 @@ export default async (req, res) => {
 
     const stringResources = resources.map(element => JSON.stringify(element));
 
-    const kNNRecommender = new KNNRecommender([
-      ['emptycorner', ...stringResources],
-      ...reviewData,
-    ]);
+    const kNNRecommender = new KNNRecommender([['emptycorner', ...stringResources], ...reviewData]);
 
     kNNRecommender
       .initializeRecommender()
       .then(() => {
-        const userRecommendations = kNNRecommender.generateNNewUniqueRecommendationsForUserId(
-          req.query.user
-        );
-        console.log(
-          `new recommendation for ${req.query.user} ${userRecommendations[0].itemId}`
-        );
+        const userRecommendations = kNNRecommender.generateNNewUniqueRecommendationsForUserId(req.query.user);
+        console.log(`new recommendation for ${req.query.user} ${userRecommendations[0].itemId}`);
         res.status(200).send(userRecommendations[0].itemId);
       })
       .catch(err => {
