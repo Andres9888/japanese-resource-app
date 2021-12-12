@@ -4,6 +4,7 @@ import React from 'react';
 
 import { useQuery } from '@apollo/react-hooks';
 import Head from 'next/head';
+import Image from 'next/image';
 import Script from 'next/script';
 
 import { getResources } from '~graphql/queries/__generated__/getResources';
@@ -36,7 +37,7 @@ export default function Home({ viewer }: Props) {
   const handleChange = event => {
     setSearchTerm(event.target.value);
   };
-  const sortedData = listings.slice().sort((a, b) => b.count - a.count);
+  const sortedData = [...listings].sort((a, b) => b.count - a.count);
 
   React.useEffect(() => {
     const results = sortedData.filter(
@@ -49,14 +50,7 @@ export default function Home({ viewer }: Props) {
   }, [searchTerm, listings]);
 
   if (loading) {
-    return (
-      <Image
-        alt=""
-        height={116}
-        src="https://res.cloudinary.com/andres9888/image/upload/v1638654801/flat_750x_075_f-pad_750x1000_f8f8f8_sh4wbg.jpg"
-        width={538}
-      />
-    );
+    return <Image alt="" height={116} src="/static/images/flat_750x_075_f-pad_750x1000_f8f8f8_sh4wbg.jpg" width={538} />;
   }
   if (error) {
     return <h1>error</h1>;

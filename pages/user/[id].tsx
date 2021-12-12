@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useQuery } from '@apollo/react-hooks';
 import { Avatar, Divider } from 'antd';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import Image from 'next/image';
 import { EmailShareButton, EmailIcon } from 'react-share';
 import styled from 'styled-components';
@@ -16,6 +16,7 @@ import NavBlank from '~views/components/NavBlank';
 interface Props {
   viewer: Viewer;
 }
+
 function userPage({ viewer }: Props) {
   const { data, loading, error } = useQuery<getUserResourceIdsData, getUserResourcesIdsVariables>(GET_USER_RESOURCES_IDS, {
     variables: { id: viewer.id },
@@ -29,8 +30,8 @@ function userPage({ viewer }: Props) {
         const response = await axios.get(`/api/recommendation?user=${viewer.id}`);
 
         setRecommendation(response.data);
-      } catch (err) {
-        console.log(err);
+      } catch (error_) {
+        console.log(error_);
       }
     };
 
@@ -38,19 +39,12 @@ function userPage({ viewer }: Props) {
   }, []);
 
   if (loading || loadingResources) {
-    return (
-      <Image
-        alt=""
-        height={116}
-        src="https://res.cloudinary.com/andres9888/image/upload/v1638654801/flat_750x_075_f-pad_750x1000_f8f8f8_sh4wbg.jpg"
-        width={538}
-      />
-    );
+    return <Image alt="" height={116} src="/static/images/flat_750x_075_f-pad_750x1000_f8f8f8_sh4wbg.jpg" width={538} />;
   }
   if (error || errorResources) {
     <h2>error</h2>;
   }
-  const userVotedResources = dataResources.listings.filter(resource => data.getUserResourceIds[0].resources.indexOf(resource.id) > -1);
+  const userVotedResources = dataResources.listings.filter(resource => data.getUserResourceIds[0].resources.includes(resource.id));
 
   const recommendedResource = dataResources.listings.filter(resource => resource.id === recommendation);
 
