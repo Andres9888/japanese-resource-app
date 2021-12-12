@@ -19,7 +19,8 @@
     "plugin:@next/next/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
-    "plugin:sonarjs/recommended"
+    "plugin:sonarjs/recommended",
+    "@sanv/eslint-config-unicorn-typescript"
   ],
   "plugins": [
     "@typescript-eslint",
@@ -29,10 +30,21 @@
     "better-styled-components",
     "import",
     "sonarjs",
-    "unicorn",
-    "smells"
+    "smells",
+    "unicorn"
   ],
   "rules": {
+    "unicorn/prevent-abbreviations": [
+      "error",
+      {
+        "allowList": {
+          "req": true,
+          "res": true,
+          "db": true,
+          "Props": true
+        }
+      }
+    ],
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": "off",
     "global-require": 0,
