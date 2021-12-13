@@ -17,17 +17,11 @@ export default async (req, res) => {
     const resources = await db.listings.distinct('_id', {});
     const users = await db.users.aggregate(agg).toArray();
 
-    const makeReviews = () => {
-      return users.map(user => {
-        const review = resources.map(resource => {
-          if (user.resources.includes(`${resource}`)) {
-            return 1;
-          }
-          return 0;
-        });
+    const makeReviews = () =>
+      users.map(user => {
+        const review = resources.map(resource => user.resources.includes(`${resource}` ? 1 : 0));
         return [user._id, ...review];
       });
-    };
 
     const reviewData = makeReviews();
 
