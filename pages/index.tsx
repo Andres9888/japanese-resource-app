@@ -33,20 +33,16 @@ export default function Home({ viewer }: Props) {
 
   const [searchTerm, setSearchTerm] = React.useState('');
   const [searchResults, setSearchResults] = React.useState([]);
-
-  const handleChange = event => {
-    setSearchTerm(event.target.value);
-  };
   const sortedData = [...listings].sort((a, b) => b.count - a.count);
 
   React.useEffect(() => {
-    const results = sortedData.filter(
+    const filteredData = sortedData.filter(
       item =>
         item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.tags.includes(searchTerm.toLowerCase())
     );
-    setSearchResults(results);
+    setSearchResults(filteredData);
   }, [searchTerm, listings]);
 
   if (loading) {
@@ -55,6 +51,10 @@ export default function Home({ viewer }: Props) {
   if (error) {
     return <h1>error</h1>;
   }
+
+  const handleSearchChange = event => {
+    setSearchTerm(event.target.value);
+  };
   return (
     <>
       <Head>
@@ -104,7 +104,7 @@ export default function Home({ viewer }: Props) {
         }}
       />
 
-      <Nav handleChange={handleChange} searchTerm={searchTerm} viewer={viewer} />
+      <Nav handleSearchChange={handleSearchChange} searchTerm={searchTerm} viewer={viewer} />
       <Table refetch={refetch} searchResults={searchResults} viewer={viewer} />
     </>
   );

@@ -18,25 +18,15 @@ export default async (req, res) => {
     const users = await db.users.aggregate(agg).toArray();
 
     const makeReview = () => {
-      const reviews = [];
-
-      users.forEach(element => {
-        let review = [];
-        review.push(element._id);
-        resources.forEach(resource => {
-          if (element.resources === undefined) {
-          } else if (element.resources.includes(`${resource}`)) {
-            review.push(1);
-          } else {
-            review.push(0);
+      return users.map(user => {
+        const review = resources.map(resource => {
+          if (user.resources.includes(`${resource}`)) {
+            return 1;
           }
+          return 0;
         });
-
-        reviews.push(review);
-        review = [];
+        return [user._id, ...review];
       });
-
-      return reviews;
     };
 
     const reviewData = makeReview();
@@ -52,10 +42,10 @@ export default async (req, res) => {
         console.log(`new recommendation for ${req.query.user} ${userRecommendations[0].itemId}`);
         res.status(200).send(userRecommendations[0].itemId);
       })
-      .catch(err => {
-        console.error(err);
+      .catch(error => {
+        console.error(error);
         return res.status(400).send({
-          message: `${err}`,
+          message: `${error}`,
         });
       });
   } catch (error) {

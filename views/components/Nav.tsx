@@ -12,25 +12,18 @@ import MenuItems from '~views/components/MenuItems';
 interface Props {
   viewer: Viewer;
   searchTerm: string;
-  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const { Header } = Layout;
 
-const Nav = ({ viewer, searchTerm, handleChange }: Props) => {
+const Nav = ({ viewer, searchTerm, handleSearchChange }: Props) => {
   const router = useRouter();
 
   useEffect(() => {
     // Options for the Typed object
     const options = {
-      strings: [
-        'Hey, If you need to find something just search and it will filter it',
-        'For Example',
-        'Guide',
-        'Grammar',
-        'Tool',
-        '',
-      ],
+      strings: ['Hey, If you need to find something just search and it will filter it', 'For Example', 'Guide', 'Grammar', 'Tool', ''],
       bindInputFocusEvents: true,
       attr: 'placeholder',
       typeSpeed: 25,
@@ -61,11 +54,7 @@ const Nav = ({ viewer, searchTerm, handleChange }: Props) => {
               </div>
             </Link>
           </div>
-          {router.asPath === '/' ? (
-            <SearchBar handleChange={handleChange} searchTerm={searchTerm} />
-          ) : (
-            <div />
-          )}
+          {router.asPath === '/' ? <SearchBar handleSearchChange={handleSearchChange} searchTerm={searchTerm} /> : <div />}
         </div>
         <div className="app-header__menu-section">
           <MenuItems viewer={viewer} />
