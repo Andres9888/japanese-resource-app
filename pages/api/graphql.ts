@@ -1,6 +1,7 @@
 import { ApolloServer } from 'apollo-server-micro';
 
 import { schema } from '~lib/schema';
+import { connectDatabase } from '~server/database';
 import { resolvers } from '~server/graphql/resolvers/clientResolver';
 import { typeDefs } from '~server/graphql/types/clientType';
 

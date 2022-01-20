@@ -10,9 +10,8 @@ import { Google } from '~lib/api';
 import { connectDatabase } from '~server/database';
 import { Viewer } from '~types/globalTypes';
 
-const getDb = async () => {
-  const db = await connectDatabase();
-  return db;
+const getDatabase = async () => {
+  return connectDatabase();
 };
 
 const logInViaGoogle = async (code: string, token: string) => {
@@ -23,37 +22,27 @@ const logInViaGoogle = async (code: string, token: string) => {
   }
 
   // Name/Photo/Email Lists
-  const userNamesList = user.names && user.names.length ? user.names : null;
-  const userPhotosList = user.photos && user.photos.length ? user.photos : null;
-  const userEmailsList =
-    user.emailAddresses && user.emailAddresses.length
-      ? user.emailAddresses
-      : null;
+  const userNamesList = user.names && user.names.length > 0 ? user.names : null;
+  const userPhotosList = user.photos && user.photos.length > 0 ? user.photos : null;
+  const userEmailsList = user.emailAddresses && user.emailAddresses.length > 0 ? user.emailAddresses : null;
 
   // User Display Name
   const userName = userNamesList ? userNamesList[0].displayName : null;
 
   // User Id
-  const userId =
-    userNamesList &&
-    userNamesList[0].metadata &&
-    userNamesList[0].metadata.source
-      ? userNamesList[0].metadata.source.id
-      : null;
+  const userId = userNamesList && userNamesList[0].metadata && userNamesList[0].metadata.source ? userNamesList[0].metadata.source.id : null;
 
   // User Avatar
-  const userAvatar =
-    userPhotosList && userPhotosList[0].url ? userPhotosList[0].url : null;
+  const userAvatar = userPhotosList && userPhotosList[0].url ? userPhotosList[0].url : null;
 
   // User Email
-  const userEmail =
-    userEmailsList && userEmailsList[0].value ? userEmailsList[0].value : null;
+  const userEmail = userEmailsList && userEmailsList[0].value ? userEmailsList[0].value : null;
 
   if (!userId || !userName || !userAvatar || !userEmail) {
     throw new Error('Google login error');
   }
-  const db = await getDb();
-  const updateRes = await db.users.findOneAndUpdate(
+  const database = await getDatabase();
+  const updateRes = await database.users.findOneAndUpdate(
     { _id: userId },
     {
       $set: {
@@ -69,7 +58,7 @@ const logInViaGoogle = async (code: string, token: string) => {
   let viewer = updateRes.value;
 
   if (!viewer) {
-    const insertResult = await db.users.insertOne({
+    const insertResult = await database.users.insertOne({
       _id: userId,
       token,
       name: userName,
@@ -86,18 +75,18 @@ const logInViaGoogle = async (code: string, token: string) => {
 
 export const resolvers = {
   Query: {
-    listings: async () => {
+    listings: async (_root: undefined) => {
       try {
-        const db = await getDb();
-        return db.listings.find({}).toArray();
+        const database = await getDatabase();
+        return database.listings.find({}).toArray();
       } catch (error) {
         throw new Error(`Failed to query listings: ${error}`);
       }
     },
     getUserResourceIds: async (_root: undefined, { id }) => {
       try {
-        const db = await getDb();
-        return db.users.find({ _id: id }).toArray();
+        const database = await getDatabase();
+        return database.users.find({ _id: id }).toArray();
       } catch (error) {
         throw new Error(`Failed to query user resources Ids: ${error}`);
       }
@@ -112,21 +101,12 @@ export const resolvers = {
   },
 
   Mutation: {
-    increment: async (
-      _root: undefined,
-      { id, viewer, resource }: incrementCountVariables
-    ) => {
+    increment: async (_root: undefined, { id, viewer, resource }: incrementCountVariables) => {
       try {
-        const db = await getDb();
+        const database = await getDatabase();
         return (
-          await db.listings.updateOne(
-            { _id: new ObjectId(id) },
-            { $inc: { count: 1 } }
-          ),
-          db.users.updateOne(
-            { _id: viewer },
-            { $addToSet: { resources: resource } }
-          )
+          await database.listings.updateOne({ _id: new ObjectId(id) }, { $inc: { count: 1 } }),
+          database.users.updateOne({ _id: viewer }, { $addToSet: { resources: resource } })
         );
       } catch (error) {
         throw new Error(`Failed to Vote : ${error}`);
@@ -137,9 +117,7 @@ export const resolvers = {
         const code = input ? input.code : null;
         const token = crypto.randomBytes(16).toString('hex');
 
-        const viewer: User | undefined = code
-          ? await logInViaGoogle(code, token)
-          : undefined;
+        const viewer: User | undefined = code ? await logInViaGoogle(code, token) : undefined;
 
         if (!viewer) {
           return { didRequest: true };
