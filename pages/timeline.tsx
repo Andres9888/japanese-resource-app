@@ -1,10 +1,9 @@
-//@ts-nocheck
+// @ts-nocheck
 
 import React, { useEffect } from 'react';
-import cookie from 'js-cookie';
-import axios from 'axios';
-import NavBlank from '~views/components/NavBlank';
 
+import axios from 'axios';
+import cookie from 'js-cookie';
 import {
   StreamApp,
   StatusUpdateForm,
@@ -18,6 +17,9 @@ import {
   CommentItem,
   InfiniteScrollPaginator,
 } from 'react-activity-feed';
+
+import NavBlank from '~views/components/NavBlank';
+
 import 'react-activity-feed/dist/index.css';
 
 const apiKey = 'ezcjh4aax2cv';
@@ -62,31 +64,31 @@ function App({ token, viewer }) {
           />
           <FlatFeed
             notify
-            feedGroup="user"
-            options={{ limit: 6, withOwnChildren: true, withRecentReactions: true }}
-            Paginator={InfiniteScrollPaginator}
             Activity={({ activity, feedGroup, userId }) => (
               <Activity
-                activity={activity}
-                feedGroup={feedGroup}
-                userId={userId}
                 Footer={() => (
                   <>
                     <ActivityFooter activity={activity} feedGroup={feedGroup} userId={userId} />
                     <CommentField activity={activity} />
                     <CommentList
-                      activityId={activity.id}
                       CommentItem={({ comment }) => (
                         <div className="wrapper">
                           <CommentItem comment={comment} />
                           <LikeButton reaction={comment} />
                         </div>
                       )}
+                      activityId={activity.id}
                     />
                   </>
                 )}
+                activity={activity}
+                feedGroup={feedGroup}
+                userId={userId}
               />
             )}
+            Paginator={InfiniteScrollPaginator}
+            feedGroup="timeline"
+            options={{ limit: 6, withOwnChildren: true, withRecentReactions: true }}
           />
         </StreamApp>
       </div>
