@@ -2,6 +2,7 @@ export interface Viewer {
   id?: string;
   token?: string;
   avatar?: string;
+  name?: string;
   didRequest: boolean;
 }
 

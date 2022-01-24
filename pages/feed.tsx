@@ -30,7 +30,7 @@ function App({ token, viewer }) {
     const getToken = async () => {
       if (!token) {
         try {
-          const { userToken } = await axios.get(`/api/stream?user=${viewer.id}`);
+          const { userToken } = await axios.get(`/api/stream?id=${viewer.id}&name=${viewer.name}`);
 
           setCurrentUserToken(userToken);
         } catch (error_) {
@@ -65,28 +65,30 @@ function App({ token, viewer }) {
             feedGroup="user"
             options={{ limit: 6, withOwnChildren: true, withRecentReactions: true }}
             Paginator={InfiniteScrollPaginator}
-            Activity={({ activity, feedGroup, userId }) => (
-              <Activity
-                activity={activity}
-                feedGroup={feedGroup}
-                userId={userId}
-                Footer={() => (
-                  <>
-                    <ActivityFooter activity={activity} feedGroup={feedGroup} userId={userId} />
-                    <CommentField activity={activity} />
-                    <CommentList
-                      activityId={activity.id}
-                      CommentItem={({ comment }) => (
-                        <div className="wrapper">
-                          <CommentItem comment={comment} />
-                          <LikeButton reaction={comment} />
-                        </div>
-                      )}
-                    />
-                  </>
-                )}
-              />
-            )}
+            Activity={({ activity, feedGroup, userId }) => {
+              return (
+                <Activity
+                  activity={activity}
+                  feedGroup={feedGroup}
+                  userId={viewer.id}
+                  Footer={() => (
+                    <>
+                      <ActivityFooter activity={activity} feedGroup={feedGroup} userId={viewer.id} />
+                      <CommentField activity={activity} />
+                      <CommentList
+                        activityId={activity.id}
+                        CommentItem={({ comment }) => (
+                          <div className="wrapper">
+                            <CommentItem comment={comment} />
+                            <LikeButton reaction={comment} />
+                          </div>
+                        )}
+                      />
+                    </>
+                  )}
+                />
+              );
+            }}
           />
         </StreamApp>
       </div>

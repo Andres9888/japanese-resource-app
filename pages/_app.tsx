@@ -16,6 +16,7 @@ const initialViewer: Viewer = {
   token: null,
   avatar: null,
   didRequest: false,
+  name: null,
 };
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -25,10 +26,7 @@ export default function App({ Component, pageProps }: AppProps) {
     // @ts-ignore
     <ApolloProvider client={apolloClient}>
       {/* Global Site Tag (gtag.js) - Google Analytics */}
-      <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-XJJPHGTZE8"
-        strategy="lazyOnload"
-      />
+      <Script src="https://www.googletagmanager.com/gtag/js?id=G-XJJPHGTZE8" strategy="lazyOnload" />
 
       <Script strategy="lazyOnload">
         {`
@@ -47,20 +45,11 @@ export default function App({ Component, pageProps }: AppProps) {
           name="description"
         />
         <link href="/favicon.ico" rel="icon" />
-        <link
-          href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
-          rel="stylesheet"
-        />
+        <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css" rel="stylesheet" />
         <link href="https://fonts.gstatic.com" rel="preconnect" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap"
-          rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet" />
         <link href="https://fonts.gstatic.com" rel="preconnect" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap"
-          rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet" />
       </Head>
       <Component {...pageProps} setViewer={setViewer} viewer={viewer} />
     </ApolloProvider>

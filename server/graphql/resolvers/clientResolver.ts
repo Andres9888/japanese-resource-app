@@ -127,6 +127,7 @@ export const resolvers = {
           _id: viewer._id,
           token: viewer.token,
           avatar: viewer.avatar,
+          name: viewer.name,
           walletId: viewer.walletId,
           didRequest: true,
         };

@@ -26,7 +26,7 @@ const apiKey = 'ezcjh4aax2cv';
 const appId = '1163661';
 
 function App({ token, viewer }) {
-  const [currentUserToken, setCurrentUserToken] = React.useState();
+  const [currentUserToken, setCurrentUserToken] = React.useState('global');
 
   useEffect(() => {
     const getToken = async () => {
@@ -51,7 +51,11 @@ function App({ token, viewer }) {
     <>
       <NavBlank viewer={viewer} />
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-        <StreamApp apiKey={apiKey} appId={appId} token={currentUserToken}>
+        <StreamApp
+          apiKey={apiKey}
+          appId={appId}
+          token={'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZ2xvYmFsIn0.uZ2GFyvVgOa1vj47sTex8rPXrbvRBt6I6WaSXoDw7tw'}
+        >
           <div className="wrapper box">
             <h3>React Activity Feed</h3>
             <NotificationDropdown right />
@@ -87,7 +91,7 @@ function App({ token, viewer }) {
               />
             )}
             Paginator={InfiniteScrollPaginator}
-            feedGroup="timeline"
+            feedGroup="user"
             options={{ limit: 6, withOwnChildren: true, withRecentReactions: true }}
           />
         </StreamApp>
