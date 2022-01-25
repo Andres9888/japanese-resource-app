@@ -1,14 +1,16 @@
-//@ts-nocheck
+// @ts-nocheck
 
-import React, { useEffect } from 'react';
-import cookie from 'js-cookie';
+import React, { useEffect, useState } from 'react';
+
 import axios from 'axios';
-import NavBlank from '~views/components/NavBlank';
-
+import { connect } from 'getstream';
+import cookie from 'js-cookie';
 import {
   StreamApp,
   StatusUpdateForm,
   FlatFeed,
+  FollowButton,
+  Notification,
   NotificationDropdown,
   Activity,
   ActivityFooter,
@@ -18,21 +20,24 @@ import {
   CommentItem,
   InfiniteScrollPaginator,
 } from 'react-activity-feed';
+
+import NavBlank from '~views/components/NavBlank';
+
 import 'react-activity-feed/dist/index.css';
 
 const apiKey = 'ezcjh4aax2cv';
 const appId = '1163661';
 
 function App({ token, viewer }) {
-  const [currentUserToken, setCurrentUserToken] = React.useState();
+  const [currentUserToken, setCurrentUserToken] = useState('');
 
   useEffect(() => {
     const getToken = async () => {
       if (!token) {
         try {
-          const { userToken } = await axios.get(`/api/stream?id=${viewer.id}&name=${viewer.name}`);
-
-          setCurrentUserToken(userToken);
+          const response = await axios.get(`/api/stream?id=${viewer.id}&name=${viewer.name}`);
+          console.log(response);
+          setCurrentUserToken(response.data.userToken);
         } catch (error_) {
           console.log(error_);
         }
@@ -45,6 +50,7 @@ function App({ token, viewer }) {
   }, []);
 
   if (!currentUserToken) return <div>Loading...</div>;
+  // const client = connect(apiKey, userToken, appId);
   return (
     <>
       <NavBlank viewer={viewer} />
@@ -52,7 +58,7 @@ function App({ token, viewer }) {
         <StreamApp apiKey={apiKey} appId={appId} token={currentUserToken}>
           <div className="wrapper box">
             <h3>React Activity Feed</h3>
-            <NotificationDropdown right />
+            <NotificationDropdown notify />
           </div>
           <StatusUpdateForm
             emojiI18n={{
@@ -62,33 +68,37 @@ function App({ token, viewer }) {
           />
           <FlatFeed
             notify
-            feedGroup="user"
-            options={{ limit: 6, withOwnChildren: true, withRecentReactions: true }}
-            Paginator={InfiniteScrollPaginator}
-            Activity={({ activity, feedGroup, userId }) => {
+            Activity={({ activity, feedGroup }) => {
               return (
                 <Activity
-                  activity={activity}
-                  feedGroup={feedGroup}
-                  userId={viewer.id}
                   Footer={() => (
                     <>
                       <ActivityFooter activity={activity} feedGroup={feedGroup} userId={viewer.id} />
                       <CommentField activity={activity} />
+                      <FollowButton onClick={console.log} />
                       <CommentList
+                        CommentItem={({ comment }) => {
+                          console.log(comment);
+                          return (
+                            <div className="wrapper">
+                              <CommentItem comment={comment} />
+                              <LikeButton reaction={comment} />
+                            </div>
+                          );
+                        }}
                         activityId={activity.id}
-                        CommentItem={({ comment }) => (
-                          <div className="wrapper">
-                            <CommentItem comment={comment} />
-                            <LikeButton reaction={comment} />
-                          </div>
-                        )}
                       />
                     </>
                   )}
+                  activity={activity}
+                  feedGroup={feedGroup}
+                  userId={viewer.id}
                 />
               );
             }}
+            Paginator={InfiniteScrollPaginator}
+            feedGroup="user"
+            options={{ limit: 20, withOwnChildren: true, withRecentReactions: true }}
           />
         </StreamApp>
       </div>

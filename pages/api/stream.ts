@@ -1,6 +1,8 @@
-const stream = require('getstream');
 // Instantiate a new client (server side)
 import cookie from 'cookie';
+
+const stream = require('getstream');
+
 const secret = process.env.GETSTREAM_SECRET;
 export default async (req, res) => {
   const client = stream.connect('ezcjh4aax2cv', secret, '1163661');
@@ -27,6 +29,5 @@ export default async (req, res) => {
     })
   );
 
-  res.statusCode = 200;
-  res.json({ userToken });
+  res.status(200).json({ userToken });
 };
