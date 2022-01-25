@@ -11,12 +11,13 @@ export default async (req, res) => {
   const currentUser = req.query.id;
   const userToken = client.createUserToken(currentUser);
 
-  const feed = await client.feed('user', currentUser, userToken);
+  // const feed = await client.feed('user', currentUser, userToken);
+  const globalUser = await client.feed('user', 'global');
   client.user(currentUser).update({
     name: req.query.name,
   });
 
-  feed.follow('user', 'global');
+  globalUser.follow('user', currentUser);
   // Store it on session object
   res.setHeader(
     'Set-Cookie',
