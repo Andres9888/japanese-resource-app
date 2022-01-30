@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import axios from 'axios';
 import { connect } from 'getstream';
@@ -9,7 +9,6 @@ import {
   StreamApp,
   StatusUpdateForm,
   FlatFeed,
-  FollowButton,
   Notification,
   NotificationDropdown,
   Activity,
@@ -50,7 +49,7 @@ function App({ token, viewer }) {
   }, []);
 
   if (!currentUserToken) return <div>Loading...</div>;
-  // const client = connect(apiKey, userToken, appId);
+
   return (
     <>
       <NavBlank viewer={viewer} />
@@ -75,10 +74,9 @@ function App({ token, viewer }) {
                     <>
                       <ActivityFooter activity={activity} feedGroup={feedGroup} userId={viewer.id} />
                       <CommentField activity={activity} />
-                      <FollowButton onClick={console.log} />
+
                       <CommentList
                         CommentItem={({ comment }) => {
-                          console.log(comment);
                           return (
                             <div className="wrapper">
                               <CommentItem comment={comment} />
