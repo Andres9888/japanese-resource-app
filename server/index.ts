@@ -54,7 +54,7 @@ nextApp.prepare().then(() => {
   apollo.applyMiddleware({ app: server, path: '/api/graphql' });
 
   server.get('*', (req, res) => handle(req, res));
-  server.patch('*', (req, res) => {
+  server.post('*', (req, res) => {
     return handle(req, res);
   });
   // express().use(handler).listen(3000) //routes handle way

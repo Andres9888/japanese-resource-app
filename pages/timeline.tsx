@@ -26,6 +26,12 @@ import 'react-activity-feed/dist/index.css';
 const apiKey = 'ezcjh4aax2cv';
 const appId = '1163661';
 const globalUserToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZ2xvYmFsIn0.uZ2GFyvVgOa1vj47sTex8rPXrbvRBt6I6WaSXoDw7tw';
+
+const getFollowing = async actorID => {
+  const response = await axios.get(`/api/is-following?currentUser=112016378414675480907&actorID=${actorID}`);
+  return response.data;
+};
+
 function App({ token, viewer }) {
   const [currentUserToken, setCurrentUserToken] = useState('');
 
@@ -38,8 +44,8 @@ function App({ token, viewer }) {
           } = await axios.get(`/api/stream?id=${viewer.id}&name=${viewer.name}`);
 
           setCurrentUserToken(userToken);
-        } catch (error_) {
-          console.log(error_);
+        } catch (error) {
+          console.log(error);
         }
       } else {
         setCurrentUserToken(token);
@@ -50,25 +56,10 @@ function App({ token, viewer }) {
   }, []);
 
   if (!currentUserToken) return <div>Loading...</div>;
-  // const client = connect(apiKey, currentUserToken, appId);
-  // const currentUser = client.feed('user', '112016378414675480907');
 
-  // const results = async () => currentUser.get({ limit: 10 });
-  const getFollowing = async actorID => {
-    const response = await axios.get(`/api/is-following?currentUser=112016378414675480907&actorID=${actorID}`);
-    return response.data;
-  };
-  const handleClick = async (isFollowed, actorID) => {
-    const response = await axios.post(`/api/followAction`, {
-      isFollowed,
-      actorID,
-      currentUser: '112016378414675480907',
-    });
-  };
   return (
     <>
       <NavBlank viewer={viewer} />
-
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>
         <StreamApp apiKey={apiKey} appId={appId} token={globalUserToken}>
           <div className="wrapper box">
@@ -89,7 +80,7 @@ function App({ token, viewer }) {
                   <>
                     <ActivityFooter activity={activity} feedGroup={feedGroup} userId={userId} />
                     <CommentField activity={activity} />
-                    <FollowButton actorID={activity.actor.id} getFollowing={getFollowing} handleClick={handleClick} />
+                    <FollowButton actorID={activity.actor.id} getFollowing={getFollowing} />
                     <CommentList
                       CommentItem={({ comment }) => (
                         <div className="wrapper">
