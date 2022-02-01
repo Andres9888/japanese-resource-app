@@ -1,18 +1,11 @@
 import { google } from 'googleapis';
-// import {hidden} from './hidden'
-const auth = new google.auth.OAuth2(
-  process.env.G_CLIENT_ID,
-  process.env.G_CLIENT_SECRET,
-  process.env.PUBLIC_URL
-);
+
+const auth = new google.auth.OAuth2(process.env.G_CLIENT_ID, process.env.G_CLIENT_SECRET, process.env.PUBLIC_URL);
 
 export const Google = {
   authUrl: auth.generateAuthUrl({
     access_type: 'online',
-    scope: [
-      'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/userinfo.profile',
-    ],
+    scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'],
   }),
   logIn: async (code: string) => {
     const { tokens } = await auth.getToken(code);

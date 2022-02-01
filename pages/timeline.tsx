@@ -2,8 +2,6 @@
 import { useEffect, useState } from 'react';
 
 import axios from 'axios';
-import { connect } from 'getstream';
-import cookie from 'js-cookie';
 import {
   StreamApp,
   StatusUpdateForm,
@@ -33,29 +31,7 @@ const getFollowing = async actorID => {
 };
 
 function App({ token, viewer }) {
-  const [currentUserToken, setCurrentUserToken] = useState('');
-
-  useEffect(() => {
-    const getToken = async () => {
-      if (!token) {
-        try {
-          const {
-            data: { userToken },
-          } = await axios.get(`/api/stream?id=${viewer.id}&name=${viewer.name}`);
-
-          setCurrentUserToken(userToken);
-        } catch (error) {
-          console.log(error);
-        }
-      } else {
-        setCurrentUserToken(token);
-      }
-    };
-
-    getToken();
-  }, []);
-
-  if (!currentUserToken) return <div>Loading...</div>;
+  if (!token || !viewer) return <div>Try loging in again</div>;
 
   return (
     <>

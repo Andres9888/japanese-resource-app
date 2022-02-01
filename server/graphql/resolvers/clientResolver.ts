@@ -2,10 +2,10 @@
 // @ts-nocheck
 import crypto from 'crypto';
 
+import axios from 'axios';
 import { ObjectId } from 'mongodb';
 
 import { incrementCountVariables } from '~graphql/mutations/__generated__/incrementCount';
-import { checkUserVoteIDVariables } from '~graphql/queries/__generated__/checkUserVoteID';
 import { Google } from '~lib/api';
 import { connectDatabase } from '~server/database';
 import { Viewer } from '~types/globalTypes';
@@ -41,6 +41,7 @@ const logInViaGoogle = async (code: string, token: string) => {
   if (!userId || !userName || !userAvatar || !userEmail) {
     throw new Error('Google login error');
   }
+
   const database = await getDatabase();
   const updateRes = await database.users.findOneAndUpdate(
     { _id: userId },
@@ -129,6 +130,7 @@ export const resolvers = {
           avatar: viewer.avatar,
           name: viewer.name,
           walletId: viewer.walletId,
+
           didRequest: true,
         };
       } catch (error) {

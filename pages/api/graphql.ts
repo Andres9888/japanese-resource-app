@@ -14,6 +14,7 @@ const apolloServerMicro = new ApolloServer({
   resolvers,
   schema,
   playground,
+  context: ({ req, res }) => ({ req, res }),
 });
 
 export const config = {

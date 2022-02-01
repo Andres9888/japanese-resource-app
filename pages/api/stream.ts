@@ -5,30 +5,31 @@ const stream = require('getstream');
 
 const secret = process.env.GETSTREAM_SECRET;
 export default async (req, res) => {
-  const client = stream.connect('ezcjh4aax2cv', secret, '1163661');
-  // Instantiate a new client (client side)
+  if (req.method === 'POST') {
+    const client = stream.connect('ezcjh4aax2cv', secret, '1163661');
 
-  const currentUser = req.query.id;
-  const userToken = client.createUserToken(currentUser);
+    const { name, avatar, id } = req.body;
+    const userToken = client.createUserToken(id);
 
-  // const feed = await client.feed('user', currentUser, userToken);
-  const globalUser = await client.feed('user', 'global');
-  client.user(currentUser).update({
-    name: req.query.name,
-  });
+    const globalUser = await client.feed('user', 'global');
+    client.user(id).update({
+      name,
+      profileImage: avatar,
+    });
 
-  globalUser.follow('user', currentUser);
-  // Store it on session object
-  res.setHeader(
-    'Set-Cookie',
-    cookie.serialize('token', userToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== 'development',
-      maxAge: 60 * 60,
-      sameSite: 'strict',
-      path: '/',
-    })
-  );
+    globalUser.follow('user', id);
+    // Store it on session object
+    res.setHeader(
+      'Set-Cookie',
+      cookie.serialize('token', userToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV !== 'development',
+        maxAge: 60 * 60,
+        sameSite: 'strict',
+        path: '/',
+      })
+    );
 
-  res.status(200).json({ userToken });
+    res.status(200).json({ userToken });
+  }
 };

@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 
 import { useMutation } from '@apollo/react-hooks';
 import { Card, Layout, Typography, Spin } from 'antd';
+import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
@@ -26,19 +27,26 @@ const LogIn = ({ setViewer }: Props) => {
   const client = initializeApollo();
   const router = useRouter();
   const [logIn, { data: logInData, loading: logInLoading, error: logInError }] = useMutation<LogInData, LogInVariables>(LOG_IN, {
-    onCompleted: data => {
+    onCompleted: async data => {
       if (data && data.logIn && data.logIn.token) {
+        const {
+          data: { userToken: feedToken },
+        } = await axios.post('/api/stream', {
+          name: data.logIn.name,
+          avatar: data.logIn.avatar,
+          id: data.logIn.id,
+        });
         setViewer(data.logIn);
         displaySuccessNotification("You've successfully logged in!");
       }
     },
   });
-  const logInRef = useRef(logIn);
+  const logInReference = useRef(logIn);
 
   useEffect(() => {
     const code = new URL(window.location.href).searchParams.get('code');
     if (code) {
-      logInRef.current({
+      logInReference.current({
         variables: {
           input: { code },
         },

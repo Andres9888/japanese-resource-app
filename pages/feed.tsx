@@ -28,33 +28,13 @@ const apiKey = 'ezcjh4aax2cv';
 const appId = '1163661';
 
 function App({ token, viewer }) {
-  const [currentUserToken, setCurrentUserToken] = useState('');
-
-  useEffect(() => {
-    const getToken = async () => {
-      if (!token) {
-        try {
-          const response = await axios.get(`/api/stream?id=${viewer.id}&name=${viewer.name}`);
-          console.log(response);
-          setCurrentUserToken(response.data.userToken);
-        } catch (error_) {
-          console.log(error_);
-        }
-      } else {
-        setCurrentUserToken(token);
-      }
-    };
-
-    getToken();
-  }, []);
-
-  if (!currentUserToken) return <div>Loading...</div>;
+  if (!token || !viewer) return <div>Try Login In</div>;
 
   return (
     <>
       <NavBlank viewer={viewer} />
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-        <StreamApp apiKey={apiKey} appId={appId} token={currentUserToken}>
+        <StreamApp apiKey={apiKey} appId={appId} token={token}>
           <div className="wrapper box">
             <h3>React Activity Feed</h3>
             <NotificationDropdown notify />
