@@ -29,9 +29,7 @@ const LogIn = ({ setViewer }: Props) => {
   const [logIn, { data: logInData, loading: logInLoading, error: logInError }] = useMutation<LogInData, LogInVariables>(LOG_IN, {
     onCompleted: async data => {
       if (data && data.logIn && data.logIn.token) {
-        const {
-          data: { userToken: feedToken },
-        } = await axios.post('/api/stream', {
+        await axios.post('/api/stream', {
           name: data.logIn.name,
           avatar: data.logIn.avatar,
           id: data.logIn.id,
