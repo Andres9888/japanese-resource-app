@@ -50,11 +50,11 @@ function App({ token, viewer }) {
           />
           <FlatFeed
             notify
-            Activity={({ activity, feedGroup, userId }) => (
+            Activity={({ activity, feedGroup }) => (
               <Activity
                 Footer={() => (
                   <>
-                    <ActivityFooter activity={activity} feedGroup={feedGroup} userId={userId} />
+                    <ActivityFooter activity={activity} feedGroup={feedGroup} userId={viewer.id} />
                     <CommentField activity={activity} />
                     <FollowButton actorID={activity.actor.id} getFollowing={getFollowing} />
                     <CommentList
@@ -70,7 +70,7 @@ function App({ token, viewer }) {
                 )}
                 activity={activity}
                 feedGroup={feedGroup}
-                userId={userId}
+                userId={viewer.id}
               />
             )}
             Paginator={InfiniteScrollPaginator}

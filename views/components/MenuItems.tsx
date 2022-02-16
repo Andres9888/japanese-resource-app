@@ -24,6 +24,9 @@ const MenuItems = ({ viewer }: Props) => {
         <Item key="/feed">
           <Link href="/timeline">Timeline</Link>
         </Item>
+        <Item key="/feed">
+          <Link href="/explore/anime">Explore</Link>
+        </Item>
       </SubMenu>
     ) : (
       <Item key="/login">

@@ -48,8 +48,6 @@
       "error",
       {
         "allowList": {
-          "req": true,
-          "res": true,
           "Props": true
         }
       }
