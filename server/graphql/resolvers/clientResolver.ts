@@ -3,6 +3,7 @@
 import crypto from 'crypto';
 
 import axios from 'axios';
+import { serialize, CookieSerializeOptions } from 'cookie';
 import { ObjectId } from 'mongodb';
 
 import { incrementCountVariables } from '~graphql/mutations/__generated__/incrementCount';
@@ -14,7 +15,15 @@ const getDatabase = async () => {
   return connectDatabase();
 };
 
-const logInViaGoogle = async (code: string, token: string) => {
+const cookieOptions = {
+  httpOnly: true,
+  sameSite: true,
+  signed: true,
+  secure: process.env.NODE_ENV !== 'development',
+  maxAge: 365 * 24 * 60 * 60 * 1000,
+};
+
+const logInViaGoogle = async (code: string, token: string, res) => {
   const { user } = await Google.logIn(code);
 
   if (!user) {
@@ -70,10 +79,22 @@ const logInViaGoogle = async (code: string, token: string) => {
     // eslint-disable-next-line prefer-destructuring
     viewer = insertResult.ops[0];
   }
+  res.setHeader('Set-Cookie', serialize('viewer', userId, cookieOptions));
 
   return viewer;
 };
+const logInViaCookie = async (token: string, req: Request, res: Response): Promise<User | undefined> => {
+  const database = await getDatabase();
+  const updateRes = await database.users.findOneAndUpdate({ _id: req.signedCookies.viewer }, { $set: { token } }, { returnOriginal: false });
 
+  let viewer = updateRes.value;
+
+  if (!viewer) {
+    res.clearCookie('viewer', cookieOptions);
+  }
+
+  return viewer;
+};
 export const resolvers = {
   Query: {
     listings: async (_root: undefined) => {
@@ -113,12 +134,12 @@ export const resolvers = {
         throw new Error(`Failed to Vote : ${error}`);
       }
     },
-    logIn: async (_root: undefined, { input }) => {
+    logIn: async (_root: undefined, { input }, { req, res }) => {
       try {
         const code = input ? input.code : null;
         const token = crypto.randomBytes(16).toString('hex');
 
-        const viewer: User | undefined = code ? await logInViaGoogle(code, token) : undefined;
+        const viewer: User | undefined = code ? await logInViaGoogle(code, token, res) : await logInViaCookie(token, req, res);
 
         if (!viewer) {
           return { didRequest: true };
@@ -137,8 +158,15 @@ export const resolvers = {
         throw new Error(`Failed to log in: ${error}`);
       }
     },
-    logOut: (): Viewer => {
+    logOut: (_root: undefined, _args: {}, { res }: { res: Response }): Viewer => {
       try {
+        res.setHeader(
+          'Set-Cookie',
+          serialize('viewer', '', {
+            maxAge: -1,
+          })
+        );
+
         return { didRequest: true };
       } catch (error) {
         throw new Error(`Failed to log out: ${error}`);

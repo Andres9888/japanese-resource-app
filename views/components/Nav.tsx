@@ -17,7 +17,7 @@ interface Props {
 
 const { Header } = Layout;
 
-const Nav = ({ viewer, searchTerm, handleSearchChange }: Props) => {
+const Nav = ({ viewer, setViewer, searchTerm, handleSearchChange }: Props) => {
   const router = useRouter();
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const Nav = ({ viewer, searchTerm, handleSearchChange }: Props) => {
           {router.asPath === '/' ? <SearchBar handleSearchChange={handleSearchChange} searchTerm={searchTerm} /> : <div />}
         </div>
         <div className="app-header__menu-section">
-          <MenuItems viewer={viewer} />
+          <MenuItems viewer={viewer} setViewer={setViewer} />
         </div>
       </Header>
     </Affix>

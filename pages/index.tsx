@@ -23,7 +23,7 @@ interface Props {
   viewer: Viewer;
 }
 
-export default function Home({ viewer }: Props) {
+export default function Home({ viewer, setViewer }: Props) {
   const {
     data: { listings },
     loading,
@@ -104,7 +104,7 @@ export default function Home({ viewer }: Props) {
         }}
       />
 
-      <Nav handleSearchChange={handleSearchChange} searchTerm={searchTerm} viewer={viewer} />
+      <Nav handleSearchChange={handleSearchChange} searchTerm={searchTerm} viewer={viewer} setViewer={setViewer} />
       <Table refetch={refetch} searchResults={searchResults} viewer={viewer} />
     </>
   );

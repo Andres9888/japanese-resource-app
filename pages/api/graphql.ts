@@ -5,6 +5,8 @@ import { connectDatabase } from '~server/database';
 import { resolvers } from '~server/graphql/resolvers/clientResolver';
 import { typeDefs } from '~server/graphql/types/clientType';
 
+
+
 const playground = {
   endpoint: `/api/graphql`,
 };

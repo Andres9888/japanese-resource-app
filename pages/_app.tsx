@@ -1,15 +1,16 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
 import '~styles/main.scss';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { ApolloProvider } from '@apollo/react-hooks';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import Script from 'next/script';
-
+import { LOG_IN } from '~graphql/mutations/mutations';
 import { useApollo } from '~lib/apolloClient';
 import { Viewer } from '~types/globalTypes';
+import { useMutation } from '@apollo/react-hooks';
 
 const initialViewer: Viewer = {
   id: null,
@@ -21,6 +22,23 @@ const initialViewer: Viewer = {
 
 export default function App({ Component, pageProps }: AppProps) {
   const [viewer, setViewer] = useState<Viewer>(initialViewer);
+
+  // const [logIn, { error }] = useMutation<LogInData, LogInVariables>(LOG_IN, {
+  //   onCompleted: data => {
+  //     if (data && data.logIn) {
+  //       setViewer(data.logIn);
+  //     }
+  //   },
+  //   client: apolloClient,
+  // });
+
+  // const logInRef = useRef(logIn);
+
+  // useEffect(() => {
+  //   logInRef.current();
+  // }, []);
+
+  // if (!viewer.didRequest && !error) return <h1>loading</h1>;
   const apolloClient = useApollo(pageProps.initialApolloState);
   return (
     // @ts-ignore

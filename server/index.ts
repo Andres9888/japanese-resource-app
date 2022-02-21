@@ -44,14 +44,14 @@ nextApp.prepare().then(() => {
 
   // start apollo server
 
-  const apollo = new ApolloServer({
-    typeDefs,
-    resolvers,
-    schema,
-    playground,
-  });
+  // const apollo = new ApolloServer({
+  //   typeDefs,
+  //   resolvers,
+  //   schema,
+  //   playground,
+  // });
 
-  apollo.applyMiddleware({ app: server, path: '/api/graphql' });
+  // apollo.applyMiddleware({ app: server, path: '/api/graphql' });
 
   server.get('*', (req, res) => handle(req, res));
   server.post('*', (req, res) => {
