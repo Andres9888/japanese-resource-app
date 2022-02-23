@@ -27,7 +27,7 @@ import 'react-activity-feed/dist/index.css';
 const apiKey = 'ezcjh4aax2cv';
 const appId = '1163661';
 
-function App({ token, viewer }) {
+function UserFeed({ token, viewer }) {
   if (!token || !viewer) return <div>Try Login In</div>;
 
   return (
@@ -43,9 +43,6 @@ function App({ token, viewer }) {
             emojiI18n={{
               search: 'Type here to search...',
               categories: { recent: 'Recent Emojis' },
-            }}
-            modifyActivityData={data => {
-              console.log(data);
             }}
           />
           <FlatFeed
@@ -86,7 +83,7 @@ function App({ token, viewer }) {
     </>
   );
 }
-export default App;
+export default UserFeed;
 
 export function getServerSideProps({ req, res }) {
   return { props: { token: req.cookies.token || '' } };

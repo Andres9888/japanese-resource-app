@@ -4,7 +4,8 @@ import { useQuery } from '@apollo/react-hooks';
 import { Avatar, Divider } from 'antd';
 import axios from 'axios';
 import Image from 'next/image';
-import { EmailShareButton, EmailIcon } from 'react-share';
+
+import { RWebShare } from 'react-web-share';
 import styled from 'styled-components';
 
 import { getUserResourcesIds as getUserResourceIdsData, getUserResourcesIdsVariables } from '../../graphql/queries/__generated__/getUserResourcesIds';
@@ -107,15 +108,16 @@ function userPage({ viewer }: Props) {
                   </a>
                 </TableDataDescription>
                 <TableData>
-                  <EmailShareButton
-                    body={`${resource.title}: ${resource.url}`}
-                    separator=":"
-                    subject="hey check out these cool japanese resources"
-                    url={resource.url}
+                  <RWebShare
+                    data={{
+                      text: resource.description,
+                      url: resource.url,
+                      title: resource.title,
+                    }}
+                    onClick={() => console.log('shared successfully!')}
                   >
-                    <EmailIcon round size={32} />
-                    <ShareHeader>Share</ShareHeader>
-                  </EmailShareButton>
+                    <ShareHeader>Share 🔗</ShareHeader>
+                  </RWebShare>
                 </TableData>
               </TableRow>
             ))}

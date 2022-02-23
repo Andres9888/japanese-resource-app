@@ -85,12 +85,17 @@ const logInViaGoogle = async (code: string, token: string, res) => {
 };
 const logInViaCookie = async (token: string, req: Request, res: Response): Promise<User | undefined> => {
   const database = await getDatabase();
-  const updateRes = await database.users.findOneAndUpdate({ _id: req.signedCookies.viewer }, { $set: { token } }, { returnOriginal: false });
+  const updateRes = await database.users.findOneAndUpdate({ _id: req.cookies.viewer }, { $set: { token } }, { returnOriginal: false });
 
   let viewer = updateRes.value;
 
   if (!viewer) {
-    res.clearCookie('viewer', cookieOptions);
+    res.setHeader(
+      'Set-Cookie',
+      serialize('viewer', '', {
+        maxAge: -1,
+      })
+    );
   }
 
   return viewer;

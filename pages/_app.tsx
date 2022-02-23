@@ -8,7 +8,7 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import Script from 'next/script';
 import { LOG_IN } from '~graphql/mutations/mutations';
-import { useApollo } from '~lib/apolloClient';
+import { useApollo, initializeApollo } from '~lib/apolloClient';
 import { Viewer } from '~types/globalTypes';
 import { useMutation } from '@apollo/react-hooks';
 
@@ -21,25 +21,26 @@ const initialViewer: Viewer = {
 };
 
 export default function App({ Component, pageProps }: AppProps) {
+  const apolloClient = useApollo(pageProps.initialApolloState);
   const [viewer, setViewer] = useState<Viewer>(initialViewer);
 
-  // const [logIn, { error }] = useMutation<LogInData, LogInVariables>(LOG_IN, {
-  //   onCompleted: data => {
-  //     if (data && data.logIn) {
-  //       setViewer(data.logIn);
-  //     }
-  //   },
-  //   client: apolloClient,
-  // });
+  const [logIn, { error }] = useMutation<LogInData, LogInVariables>(LOG_IN, {
+    onCompleted: data => {
+      if (data && data.logIn) {
+        setViewer(data.logIn);
+      }
+    },
+    client: initializeApollo(),
+  });
 
-  // const logInRef = useRef(logIn);
+  const logInRef = useRef(logIn);
 
-  // useEffect(() => {
-  //   logInRef.current();
-  // }, []);
+  useEffect(() => {
+    logInRef.current();
+  }, []);
 
-  // if (!viewer.didRequest && !error) return <h1>loading</h1>;
-  const apolloClient = useApollo(pageProps.initialApolloState);
+  if (!viewer.didRequest && !error) return <h1>cookie loading</h1>;
+
   return (
     // @ts-ignore
     <ApolloProvider client={apolloClient}>
