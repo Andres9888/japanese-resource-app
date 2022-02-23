@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
+// @ts-nocheck
 import '~styles/main.scss';
 import { useState, useEffect, useRef } from 'react';
 
