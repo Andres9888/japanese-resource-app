@@ -20,8 +20,6 @@ import {
   InfiniteScrollPaginator,
 } from 'react-activity-feed';
 
-import NavBlank from '~views/components/NavBlank';
-
 import 'react-activity-feed/dist/index.css';
 
 const apiKey = 'ezcjh4aax2cv';
@@ -32,7 +30,6 @@ function UserFeed({ token, viewer }) {
 
   return (
     <>
-      <NavBlank viewer={viewer} />
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>
         <StreamApp apiKey={apiKey} appId={appId} token={token}>
           <div className="wrapper box">

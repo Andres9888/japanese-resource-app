@@ -21,7 +21,6 @@ import {
 } from 'react-activity-feed';
 
 import { FollowButton } from '~views/components/FollowButton';
-import NavBlank from '~views/components/NavBlank';
 
 import 'react-activity-feed/dist/index.css';
 
@@ -72,7 +71,6 @@ export default function AnimeSingle({ viewer, token }) {
 
   return (
     <>
-      <NavBlank viewer={viewer} />
       <h1>{data.findAnimeBySlug.titles.canonical}</h1>
       <p>{data.findAnimeBySlug.description.en}</p>
 

@@ -2,8 +2,7 @@
 // @ts-nocheck
 import crypto from 'crypto';
 
-import axios from 'axios';
-import { serialize, CookieSerializeOptions } from 'cookie';
+import { serialize } from 'cookie';
 import { ObjectId } from 'mongodb';
 
 import { incrementCountVariables } from '~graphql/mutations/__generated__/incrementCount';

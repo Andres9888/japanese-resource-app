@@ -4,7 +4,6 @@ import { useQuery } from '@apollo/react-hooks';
 import { Avatar, Divider } from 'antd';
 import axios from 'axios';
 import Image from 'next/image';
-
 import { RWebShare } from 'react-web-share';
 import styled from 'styled-components';
 
@@ -12,7 +11,6 @@ import { getUserResourcesIds as getUserResourceIdsData, getUserResourcesIdsVaria
 
 import { GET_USER_RESOURCES_IDS, RESOURCES } from '~graphql/queries/queries';
 import { Viewer } from '~types/globalTypes';
-import NavBlank from '~views/components/NavBlank';
 
 interface Props {
   viewer: Viewer;
@@ -53,7 +51,6 @@ function userPage({ viewer }: Props) {
 
   return (
     <div>
-      <NavBlank viewer={viewer} />
       <div className="user-profile">
         <Divider />
         <div className="user-profile__avatar">

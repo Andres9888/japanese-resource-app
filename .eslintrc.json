@@ -50,7 +50,7 @@
         "allowList": {
           "Props": true,
           "req": true,
-          "res": true,
+          "res": true
         }
       }
     ],

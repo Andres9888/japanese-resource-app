@@ -11,7 +11,6 @@ import { getResources } from '~graphql/queries/__generated__/getResources';
 import { RESOURCES } from '~graphql/queries/queries';
 import { initializeApollo } from '~lib/apolloClient';
 import { Viewer } from '~types/globalTypes';
-import Nav from '~views/components/Nav';
 import Table from '~views/components/Table';
 
 declare global {
@@ -23,7 +22,7 @@ interface Props {
   viewer: Viewer;
 }
 
-export default function Home({ viewer, setViewer }: Props) {
+export default function Home({ viewer, setViewer, searchTerm }: Props) {
   const {
     data: { listings },
     loading,
@@ -31,7 +30,6 @@ export default function Home({ viewer, setViewer }: Props) {
     refetch,
   } = useQuery<getResources>(RESOURCES);
 
-  const [searchTerm, setSearchTerm] = React.useState('');
   const [searchResults, setSearchResults] = React.useState([]);
   const sortedData = [...listings].sort((a, b) => b.count - a.count);
 
@@ -52,14 +50,15 @@ export default function Home({ viewer, setViewer }: Props) {
     return <h1>error</h1>;
   }
 
-  const handleSearchChange = event => {
-    setSearchTerm(event.target.value);
-  };
   return (
     <>
       <Head>
         <title>Japanese Resources Site</title>
-        <meta content="Q7vgw_JZpE7XtVGSpkL6ZpLx3745jU_LDc6YVFzU3T8" name="google-site-verification" />
+
+        <meta
+          content="Finding Quality Japanese Resources can be hard to find in the beginning. This site is here to make it easier for you. I currated a list of Japanese study material that I found useful and wanted to share. You can search and filter what type of resources and vote, track, and share the resources you like."
+          name="description"
+        />
       </Head>
       <Script
         src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"
@@ -104,7 +103,6 @@ export default function Home({ viewer, setViewer }: Props) {
         }}
       />
 
-      <Nav handleSearchChange={handleSearchChange} searchTerm={searchTerm} viewer={viewer} setViewer={setViewer} />
       <Table refetch={refetch} searchResults={searchResults} viewer={viewer} />
     </>
   );

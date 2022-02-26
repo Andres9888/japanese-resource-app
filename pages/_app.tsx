@@ -4,14 +4,17 @@
 import '~styles/main.scss';
 import { useState, useEffect, useRef } from 'react';
 
-import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloProvider, useMutation } from '@apollo/react-hooks';
+import { Layout, Spin } from 'antd';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import Script from 'next/script';
+
 import { LOG_IN } from '~graphql/mutations/mutations';
 import { useApollo, initializeApollo } from '~lib/apolloClient';
 import { Viewer } from '~types/globalTypes';
-import { useMutation } from '@apollo/react-hooks';
+import Nav from '~views/components/Nav';
+import NavBlank from '~views/components/NavBlank';
 
 const initialViewer: Viewer = {
   id: null,
@@ -20,11 +23,11 @@ const initialViewer: Viewer = {
   didRequest: false,
   name: null,
 };
-
+const { Content } = Layout;
 export default function App({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState);
   const [viewer, setViewer] = useState<Viewer>(initialViewer);
-
+  const [searchTerm, setSearchTerm] = useState('');
   const [logIn, { error }] = useMutation<LogInData, LogInVariables>(LOG_IN, {
     onCompleted: data => {
       if (data && data.logIn) {
@@ -34,36 +37,29 @@ export default function App({ Component, pageProps }: AppProps) {
     client: initializeApollo(),
   });
 
-  const logInRef = useRef(logIn);
+  const logInReference = useRef(logIn);
 
   useEffect(() => {
-    logInRef.current();
+    logInReference.current();
   }, []);
-
-  if (!viewer.didRequest && !error) return <h1>cookie loading</h1>;
+  const handleSearchChange = event => {
+    setSearchTerm(event.target.value);
+  };
+  if (!viewer.didRequest && !error) {
+    return (
+      <>
+        <NavBlank />
+        <Content className="log-in">
+          <Spin size="large" tip="Logging you in..." />
+        </Content>
+      </>
+    );
+  }
 
   return (
     // @ts-ignore
     <ApolloProvider client={apolloClient}>
-      {/* Global Site Tag (gtag.js) - Google Analytics */}
-      <Script src="https://www.googletagmanager.com/gtag/js?id=G-XJJPHGTZE8" strategy="lazyOnload" />
-
-      <Script strategy="lazyOnload">
-        {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-XJJPHGTZE8', {
-              page_path: window.location.pathname,
-            });
-                `}
-      </Script>
       <Head>
-        <title>Japanese Resources</title>
-        <meta
-          content="Finding Quality Japanese Resources can be hard to find in the beginning. This site is here to make it easier for you. I currated a list of Japanese study material that I found useful and wanted to share. You can search and filter what type of resources and vote, track, and share the resources you like."
-          name="description"
-        />
         <link href="/favicon.ico" rel="icon" />
         <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css" rel="stylesheet" />
         <link href="https://fonts.gstatic.com" rel="preconnect" />
@@ -71,7 +67,8 @@ export default function App({ Component, pageProps }: AppProps) {
         <link href="https://fonts.gstatic.com" rel="preconnect" />
         <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet" />
       </Head>
-      <Component {...pageProps} setViewer={setViewer} viewer={viewer} />
+      <Nav handleSearchChange={handleSearchChange} searchTerm={searchTerm} setViewer={setViewer} viewer={viewer} />
+      <Component {...pageProps} searchTerm={searchTerm} setViewer={setViewer} viewer={viewer} />
     </ApolloProvider>
   );
 }

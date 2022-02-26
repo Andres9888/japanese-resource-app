@@ -7,8 +7,6 @@ import gql from 'graphql-tag';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import NavBlank from '~views/components/NavBlank';
-
 export const RESOURCES = gql`
   query {
     globalTrending(first: 5, mediaType: ANIME) {
@@ -46,8 +44,6 @@ export default function ExploreAnime({ viewer }: Props) {
 
   return (
     <>
-      <NavBlank viewer={viewer} />
-
       <Card title="Card Title">
         {globalTrending.map(({ slug, posterImage, titles }) => (
           <Link href={`/anime/${slug}`}>
