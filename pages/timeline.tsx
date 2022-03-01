@@ -18,7 +18,6 @@ import {
 } from 'react-activity-feed';
 
 import { FollowButton } from '~views/components/FollowButton';
-import Nav from '~views/components/Nav';
 
 import 'react-activity-feed/dist/index.css';
 
@@ -36,13 +35,13 @@ const { TextArea } = Input;
 function GlobalFeed({ getStreamToken, viewer }) {
   if (!getStreamToken || !viewer) return <div>Try loging in again</div>;
   const client = connect(apiKey, getStreamToken, appId);
-  const currentUserClient = client.feed('user', viewer.id);
+  const currentUserClient = client.feed('user', client.userId);
   const [post, setPost] = useState();
   const onChange = e => {
     setPost(e.target.value);
   };
   const onSubmit = async () => {
-    const activity = { actor: `SU:${viewer.id}`, verb: 'pin', object: post };
+    const activity = { actor: client.currentUser, verb: 'pin', object: post };
     await currentUserClient.addActivity(activity);
   };
 
@@ -54,18 +53,16 @@ function GlobalFeed({ getStreamToken, viewer }) {
 
   return (
     <>
-      <Nav viewer={viewer} />
-
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>
         <Comment
-          avatar={<Avatar src={viewer.avatar} alt="Han Solo" />}
+          avatar={<Avatar alt="Han Solo" src={viewer.avatar} />}
           content={
             <>
               <Form.Item>
-                <TextArea rows={4} onChange={onChange} value={post} />
+                <TextArea rows={4} value={post} onChange={onChange} />
               </Form.Item>
               <Form.Item>
-                <Button htmlType="submit" onClick={onSubmit} type="primary">
+                <Button htmlType="submit" type="primary" onClick={onSubmit}>
                   Add Comment
                 </Button>
               </Form.Item>

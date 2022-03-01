@@ -41,6 +41,9 @@ function UserFeed({ token, viewer }) {
               search: 'Type here to search...',
               categories: { recent: 'Recent Emojis' },
             }}
+            modifyActivityData={data => {
+              console.log(data);
+            }}
           />
           <FlatFeed
             notify

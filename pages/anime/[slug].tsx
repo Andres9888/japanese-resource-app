@@ -1,9 +1,11 @@
 // @ts-nocheck
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useQuery } from '@apollo/react-hooks';
+import { Form, Input, Button, Comment, Avatar, List } from 'antd';
 import axios from 'axios';
+import { connect } from 'getstream';
 import gql from 'graphql-tag';
 import { useRouter } from 'next/router';
 import {
@@ -37,16 +39,17 @@ export const RESOURCES = gql`
     }
   }
 `;
-
+const { TextArea } = Input;
 export default function AnimeSingle({ viewer, token }) {
   const router = useRouter();
   const { slug } = router.query;
   const { data, loading, error } = useQuery(RESOURCES, { variables: { slug }, context: { clientName: 'third-party' } });
   const [currentAnimeToken, setCurrentAnimeToken] = React.useState();
-  const getFollowing = async actorID => {
-    const response = await axios.get(`/api/is-following?currentUser=${viewer.id}&actorID=${actorID}`);
-    return response.data;
-  };
+  const [post, setPost] = useState();
+  // const getFollowing = async actorID => {
+  //   const response = await axios.get(`/api/is-following?currentUser=${viewer.id}&actorID=${actorID}`);
+  //   return response.data;
+  // };
   useEffect(() => {
     const getToken = async () => {
       try {
@@ -68,26 +71,41 @@ export default function AnimeSingle({ viewer, token }) {
   if (error) {
     return <h1>error</h1>;
   }
+  const client = connect(apiKey, token, appId);
+  const currentUserClient = client.feed('user', client.userId);
 
+  const onChange = e => {
+    setPost(e.target.value);
+  };
+  const onSubmit = async () => {
+    const activity = { actor: client.currentUser, verb: 'pin', object: post, to: [`user:${slug}`] };
+    await currentUserClient.addActivity(activity);
+  };
   return (
     <>
       <h1>{data.findAnimeBySlug.titles.canonical}</h1>
       <p>{data.findAnimeBySlug.description.en}</p>
-
+      <Comment
+        avatar={<Avatar alt="Han Solo" src={viewer.avatar} />}
+        content={
+          <>
+            <Form.Item>
+              <TextArea rows={4} value={post} onChange={onChange} />
+            </Form.Item>
+            <Form.Item>
+              <Button htmlType="submit" type="primary" onClick={onSubmit}>
+                Add Comment
+              </Button>
+            </Form.Item>
+          </>
+        }
+      />
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>
         <StreamApp apiKey={apiKey} appId={appId} token={currentAnimeToken}>
           <div className="wrapper box">
             <h3>React Activity Feed</h3>
             <NotificationDropdown right />
           </div>
-          {viewer.id ? (
-            <StatusUpdateForm
-              emojiI18n={{
-                search: 'Type here to search...',
-                categories: { recent: 'Recent Emojis' },
-              }}
-            />
-          ) : null}
 
           <FlatFeed
             notify
@@ -98,7 +116,7 @@ export default function AnimeSingle({ viewer, token }) {
                     <>
                       <ActivityFooter activity={activity} feedGroup={feedGroup} userId={userId} />
                       <CommentField activity={activity} />
-                      <FollowButton actorID={activity.actor.id} getFollowing={getFollowing} />
+                      {/* <FollowButton actorID={activity.actor.id} getFollowing={getFollowing} /> */}
                       <CommentList
                         CommentItem={({ comment }) => (
                           <div className="wrapper">
