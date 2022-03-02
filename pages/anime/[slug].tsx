@@ -78,7 +78,12 @@ export default function AnimeSingle({ viewer, token }) {
     setPost(e.target.value);
   };
   const onSubmit = async () => {
-    const activity = { actor: client.currentUser, verb: 'pin', object: post, to: [`user:${slug}`] };
+    const activity = {
+      object: 'test',
+      text: 'test',
+      verb: 'post',
+      to: ['user:kimetsu-no-yaiba-yuukaku-hen'],
+    };
     await currentUserClient.addActivity(activity);
   };
   return (

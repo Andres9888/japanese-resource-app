@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React from 'react';
 
 import { Layout, Affix, Icon } from 'antd';
@@ -7,11 +5,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import SearchBar from '~features/searchBar';
+import MenuItems from '~layouts/core/MenuItems';
 import { Viewer } from '~types/globalTypes';
-import MenuItems from '~views/components/MenuItems';
 
 interface Props {
   viewer: Viewer;
+  setViewer: (viewer: Viewer) => void;
   searchTerm: string;
   handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -32,7 +31,7 @@ const Nav = ({ viewer, setViewer, searchTerm, handleSearchChange }: Props) => {
               </div>
             </Link>
           </div>
-          {router.asPath === '/' ? <SearchBar handleSearchChange={handleSearchChange} searchTerm={searchTerm} /> : <div />}
+          {router.asPath === '/' ? <SearchBar handleSearchChange={handleSearchChange} searchTerm={searchTerm} /> : null}
         </div>
         <div className="app-header__menu-section">
           <MenuItems setViewer={setViewer} viewer={viewer} />

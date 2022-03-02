@@ -23,6 +23,12 @@
       "~features/*": [
         "./features/*"
       ],
+      "~layouts/*": [
+        "./layouts/*"
+      ],
+      "~app/*": [
+        "./app/*"
+      ],
       "~types/*": [
         "./@types/*"
       ],

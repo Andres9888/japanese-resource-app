@@ -3,26 +3,19 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { LogInInput } from "./../../../__generated__/globalTypes";
-
 // ====================================================
-// GraphQL mutation operation: LogIn
+// GraphQL mutation operation: LogOut
 // ====================================================
 
-export interface LogIn_logIn {
+export interface LogOut_logOut {
   __typename: "Viewer";
   id: string | null;
   token: string | null;
   avatar: string | null;
   hasWallet: boolean | null;
   didRequest: boolean;
-  name: string | null;
 }
 
-export interface LogIn {
-  logIn: LogIn_logIn;
-}
-
-export interface LogInVariables {
-  input?: LogInInput | null;
+export interface LogOut {
+  logOut: LogOut_logOut;
 }

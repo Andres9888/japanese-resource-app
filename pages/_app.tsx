@@ -5,16 +5,15 @@ import '~styles/main.scss';
 import { useState, useEffect, useRef } from 'react';
 
 import { ApolloProvider, useMutation } from '@apollo/react-hooks';
-import { Layout, Spin } from 'antd';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import Script from 'next/script';
 
+import LoadingCookieTemplatePage from '~app/components/LoadingCookieTemplatePage';
+import { LogIn as LogInData } from '~graphql/mutations/__generated__/LogIn';
 import { LOG_IN } from '~graphql/mutations/mutations';
+import Nav from '~layouts/default/Nav';
 import { useApollo, initializeApollo } from '~lib/apolloClient';
 import { Viewer } from '~types/globalTypes';
-import Nav from '~views/components/Nav';
-import NavBlank from '~views/components/NavBlank';
 
 const initialViewer: Viewer = {
   id: null,
@@ -23,17 +22,18 @@ const initialViewer: Viewer = {
   didRequest: false,
   name: null,
 };
-const { Content } = Layout;
+
 export default function App({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState);
   const [viewer, setViewer] = useState<Viewer>(initialViewer);
   const [searchTerm, setSearchTerm] = useState('');
-  const [logIn, { error }] = useMutation<LogInData, LogInVariables>(LOG_IN, {
+  const [logIn, { error }] = useMutation<LogInData>(LOG_IN, {
     onCompleted: data => {
       if (data && data.logIn) {
         setViewer(data.logIn);
       }
     },
+
     client: initializeApollo(),
   });
 
@@ -46,18 +46,10 @@ export default function App({ Component, pageProps }: AppProps) {
     setSearchTerm(event.target.value);
   };
   if (!viewer.didRequest && !error) {
-    return (
-      <>
-        <NavBlank />
-        <Content className="log-in">
-          <Spin size="large" tip="Logging you in..." />
-        </Content>
-      </>
-    );
+    return <LoadingCookieTemplatePage />;
   }
 
   return (
-    // @ts-ignore
     <ApolloProvider client={apolloClient}>
       <Head>
         <link href="/favicon.ico" rel="icon" />

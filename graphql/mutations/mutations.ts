@@ -20,3 +20,14 @@ export const LOG_IN = gql`
     }
   }
 `;
+export const LOG_OUT = gql`
+  mutation LogOut {
+    logOut {
+      id
+      token
+      avatar
+      hasWallet
+      didRequest
+    }
+  }
+`;
