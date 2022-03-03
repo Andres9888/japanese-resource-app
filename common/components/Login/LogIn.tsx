@@ -8,6 +8,7 @@ import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
+import { ErrorBanner } from '~common/components/ErrorBanner';
 import { LogIn as LogInData, LogInVariables } from '~graphql/mutations/__generated__/LogIn';
 import { LOG_IN } from '~graphql/mutations/mutations';
 import { AuthUrl as AuthUrlData } from '~graphql/queries/__generated__/AuthUrl';
@@ -15,7 +16,6 @@ import { AUTH_URL } from '~graphql/queries/queries';
 import { initializeApollo } from '~lib/apolloClient';
 import { displaySuccessNotification, displayErrorMessage } from '~lib/utils';
 import { Viewer } from '~types/globalTypes';
-import { ErrorBanner } from '~views/components/ErrorBanner';
 import 'antd/dist/antd.css';
 
 const { Content } = Layout;
@@ -37,6 +37,7 @@ const LogIn = ({ setViewer }: Props) => {
           id: data.logIn.id,
         });
         setViewer(data.logIn);
+        sessionStorage.setItem('token', data.logIn.token);
         displaySuccessNotification("You've successfully logged in!");
       }
     },

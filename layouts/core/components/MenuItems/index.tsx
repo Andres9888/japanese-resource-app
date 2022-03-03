@@ -1,7 +1,8 @@
 import { Avatar, Button, Menu } from 'antd';
 import Link from 'next/link';
 
-import { LogOutButton } from './LogOutButton';
+import { LogOutButton } from './components/LogOutButton';
+// import { SakuraSlider } from './SakuraSlider';
 
 import { Viewer } from '~types/globalTypes';
 
@@ -16,6 +17,9 @@ const MenuItems = ({ viewer, setViewer }: Props) => {
   const subMenuLogin =
     viewer.id && viewer.avatar ? (
       <SubMenu title={<Avatar src={viewer.avatar} />}>
+        {/* <Item key="/user">
+          <SakuraSlider />
+        </Item> */}
         <Item key="/user">
           <Link href={`/user/${viewer.id}`}>Profile</Link>
         </Item>

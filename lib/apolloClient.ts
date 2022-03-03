@@ -29,6 +29,14 @@ function createIsomorphicLink() {
 function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
+    request: async operation => {
+      const token = sessionStorage.getItem('token');
+      operation.setContext({
+        headers: {
+          'X-CSRF-TOKEN': token || '',
+        },
+      });
+    },
     link: ApolloLink.split(
       operation => operation.getContext().clientName === 'third-party',
       // the string "third-party" can be anything you want,

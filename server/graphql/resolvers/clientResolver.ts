@@ -22,6 +22,16 @@ const cookieOptions = {
   maxAge: 365 * 24 * 60 * 60 * 1000,
 };
 
+const authorize = async (db: Database, req: Request): Promise<User | null> => {
+  const token = req.get('X-CSRF-TOKEN');
+  const viewer = await db.users.findOne({
+    _id: req.cookies.viewer,
+    token,
+  });
+
+  return viewer;
+};
+
 const logInViaGoogle = async (code: string, token: string, res) => {
   const { user } = await Google.logIn(code);
 

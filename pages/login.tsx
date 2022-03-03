@@ -1,5 +1,5 @@
 /* eslint-disable import/extensions */
-import LogIn from '~features/login';
+import LogIn from '~common/components/Login';
 
 function loginPage({ setViewer, viewer }) {
   return <LogIn setViewer={setViewer} />;

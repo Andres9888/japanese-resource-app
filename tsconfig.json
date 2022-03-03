@@ -20,14 +20,14 @@
     "noImplicitAny": false,
     "baseUrl": "./",
     "paths": {
-      "~features/*": [
-        "./features/*"
-      ],
       "~layouts/*": [
         "./layouts/*"
       ],
       "~app/*": [
         "./app/*"
+      ],
+      "~common/*": [
+        "./common/*"
       ],
       "~types/*": [
         "./@types/*"
@@ -40,18 +40,6 @@
       ],
       "~graphqlM/*": [
         "./graphql/mutations/*"
-      ],
-      "~views/*": [
-        "./views/*"
-      ],
-      "~viewsUi/*": [
-        "./views/ui/*"
-      ],
-      "~viewsComp/*": [
-        "./views/components/*"
-      ],
-      "~viewsLay/*": [
-        "./views/layouts/*"
       ],
       "~styles/*": [
         "./styles/*"

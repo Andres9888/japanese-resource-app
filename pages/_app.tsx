@@ -7,6 +7,7 @@ import { useState, useEffect, useRef } from 'react';
 import { ApolloProvider, useMutation } from '@apollo/react-hooks';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import Script from 'next/script';
 
 import LoadingCookieTemplatePage from '~app/components/LoadingCookieTemplatePage';
 import { LogIn as LogInData } from '~graphql/mutations/__generated__/LogIn';
@@ -23,6 +24,12 @@ const initialViewer: Viewer = {
   name: null,
 };
 
+declare global {
+  interface Window {
+    sakura: any;
+  }
+}
+
 export default function App({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState);
   const [viewer, setViewer] = useState<Viewer>(initialViewer);
@@ -31,6 +38,11 @@ export default function App({ Component, pageProps }: AppProps) {
     onCompleted: data => {
       if (data && data.logIn) {
         setViewer(data.logIn);
+        if (data.logIn.token) {
+          sessionStorage.setItem('token', data.logIn.token);
+        } else {
+          sessionStorage.removeItem('token');
+        }
       }
     },
 
@@ -42,12 +54,12 @@ export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
     logInReference.current();
   }, []);
+
+  if (!viewer.didRequest && !error) return <LoadingCookieTemplatePage />;
+
   const handleSearchChange = event => {
     setSearchTerm(event.target.value);
   };
-  if (!viewer.didRequest && !error) {
-    return <LoadingCookieTemplatePage />;
-  }
 
   return (
     <ApolloProvider client={apolloClient}>
@@ -58,8 +70,52 @@ export default function App({ Component, pageProps }: AppProps) {
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet" />
         <link href="https://fonts.gstatic.com" rel="preconnect" />
         <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet" />
+        {/* <Script
+          src="/static/scripts/sakura.min.js"
+          strategy="beforeInteractive"
+          onLoad={() => {
+            // @ts-ignore
+
+            window.sakura = new Sakura('body', {
+              maxSize: 30,
+              colors: [
+                {
+                  gradientColorStart: 'rgba(255, 183, 197, 0.9)',
+                  gradientColorEnd: 'rgba(255, 197, 208, 0.9)',
+                  gradientColorDegree: 120,
+                },
+                {
+                  gradientColorStart: 'rgba(255,189,189)',
+                  gradientColorEnd: 'rgba(227,170,181)',
+                  gradientColorDegree: 120,
+                },
+                {
+                  gradientColorStart: 'rgba(212,152,163)',
+                  gradientColorEnd: 'rgba(242,185,196)',
+                  gradientColorDegree: 120,
+                },
+              ],
+            });
+            window.sakura.stop(true);
+          }}
+        /> */}
+        <Script
+          src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"
+          strategy="lazyOnload"
+          onLoad={() => {
+            // @ts-ignore
+            kofiWidgetOverlay.draw('andres9888', {
+              type: 'floating-chat',
+              'floating-chat.donateButton.text': 'Buy me Coffee',
+              'floating-chat.donateButton.background-color': '#1890ff',
+              'floating-chat.donateButton.text-color': '#fff',
+            });
+          }}
+        />
       </Head>
-      <Nav handleSearchChange={handleSearchChange} searchTerm={searchTerm} setViewer={setViewer} viewer={viewer} />
+
+      <Nav error={error} handleSearchChange={handleSearchChange} searchTerm={searchTerm} setViewer={setViewer} viewer={viewer} />
+
       <Component {...pageProps} searchTerm={searchTerm} setViewer={setViewer} viewer={viewer} />
     </ApolloProvider>
   );
