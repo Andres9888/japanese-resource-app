@@ -6,6 +6,7 @@ import { useQuery } from '@apollo/react-hooks';
 import Head from 'next/head';
 import Image from 'next/image';
 
+import FilterByTag from '~common/components/FilterByTag';
 import Table from '~common/components/Table';
 import { getResources } from '~graphql/queries/__generated__/getResources';
 import { RESOURCES } from '~graphql/queries/queries';
@@ -16,7 +17,7 @@ interface Props {
   viewer: Viewer;
 }
 
-export default function Home({ viewer, setViewer, searchTerm }: Props) {
+export default function Home({ viewer, setViewer, searchTerm, setSearchTerm }: Props) {
   const {
     data: { listings },
     loading,
@@ -54,8 +55,10 @@ export default function Home({ viewer, setViewer, searchTerm }: Props) {
           name="description"
         />
       </Head>
-
-      <Table refetch={refetch} searchResults={searchResults} viewer={viewer} />
+      <div className="container">
+        <FilterByTag setSearchTerm={setSearchTerm} />
+        <Table refetch={refetch} searchResults={searchResults} viewer={viewer} />
+      </div>
     </>
   );
 }

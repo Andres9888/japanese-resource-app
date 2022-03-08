@@ -65,48 +65,46 @@ export default function Table({ viewer, searchResults, refetch }: Props) {
   };
 
   return (
-    <div className="container">
-      <table className="table is-fullwidth is-hoverable">
-        <tbody>
-          {searchResults.map(resource => (
-            <TableRow
-              key={resource.id}
-              whileHover={{
-                scale: 1.02,
-              }}
-            >
-              <TableData>
-                <a href={resource.url} rel="noreferrer" target="_blank">
-                  <Image alt="" height={200} src={resource.image} width={200} />
-                </a>
-              </TableData>
-              <TableDataTitle>
-                <a href={resource.url} rel="noreferrer" target="_blank">
-                  {resource.title}
-                </a>
-              </TableDataTitle>
-              <TableDataDescription>
-                <a href={resource.url} rel="noreferrer" target="_blank">
-                  {resource.description}
-                </a>
-              </TableDataDescription>
-              <TableDataTags>
-                <div className="field is-grouped is-grouped-multiline">
-                  {resource.tags.map(tag => (
-                    <div key={`${`${resource.id}-${tag}`}`} className="control">
-                      <div className="tags has-addons">
-                        <span className="tag is-link">{tag}</span>
-                      </div>
+    <table className="table is-fullwidth is-hoverable">
+      <tbody>
+        {searchResults.map(resource => (
+          <TableRow
+            key={resource.id}
+            whileHover={{
+              scale: 1.02,
+            }}
+          >
+            <TableData>
+              <a href={resource.url} rel="noreferrer" target="_blank">
+                <Image alt="" height={200} src={resource.image} width={200} />
+              </a>
+            </TableData>
+            <TableDataTitle>
+              <a href={resource.url} rel="noreferrer" target="_blank">
+                {resource.title}
+              </a>
+            </TableDataTitle>
+            <TableDataDescription>
+              <a href={resource.url} rel="noreferrer" target="_blank">
+                {resource.description}
+              </a>
+            </TableDataDescription>
+            <TableDataTags>
+              <div className="field is-grouped is-grouped-multiline">
+                {resource.tags.map(tag => (
+                  <div key={`${`${resource.id}-${tag}`}`} className="control">
+                    <div className="tags has-addons">
+                      <span className="tag is-link">{tag}</span>
                     </div>
-                  ))}
-                </div>
-              </TableDataTags>
-              <TableDataVoteContainer>{renderVoteButton(resource)}</TableDataVoteContainer>
-            </TableRow>
-          ))}
-        </tbody>
-      </table>
-    </div>
+                  </div>
+                ))}
+              </div>
+            </TableDataTags>
+            <TableDataVoteContainer>{renderVoteButton(resource)}</TableDataVoteContainer>
+          </TableRow>
+        ))}
+      </tbody>
+    </table>
   );
 }
 

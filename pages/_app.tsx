@@ -116,7 +116,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
       <Nav error={error} handleSearchChange={handleSearchChange} searchTerm={searchTerm} setViewer={setViewer} viewer={viewer} />
 
-      <Component {...pageProps} searchTerm={searchTerm} setViewer={setViewer} viewer={viewer} />
+      <Component {...pageProps} searchTerm={searchTerm} setSearchTerm={setSearchTerm} setViewer={setViewer} viewer={viewer} />
     </ApolloProvider>
   );
 }
