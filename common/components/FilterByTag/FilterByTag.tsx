@@ -22,10 +22,8 @@ const FilterByTag = ({ setSearchTerm }) => {
   const [selectedTags, setSelectedTags] = useState();
 
   const handleChange = (tag, checked) => {
-    const nextSelectedTags = checked ? tag : selectedTags.filter(t => t !== tag);
-    console.log('You are interested in:', nextSelectedTags);
-    setSelectedTags(nextSelectedTags);
-    setSearchTerm(nextSelectedTags);
+    setSelectedTags(tag);
+    setSearchTerm(tag);
   };
 
   return (

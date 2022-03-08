@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 import { getUserResourcesIds as getUserResourceIdsData, getUserResourcesIdsVariables } from '../../graphql/queries/__generated__/getUserResourcesIds';
 
-import VoteButton from '~common/components/VoteButton';
+import VoteButton from '~common/components/VoteButton/voteButton';
 import { getResources } from '~graphql/queries/__generated__/getResources';
 import { GET_USER_RESOURCES_IDS } from '~graphql/queries/queries';
 import { displayErrorMessage } from '~lib/utils';
