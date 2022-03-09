@@ -4,12 +4,11 @@ import { useMutation } from '@apollo/react-hooks';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
-import { getUserResourcesIds as getUserResourcesIdsData } from '../../../graphql/queries/__generated__/getUserResourcesIds';
-
 import { incrementCount as incrementCountData, incrementCountVariables } from '~graphql/mutations/__generated__/incrementCount';
 import { INCREMENT_COUNT } from '~graphql/mutations/mutations';
 // eslint-disable-next-line camelcase
 import { getResources_listings } from '~graphql/queries/__generated__/getResources';
+import { getUserResourcesIds as getUserResourcesIdsData } from '~graphql/queries/__generated__/getUserResourcesIds';
 import { displayErrorMessage } from '~lib/utils';
 import { Viewer } from '~types/globalTypes';
 
@@ -69,4 +68,4 @@ const VoteButton = ({ resource, viewer, refetch, refetchUserResourcesIds, userRe
 
 const ThumbButton = styled(motion.button)``;
 
-export default VoteB
+export default VoteButton;
