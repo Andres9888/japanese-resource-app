@@ -22,14 +22,12 @@ const cookieOptions = {
   maxAge: 365 * 24 * 60 * 60 * 1000,
 };
 
-const authorize = async (db: Database, req: Request): Promise<User | null> => {
+const authorize = async (database: Database, req: Request): Promise<User | null> => {
   const token = req.get('X-CSRF-TOKEN');
-  const viewer = await db.users.findOne({
+  return await database.users.findOne({
     _id: req.cookies.viewer,
     token,
   });
-
-  return viewer;
 };
 
 const logInViaGoogle = async (code: string, token: string, res) => {
@@ -96,7 +94,7 @@ const logInViaCookie = async (token: string, req: Request, res: Response): Promi
   const database = await getDatabase();
   const updateRes = await database.users.findOneAndUpdate({ _id: req.cookies.viewer }, { $set: { token } }, { returnOriginal: false });
 
-  let viewer = updateRes.value;
+  const viewer = updateRes.value;
 
   if (!viewer) {
     res.setHeader(
@@ -114,7 +112,10 @@ export const resolvers = {
     listings: async (_root: undefined) => {
       try {
         const database = await getDatabase();
-        return database.listings.find({}).toArray();
+        return database.listings
+          .find({})
+          .sort({ count: -1 })
+          .toArray();
       } catch (error) {
         throw new Error(`Failed to query listings: ${error}`);
       }
@@ -172,7 +173,7 @@ export const resolvers = {
         throw new Error(`Failed to log in: ${error}`);
       }
     },
-    logOut: (_root: undefined, _args: {}, { res }: { res: Response }): Viewer => {
+    logOut: (_root: undefined, _arguments: {}, { res }: { res: Response }): Viewer => {
       try {
         res.setHeader(
           'Set-Cookie',

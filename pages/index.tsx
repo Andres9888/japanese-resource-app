@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import React from 'react';
+import { useState, useEffect } from 'react';
 
 import { useQuery } from '@apollo/react-hooks';
 import Head from 'next/head';
@@ -15,9 +15,11 @@ import { Viewer } from '~types/globalTypes';
 
 interface Props {
   viewer: Viewer;
+  searchTerm: string;
+  setSearchTerm: (searchTerm: string) => void;
 }
 
-export default function Home({ viewer, setViewer, searchTerm, setSearchTerm }: Props) {
+export default function Home({ viewer, searchTerm, setSearchTerm }: Props) {
   const {
     data: { listings },
     loading,
@@ -25,11 +27,10 @@ export default function Home({ viewer, setViewer, searchTerm, setSearchTerm }: P
     refetch,
   } = useQuery<getResources>(RESOURCES);
 
-  const [searchResults, setSearchResults] = React.useState([]);
-  const sortedData = [...listings].sort((a, b) => b.count - a.count);
+  const [searchResults, setSearchResults] = useState([]);
 
-  React.useEffect(() => {
-    const filteredData = sortedData.filter(
+  useEffect(() => {
+    const filteredData = listings.filter(
       item =>
         item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
