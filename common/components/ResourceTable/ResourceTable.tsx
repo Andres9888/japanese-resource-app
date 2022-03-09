@@ -6,10 +6,10 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import styled from 'styled-components';
 
-import { getUserResourcesIds as getUserResourceIdsData, getUserResourcesIdsVariables } from '../../graphql/queries/__generated__/getUserResourcesIds';
+import VoteButton from './components/VoteButton';
 
-import VoteButton from '~common/components/VoteButton/voteButton';
 import { getResources } from '~graphql/queries/__generated__/getResources';
+import { getUserResourcesIds as getUserResourceIdsData, getUserResourcesIdsVariables } from '~graphql/queries/__generated__/getUserResourcesIds';
 import { GET_USER_RESOURCES_IDS } from '~graphql/queries/queries';
 import { displayErrorMessage } from '~lib/utils';
 import { Viewer } from '~types/globalTypes';
@@ -20,7 +20,7 @@ interface Props {
   refetch: () => Promise<void>;
 }
 
-export default function Table({ viewer, searchResults, refetch }: Props) {
+const ResourceTable = ({ viewer, searchResults, refetch }: Props) => {
   const { data, loading, refetch: refetchUserResourcesIds } = useQuery<getUserResourceIdsData, getUserResourcesIdsVariables>(GET_USER_RESOURCES_IDS, {
     variables: { id: viewer.id },
     skip: !viewer.id,
@@ -106,7 +106,9 @@ export default function Table({ viewer, searchResults, refetch }: Props) {
       </tbody>
     </table>
   );
-}
+};
+
+export default ResourceTable;
 
 const TableRow = styled(motion.tr)`
   border-radius: 6px;

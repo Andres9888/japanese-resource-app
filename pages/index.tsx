@@ -7,7 +7,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 
 import FilterByTag from '~common/components/FilterByTag';
-import Table from '~common/components/Table';
+import ResourceTable from '~common/components/ResourceTable';
 import { getResources } from '~graphql/queries/__generated__/getResources';
 import { RESOURCES } from '~graphql/queries/queries';
 import { initializeApollo } from '~lib/apolloClient';
@@ -57,7 +57,7 @@ export default function Home({ viewer, setViewer, searchTerm, setSearchTerm }: P
       </Head>
       <div className="container">
         <FilterByTag setSearchTerm={setSearchTerm} />
-        <Table refetch={refetch} searchResults={searchResults} viewer={viewer} />
+        <ResourceTable refetch={refetch} searchResults={searchResults} viewer={viewer} />
       </div>
     </>
   );
