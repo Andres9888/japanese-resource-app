@@ -69,4 +69,4 @@ const VoteButton = ({ resource, viewer, refetch, refetchUserResourcesIds, userRe
 
 const ThumbButton = styled(motion.button)``;
 
-export default VoteButton;
+export default VoteB
