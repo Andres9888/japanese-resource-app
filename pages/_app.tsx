@@ -7,7 +7,7 @@ import { useState, useEffect, useRef } from 'react';
 import { ApolloProvider, useMutation } from '@apollo/react-hooks';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import Script from 'next/script';
+// import Script from 'next/script';
 
 import LoadingCookieTemplatePage from '~app/components/LoadingCookieTemplatePage';
 import { LogIn as LogInData } from '~graphql/mutations/__generated__/LogIn';
@@ -55,7 +55,7 @@ export default function App({ Component, pageProps }: AppProps) {
     logInReference.current();
   }, []);
 
-  if (!viewer.didRequest && !error) return <LoadingCookieTemplatePage />;
+  // if (!viewer.didRequest && !error) return <LoadingCookieTemplatePage />;
 
   const handleSearchChange = event => {
     setSearchTerm(event.target.value);
@@ -64,12 +64,6 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={apolloClient}>
       <Head>
-        <link href="/favicon.ico" rel="icon" />
-        <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css" rel="stylesheet" />
-        <link href="https://fonts.gstatic.com" rel="preconnect" />
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet" />
-        <link href="https://fonts.gstatic.com" rel="preconnect" />
-        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet" />
         {/* <Script
           src="/static/scripts/sakura.min.js"
           strategy="beforeInteractive"
@@ -98,7 +92,7 @@ export default function App({ Component, pageProps }: AppProps) {
             });
             window.sakura.stop(true);
           }}
-        /> */}
+        />
         <Script
           src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"
           strategy="lazyOnload"
@@ -112,6 +106,7 @@ export default function App({ Component, pageProps }: AppProps) {
             });
           }}
         />
+        */}
       </Head>
 
       <Nav error={error} handleSearchChange={handleSearchChange} searchTerm={searchTerm} setViewer={setViewer} viewer={viewer} />
