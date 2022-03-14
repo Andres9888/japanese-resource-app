@@ -13,6 +13,8 @@ import { RESOURCES } from '~graphql/queries/queries';
 import { initializeApollo } from '~lib/apolloClient';
 import { Viewer } from '~types/globalTypes';
 
+const loadingImageUrl = '/static/images/japanese-loading-text-bar.jpg';
+
 interface Props {
   viewer: Viewer;
   searchTerm: string;
@@ -40,7 +42,7 @@ export default function Home({ viewer, searchTerm, setSearchTerm }: Props) {
   }, [searchTerm, listings]);
 
   if (loading) {
-    return <Image alt="" height={116} src="/static/images/flat_750x_075_f-pad_750x1000_f8f8f8_sh4wbg.jpg" width={538} />;
+    return <Image alt="" height={116} src={loadingImageUrl} width={538} />;
   }
   if (error) {
     return <h1>error</h1>;
