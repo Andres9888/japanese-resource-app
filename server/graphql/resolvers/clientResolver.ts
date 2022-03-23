@@ -149,6 +149,14 @@ export const resolvers = {
         throw new Error(`Failed to Vote : ${error}`);
       }
     },
+    setCommitment: async (_root: undefined, { viewerId, isCommited }) => {
+      try {
+        const database = await getDatabase();
+        return await database.users.updateOne({ _id: viewerId }, { $addToSet: { resources: resource } });
+      } catch (error) {
+        throw new Error(`Failed to Vote : ${error}`);
+      }
+    },
     logIn: async (_root: undefined, { input }, { req, res }) => {
       try {
         const code = input ? input.code : null;
