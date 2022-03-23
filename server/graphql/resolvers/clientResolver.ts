@@ -153,9 +153,22 @@ export const resolvers = {
       try {
         const database = await getDatabase();
 
-        database.users.updateOne({ _id: viewerId }, { $set: { committed: isCommited, timezone: timeZone } }, { upsert: true });
+        database.users.updateOne(
+          { _id: viewerId },
+          { $set: { committed: isCommited, timezone: timeZone, dateCommitted: new Date() } },
+          { upsert: true }
+        );
       } catch (error) {
-        throw new Error(`Failed to Vote : ${error}`);
+        throw new Error(`Failed to setCommitment : ${error}`);
+      }
+    },
+    setCommitmentLog: async (_root: undefined, { viewerId, isCommited, timeZone }) => {
+      try {
+        const database = await getDatabase();
+
+        database.users.updateOne({ _id: viewerId }, { $push: { committedLog: { timezone: timeZone, dateCommitted: new Date() } } }, { upsert: true });
+      } catch (error) {
+        throw new Error(`Failed to setCommitment : ${error}`);
       }
     },
     logIn: async (_root: undefined, { input }, { req, res }) => {

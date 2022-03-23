@@ -49,7 +49,7 @@ export const typeDefs = gql`
   }
   type Mutation {
     increment(id: ID!, viewer: ID!, resource: String!): CountResult
-    setCommitment(viewerId: ID!, isCommited: Boolean!): Acknowledged
+    setCommitment(viewerId: ID!, isCommited: Boolean!, timeZone: String!): Acknowledged
     logIn(input: LogInInput): Viewer!
     logOut: Viewer!
   }
