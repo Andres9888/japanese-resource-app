@@ -162,7 +162,7 @@ export const resolvers = {
         throw new Error(`Failed to setCommitment : ${error}`);
       }
     },
-    setCommitmentLog: async (_root: undefined, { viewerId, isCommited, timeZone }) => {
+    setCommitmentLog: async (_root: undefined, { viewerId, timeZone }) => {
       try {
         const database = await getDatabase();
 
