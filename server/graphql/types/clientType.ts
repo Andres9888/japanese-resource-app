@@ -38,6 +38,9 @@ export const typeDefs = gql`
   type CountResult {
     acknowledged: Boolean
   }
+  type Acknowledged {
+    acknowledged: Boolean
+  }
   type Query {
     listings: [Listing!]!
     authUrl: String!
@@ -46,6 +49,7 @@ export const typeDefs = gql`
   }
   type Mutation {
     increment(id: ID!, viewer: ID!, resource: String!): CountResult
+    setCommitment(viewerId: ID!, isCommited: Boolean!): Acknowledged
     logIn(input: LogInInput): Viewer!
     logOut: Viewer!
   }

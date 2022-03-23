@@ -149,10 +149,11 @@ export const resolvers = {
         throw new Error(`Failed to Vote : ${error}`);
       }
     },
-    setCommitment: async (_root: undefined, { viewerId, isCommited }) => {
+    setCommitment: async (_root: undefined, { viewerId, isCommited, timeZone }) => {
       try {
         const database = await getDatabase();
-        return await database.users.updateOne({ _id: viewerId }, { $addToSet: { resources: resource } });
+
+        database.users.updateOne({ _id: viewerId }, { $set: { committed: isCommited, timezone: timeZone } }, { upsert: true });
       } catch (error) {
         throw new Error(`Failed to Vote : ${error}`);
       }
