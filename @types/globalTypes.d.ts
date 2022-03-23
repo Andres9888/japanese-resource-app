@@ -3,7 +3,7 @@ export interface Viewer {
   token?: string;
   avatar?: string;
   name?: string;
-
+  hasWallet: boolean | null;
   didRequest: boolean;
 }
 

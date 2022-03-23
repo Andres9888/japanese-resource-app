@@ -20,6 +20,7 @@ const initialViewer: Viewer = {
   id: null,
   token: null,
   avatar: null,
+  hasWallet: null,
   didRequest: false,
   name: null,
 };
