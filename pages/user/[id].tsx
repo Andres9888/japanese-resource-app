@@ -19,7 +19,7 @@ interface recommendationData {
   data: string;
 }
 
-const stripeAuthUrl = `https://connect.stripe.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_S_CLIENT_ID}&scope=read_write`;
+const stripeAuthUrl = `https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_LNMEYF6XiUD7r5SM74ATo5RzJuOmuTES&scope=read_write`;
 
 function userPage({ viewer }: Props) {
   const { data, loading, error } = useQuery<getUserResourceIdsData, getUserResourcesIdsVariables>(GET_USER_RESOURCES_IDS, {

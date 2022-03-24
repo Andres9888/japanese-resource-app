@@ -2,12 +2,12 @@ import React, { useEffect, useRef } from 'react';
 
 import { useMutation } from '@apollo/react-hooks';
 import { Layout, Spin } from 'antd';
-//import { CONNECT_STRIPE } from '../../lib/graphql/mutations';
-import { useRouter } from 'next/router';
-//import { useScrollToTop } from "../../lib/hooks";
-import { displaySuccessNotification } from '../../lib/utils';
-//import { Viewer } from '../../lib/types';
+// import { CONNECT_STRIPE } from '../../lib/graphql/mutations';
 import gql from 'graphql-tag';
+import { useRouter } from 'next/router';
+// import { useScrollToTop } from "../../lib/hooks";
+// import { displaySuccessNotification } from '../../lib/utils';
+// import { Viewer } from '../../lib/types';
 
 const CONNECT_STRIPE = gql`
   mutation ConnectStripe($input: ConnectStripeInput!) {
@@ -24,23 +24,23 @@ interface Props {
 
 const { Content } = Layout;
 
-export const Stripe = ({ viewer, setViewer }: Props) => {
+const Stripe = ({ viewer, setViewer }: Props) => {
   const router = useRouter();
   const [connectStripe, { data, loading, error }] = useMutation<ConnectStripeData, ConnectStripeVariables>(CONNECT_STRIPE, {
     onCompleted: data => {
       if (data && data.connectStripe) {
         setViewer({ ...viewer, hasWallet: data.connectStripe.hasWallet });
-        displaySuccessNotification("You've successfully connected your Stripe Account!", 'You can now begin to create listings in the Host page.');
+        // displaySuccessNotification("You've successfully connected your Stripe Account!", 'You can now begin to create listings in the Host page.');
       }
     },
   });
-  const connectStripeRef = useRef(connectStripe);
+  const connectStripeReference = useRef(connectStripe);
 
   useEffect(() => {
     const code = new URL(window.location.href).searchParams.get('code');
 
     if (code) {
-      connectStripeRef.current({
+      connectStripeReference.current({
         variables: {
           input: { code },
         },
@@ -48,7 +48,7 @@ export const Stripe = ({ viewer, setViewer }: Props) => {
     } else {
       router.replace('/login');
     }
-  }, [rou]);
+  }, [router]);
 
   if (data && data.connectStripe) {
     router.push(`/user/${viewer.id}`);
@@ -68,3 +68,5 @@ export const Stripe = ({ viewer, setViewer }: Props) => {
 
   return null;
 };
+
+export default Stripe;
