@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useQuery } from '@apollo/react-hooks';
-import { Avatar, Divider } from 'antd';
+import { Avatar, Divider, Button } from 'antd';
 import axios from 'axios';
 import Image from 'next/image';
 import { RWebShare } from 'react-web-share';
@@ -18,6 +18,9 @@ interface Props {
 interface recommendationData {
   data: string;
 }
+
+const stripeAuthUrl = `https://connect.stripe.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_S_CLIENT_ID}&scope=read_write`;
+
 function userPage({ viewer }: Props) {
   const { data, loading, error } = useQuery<getUserResourceIdsData, getUserResourcesIdsVariables>(GET_USER_RESOURCES_IDS, {
     variables: { id: viewer.id },
@@ -48,7 +51,9 @@ function userPage({ viewer }: Props) {
   const userVotedResources = dataResources.listings.filter(resource => data.getUserResourceIds[0].resources.includes(resource.id));
 
   const recommendedResource = dataResources.listings.filter(resource => resource.id === recommendation);
-
+  const redirectToStripe = () => {
+    window.location.href = stripeAuthUrl;
+  };
   return (
     <div>
       <div className="user-profile">
@@ -57,6 +62,9 @@ function userPage({ viewer }: Props) {
           <Avatar size={100} src={viewer.avatar} />
         </div>
         <Divider />
+        <Button className="user-profile__details-cta" type="primary" onClick={redirectToStripe}>
+          Connect with Stripe
+        </Button>
       </div>
       <div className="container">
         <Header>You Might Like This Resource Below</Header>

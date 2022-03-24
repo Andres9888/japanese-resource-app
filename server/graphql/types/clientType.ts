@@ -48,9 +48,9 @@ export const typeDefs = gql`
     getUserResourceIds(id: ID!): [User!]!
   }
 
-  # input ConnectStripeInput {
-  #   code: String!
-  # }
+  input ConnectStripeInput {
+    code: String!
+  }
 
   type Mutation {
     increment(id: ID!, viewer: ID!, resource: String!): CountResult
@@ -58,7 +58,7 @@ export const typeDefs = gql`
     # setCommitmentLog:( viewerId: ID!, timeZone: String! ): Acknowledged
     logIn(input: LogInInput): Viewer!
     logOut: Viewer!
-    # connectStripe(input: ConnectStripeInput!): Viewer!
-    # disconnectStripe: Viewer!
+    connectStripe(input: ConnectStripeInput!): Viewer!
+    disconnectStripe: Viewer!
   }
 `;
