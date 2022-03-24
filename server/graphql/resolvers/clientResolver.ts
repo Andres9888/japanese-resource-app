@@ -23,7 +23,8 @@ const cookieOptions = {
 };
 
 const authorize = async (database: Database, req: Request): Promise<User | null> => {
-  const token = req.get('X-CSRF-TOKEN');
+  const token = req.headers['X-CSRF-TOKEN'];
+  console.log('x-csrf-token', token);
   return await database.users.findOne({
     _id: req.cookies.viewer,
     token,
@@ -214,11 +215,12 @@ export const resolvers = {
       }
     },
 
-    connectStripe: async (_root: undefined, { input }: ConnectStripeArgs, { db, req }: { db: Database; req: Request }): Promise<Viewer> => {
+    connectStripe: async (_root: undefined, { input }: ConnectStripeArgs, { req }): Promise<Viewer> => {
       try {
+        const database = await getDatabase();
         const { code } = input;
 
-        let viewer = await authorize(db, req);
+        let viewer = await authorize(database, req);
         if (!viewer) {
           throw new Error('viewer cannot be found');
         }
@@ -228,7 +230,7 @@ export const resolvers = {
           throw new Error('stripe grant error');
         }
 
-        const updateRes = await db.users.findOneAndUpdate(
+        const updateRes = await database.users.findOneAndUpdate(
           { _id: viewer._id },
           { $set: { walletId: wallet.stripe_user_id } },
           { returnOriginal: false }

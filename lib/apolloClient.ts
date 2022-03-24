@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 
 import { ApolloClient, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { ApolloLink } from 'apollo-link';
 
 const { HttpLink } = require('@apollo/client/link/http');
@@ -14,36 +15,45 @@ const thirdPartyLink = new HttpLink({
   // other link options...
 });
 
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  // const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      'X-CSRF-TOKEN': token || '',
+    },
+  };
+});
+
 function createIsomorphicLink() {
   if (typeof window === 'undefined') {
     // server
     const { SchemaLink } = require('@apollo/client/link/schema');
     const { schema } = require('./schema');
-    return new SchemaLink({ schema });
+    const link = new SchemaLink({ schema });
+    return authLink.concat(link);
   }
   // client
-
-  return new HttpLink({ uri: '/api/graphql' });
+  const link = new HttpLink({ uri: '/api/graphql' });
+  return authLink.concat(link);
 }
+
+// ApolloLink.split(
+//   operation => operation.getContext().clientName === 'third-party',
+//   // the string "third-party" can be anything you want,
+//   // we will use it in a bit
+//   thirdPartyLink, // <= apollo will send to this if clientName is "third-party"
+//   authMiddleware.concat(createIsomorphicLink()) // <= otherwise will send to this
+// ),
 
 function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    request: async operation => {
-      const token = sessionStorage.getItem('token');
-      operation.setContext({
-        headers: {
-          'X-CSRF-TOKEN': token || '',
-        },
-      });
-    },
-    link: ApolloLink.split(
-      operation => operation.getContext().clientName === 'third-party',
-      // the string "third-party" can be anything you want,
-      // we will use it in a bit
-      thirdPartyLink, // <= apollo will send to this if clientName is "third-party"
-      createIsomorphicLink() // <= otherwise will send to this
-    ),
+
+    link: createIsomorphicLink(),
     cache: new InMemoryCache(),
   });
 }
