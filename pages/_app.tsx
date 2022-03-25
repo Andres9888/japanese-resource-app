@@ -9,7 +9,7 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 // import Script from 'next/script';
 
-// import LoadingCookieTemplatePage from '~app/components/LoadingCookieTemplatePage';
+import LoadingCookieTemplatePage from '~app/components/LoadingCookieTemplatePage';
 import { LogIn as LogInData } from '~graphql/mutations/__generated__/LogIn';
 import { LOG_IN } from '~graphql/mutations/mutations';
 import Nav from '~layouts/default/Nav';
@@ -56,7 +56,7 @@ export default function App({ Component, pageProps }: AppProps) {
     logInReference.current();
   }, []);
 
-  // if (!viewer.didRequest && !error) return <LoadingCookieTemplatePage />;
+  if (!viewer.didRequest && !error) return <LoadingCookieTemplatePage />;
 
   const handleSearchChange = event => {
     setSearchTerm(event.target.value);

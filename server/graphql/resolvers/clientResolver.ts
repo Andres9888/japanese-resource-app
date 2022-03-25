@@ -6,7 +6,7 @@ import { serialize } from 'cookie';
 import { ObjectId } from 'mongodb';
 
 import { incrementCountVariables } from '~graphql/mutations/__generated__/incrementCount';
-import { Google } from '~lib/api';
+import { Google, Stripe } from '~lib/api';
 import { connectDatabase } from '~server/database';
 import { Viewer } from '~types/globalTypes';
 
@@ -23,8 +23,9 @@ const cookieOptions = {
 };
 
 const authorize = async (database: Database, req: Request): Promise<User | null> => {
-  const token = req.headers['X-CSRF-TOKEN'];
+  const token = req.get('X-CSRF-TOKEN');
   console.log('x-csrf-token', token);
+
   return await database.users.findOne({
     _id: req.cookies.viewer,
     token,
@@ -220,7 +221,10 @@ export const resolvers = {
         const database = await getDatabase();
         const { code } = input;
 
-        let viewer = await authorize(database, req);
+        // let viewer = await authorize(database, req);
+        let viewer = await database.users.findOne({
+          _id: req.cookies.viewer,
+        });
         if (!viewer) {
           throw new Error('viewer cannot be found');
         }
@@ -255,7 +259,10 @@ export const resolvers = {
     },
     disconnectStripe: async (_root: undefined, _arguments: {}, { db, req }: { db: Database; req: Request }): Promise<Viewer> => {
       try {
-        let viewer = await authorize(db, req);
+        // let viewer = await authorize(db, req);
+        let viewer = await database.users.findOne({
+          _id: req.cookies.viewer,
+        });
         if (!viewer || !viewer.walletId) {
           throw new Error('viewer cannot be found or has not connected with Stripe');
         }

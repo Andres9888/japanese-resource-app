@@ -10,22 +10,21 @@ const { HttpLink } = require('@apollo/client/link/http');
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
+const link = new HttpLink({ uri: '/api/graphql' });
+
 const thirdPartyLink = new HttpLink({
   uri: 'https://kitsu.io/api/graphql',
   // other link options...
 });
 
-const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  // const token = localStorage.getItem('token');
-  const token = sessionStorage.getItem('token');
-  // return the headers to the context so httpLink can read them
-  return {
+const authMiddleware = new ApolloLink((operation, forward) => {
+  operation.setContext({
     headers: {
-      ...headers,
-      'X-CSRF-TOKEN': token || '',
+      'X-CSRF-TOKEN': sessionStorage.getItem('token') || '',
     },
-  };
+  });
+
+  return forward(operation);
 });
 
 function createIsomorphicLink() {
@@ -33,12 +32,11 @@ function createIsomorphicLink() {
     // server
     const { SchemaLink } = require('@apollo/client/link/schema');
     const { schema } = require('./schema');
-    const link = new SchemaLink({ schema });
-    return authLink.concat(link);
+    return new SchemaLink({ schema });
   }
   // client
-  const link = new HttpLink({ uri: '/api/graphql' });
-  return authLink.concat(link);
+
+  return authMiddleware.concat(link);
 }
 
 // ApolloLink.split(
