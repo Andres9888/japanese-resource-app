@@ -4,9 +4,13 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       // Create Checkout Sessions from body params.
+      const customer = await stripe.customers.create({
+        email: 'jenny.rosen@example.com',
+      });
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         mode: 'setup',
+        customer: customer.id,
         success_url: `${req.headers.origin}/?success=true`,
         cancel_url: `${req.headers.origin}/?canceled=true`,
       });
