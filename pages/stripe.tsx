@@ -1,72 +1,57 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
-import { useMutation } from '@apollo/react-hooks';
-import { Layout, Spin } from 'antd';
-// import { CONNECT_STRIPE } from '../../lib/graphql/mutations';
-import gql from 'graphql-tag';
-import { useRouter } from 'next/router';
-// import { useScrollToTop } from "../../lib/hooks";
-// import { displaySuccessNotification } from '../../lib/utils';
-// import { Viewer } from '../../lib/types';
+import { loadStripe } from '@stripe/stripe-js';
 
-const CONNECT_STRIPE = gql`
-  mutation ConnectStripe($input: ConnectStripeInput!) {
-    connectStripe(input: $input) {
-      hasWallet
+// Make sure to call `loadStripe` outside of a component’s render to avoid
+// recreating the `Stripe` object on every render.
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+export default function PreviewPage() {
+  React.useEffect(() => {
+    // Check to see if this is a redirect back from Checkout
+    const query = new URLSearchParams(window.location.search);
+    if (query.get('success')) {
+      console.log('Order placed! You will receive an email confirmation.');
     }
-  }
-`;
 
-interface Props {
-  viewer: Viewer;
-  setViewer: (viewer: Viewer) => void;
+    if (query.get('canceled')) {
+      console.log('Order canceled -- continue to shop around and checkout when you’re ready.');
+    }
+  }, []);
+
+  return (
+    <form action="/api/checkout_sessions" method="POST">
+      <section>
+        <button role="link" type="submit">
+          Checkout
+        </button>
+      </section>
+      <style jsx>
+        {`
+          section {
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            width: 400px;
+            height: 112px;
+            border-radius: 6px;
+            justify-content: space-between;
+          }
+          button {
+            height: 36px;
+            background: #556cd6;
+            border-radius: 4px;
+            color: white;
+            border: 0;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
+          }
+          button:hover {
+            opacity: 0.8;
+          }
+        `}
+      </style>
+    </form>
+  );
 }
-
-const { Content } = Layout;
-
-const Stripe = ({ viewer, setViewer }: Props) => {
-  const router = useRouter();
-  const [connectStripe, { data, loading, error }] = useMutation<ConnectStripeData, ConnectStripeVariables>(CONNECT_STRIPE, {
-    onCompleted: data => {
-      if (data && data.connectStripe) {
-        setViewer({ ...viewer, hasWallet: data.connectStripe.hasWallet });
-        // displaySuccessNotification("You've successfully connected your Stripe Account!", 'You can now begin to create listings in the Host page.');
-      }
-    },
-  });
-  const connectStripeReference = useRef(connectStripe);
-
-  useEffect(() => {
-    const code = new URL(window.location.href).searchParams.get('code');
-
-    if (code) {
-      connectStripeReference.current({
-        variables: {
-          input: { code },
-        },
-      });
-    } else {
-      router.replace('/login');
-    }
-  }, [router]);
-
-  if (data && data.connectStripe) {
-    router.push(`/user/${viewer.id}`);
-  }
-
-  if (loading) {
-    return (
-      <Content className="stripe">
-        <Spin size="large" tip="Connecting your Stripe account..." />
-      </Content>
-    );
-  }
-
-  if (error) {
-    router.push(`/user/${viewer.id}?stripe_error=true`);
-  }
-
-  return null;
-};
-
-export default Stripe;
