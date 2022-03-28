@@ -7,7 +7,7 @@ export default async (req, res) => {
       .find({})
       .sort({ count: -1 })
       .toArray();
-    console.log(req.cookies.viewer);
+
     res.status(200).json({ resources });
   } catch (error) {
     throw new Error(`Failed to query listings: ${error}`);

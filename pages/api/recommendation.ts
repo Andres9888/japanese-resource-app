@@ -13,9 +13,9 @@ const agg = [
 
 export default async (req, res) => {
   try {
-    const db = await connectDatabase();
-    const resources = await db.listings.distinct('_id', {});
-    const users = await db.users.aggregate(agg).toArray();
+    const database = await connectDatabase();
+    const resources = await database.listings.distinct('_id', {});
+    const users = await database.users.aggregate(agg).toArray();
 
     const makeReviews = () =>
       users.map(user => {

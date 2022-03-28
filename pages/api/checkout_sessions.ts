@@ -1,9 +1,14 @@
+import { connectDatabase } from '~server/database';
+
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       // Create Checkout Sessions from body params.
+      const database = await connectDatabase();
+      const users = await database.users.find({}).toArray();
+
       const customer = await stripe.customers.create({
         email: 'jenny.rosen@example.com',
       });

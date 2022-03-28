@@ -12,7 +12,7 @@ const playground = {
   endpoint: `http://localhost:${PORT}/graphql`,
 };
 
-let db;
+let database;
 
 const apollo = new ApolloServer({
   typeDefs,
@@ -20,14 +20,14 @@ const apollo = new ApolloServer({
   schema,
   playground,
   context: async () => {
-    if (!db) {
+    if (!database) {
       try {
-        db = await connectDatabase();
-      } catch (e) {
-        console.log('error no db', e);
+        database = await connectDatabase();
+      } catch (error) {
+        console.log('error no db', error);
       }
     }
-    return { db };
+    return { db: database };
   },
 });
 
