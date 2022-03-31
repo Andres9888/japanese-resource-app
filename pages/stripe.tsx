@@ -19,6 +19,7 @@ function App() {
         const { data: responseData } = await axios.post(`/api/checkout_sessions`);
 
         const { client_secret: clientSecret } = responseData;
+        console.log(clientSecret);
         setCs(clientSecret);
       } catch (error_) {
         console.log(error_);
