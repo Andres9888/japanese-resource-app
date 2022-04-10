@@ -5,17 +5,21 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
-      const { id: viewerId, name: viewerName } = req.body;
-
-      const customer = await stripe.customers.create();
+      const { id, name } = req.body;
       const database = await connectDatabase();
 
-      database.users.updateOne({ _id: viewerId }, { $set: { stripeId: customer.id } }, { upsert: true });
+      let { contact, stripeId } = await database.users.findOne({
+        _id: id,
+      });
+
+      if (!stripeId) {
+        const customer = await stripe.customers.create({ name: name, email: contact });
+        database.users.updateOne({ _id: id }, { $set: { stripeId: customer.id } }, { upsert: true });
+      }
 
       res.send(
         await stripe.setupIntents.create({
-          customer: customer.id,
-          name: viewerName,
+          customer: stripeId,
           payment_method_types: ['card'],
         })
       );
