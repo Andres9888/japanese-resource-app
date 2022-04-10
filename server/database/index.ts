@@ -9,10 +9,10 @@ export const connectDatabase = async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
-  const db = client.db(dbname);
+  const database = client.db(dbname);
 
   return {
-    listings: db.collection('japanese-resources-collection'),
-    users: db.collection('users'),
+    listings: database.collection('japanese-resources-collection'),
+    users: database.collection('users'),
   };
 };

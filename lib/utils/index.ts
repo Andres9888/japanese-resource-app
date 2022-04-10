@@ -7,10 +7,7 @@ export const formatListingPrice = (price: number, round = true) => {
   return `$${formattedListingPrice}`;
 };
 
-export const displaySuccessNotification = (
-  message: string,
-  description?: string
-) => {
+export const displaySuccessNotification = (message: string, description?: string) => {
   return notification.success({
     message,
     description,
