@@ -11,35 +11,32 @@ import SetupForm from '~common/components/SetupForm';
 const stripePromise = loadStripe('pk_test_51KhIeyBb7SW2HKTCYBSUyXDid0B9Wf9j6p6BZLzFDGR4F040zXV1ikmb7qEZ2R57Xi5MWj1juiM8psrpcexMN5VQ00STrPccDE');
 
 function App() {
-  const [cs, setCs] = useState();
+  const [clientSecret, setClientSecret] = useState();
 
   useEffect(() => {
-    const getCs = async () => {
+    const getClientSecret = async () => {
       try {
         const { data: responseData } = await axios.post(`/api/checkout_sessions`);
 
         const { client_secret: clientSecret } = responseData;
-        console.log(clientSecret);
-        setCs(clientSecret);
-      } catch (error_) {
-        console.log(error_);
+
+        setClientSecret(clientSecret);
+      } catch (error) {
+        console.log(error);
       }
     };
 
-    getCs();
+    getClientSecret();
   }, []);
 
   const options = {
     // passing the client secret obtained in step 2
-    client_secret: cs,
+    clientSecret: clientSecret,
     // Fully customizable with appearance API.
-    appearance: {
-      /* ... */
-    },
   };
-
+  if (!clientSecret && !options.clientSecret) return null;
   return (
-    <Elements options={options} stripe={stripePromise}>
+    <Elements stripe={stripePromise} options={options}>
       <SetupForm />
     </Elements>
   );

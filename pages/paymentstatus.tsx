@@ -1,8 +1,10 @@
 // PaymentStatus.jsx
 
 import React, { useState, useEffect } from 'react';
-
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import { useStripe } from '@stripe/react-stripe-js';
+const stripePromise = loadStripe('pk_test_51KhIeyBb7SW2HKTCYBSUyXDid0B9Wf9j6p6BZLzFDGR4F040zXV1ikmb7qEZ2R57Xi5MWj1juiM8psrpcexMN5VQ00STrPccDE');
 
 const PaymentStatus = () => {
   const stripe = useStripe();
@@ -27,7 +29,7 @@ const PaymentStatus = () => {
       //
       // [0]: https://stripe.com/docs/payments/payment-methods#payment-notification
       switch (setupIntent.status) {
-        case succeeded:
+        case 'succeeded':
           setMessage('Success! Your payment method has been saved.');
           break;
 
@@ -47,4 +49,15 @@ const PaymentStatus = () => {
   return message;
 };
 
-export default PaymentStatus;
+// Make sure to call `loadStripe` outside of a component’s render to avoid
+// recreating the `Stripe` object on every render.
+
+function App() {
+  return (
+    <Elements stripe={stripePromise}>
+      <PaymentStatus />
+    </Elements>
+  );
+}
+
+export default App;

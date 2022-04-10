@@ -10,13 +10,14 @@ export default async function handler(req, res) {
       res.send(
         await stripe.setupIntents.create({
           customer: customer.id,
+          payment_method_types: ['card'],
         })
       );
-    } catch (err) {
+    } catch (error) {
       // Error code will be authentication_required if authentication is needed
-      console.log('Error code is: ', err.code);
-      const paymentIntentRetrieved = await stripe.paymentIntents.retrieve(err.raw.payment_intent.id);
-      console.log('PI retrieved: ', paymentIntentRetrieved.id);
+      console.log('Error code is:', error.code);
+      const paymentIntentRetrieved = await stripe.paymentIntents.retrieve(error.raw.payment_intent.id);
+      console.log('PI retrieved:', paymentIntentRetrieved.id);
     }
   }
 }
