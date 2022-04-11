@@ -48,9 +48,9 @@ function userPage({ viewer }: Props) {
   if (error || errorResources) {
     return <h2>error</h2>;
   }
-  const userVotedResources = dataResources.listings.filter(resource => data.getUserResourceIds[0].resources.includes(resource.id));
+  const userVotedResources = dataResources.listings.filter((resource) => data.getUserResourceIds[0].resources.includes(resource.id));
 
-  const recommendedResource = dataResources.listings.filter(resource => resource.id === recommendation);
+  const recommendedResource = dataResources.listings.filter((resource) => resource.id === recommendation);
   const redirectToStripe = () => {
     window.location.href = stripeAuthUrl;
   };
@@ -62,15 +62,12 @@ function userPage({ viewer }: Props) {
           <Avatar size={100} src={viewer.avatar} />
         </div>
         <Divider />
-        <Button className="user-profile__details-cta" type="primary" onClick={redirectToStripe}>
-          Connect with Stripe
-        </Button>
       </div>
       <div className="container">
         <Header>You Might Like This Resource Below</Header>
         <table className="table is-fullwidth is-hoverable">
           <tbody>
-            {recommendedResource.map(resource => (
+            {recommendedResource.map((resource) => (
               <TableRow key={resource.id}>
                 <TableData>
                   <a href={resource.url} rel="noreferrer" target="_blank">
@@ -95,7 +92,7 @@ function userPage({ viewer }: Props) {
         <Header>Your Liked Resources</Header>
         <table className="table is-fullwidth is-hoverable">
           <tbody>
-            {userVotedResources.map(resource => (
+            {userVotedResources.map((resource) => (
               <TableRow key={resource.id}>
                 <TableData>
                   <a href={resource.url} rel="noreferrer" target="_blank">

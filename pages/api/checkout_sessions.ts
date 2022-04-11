@@ -8,7 +8,7 @@ export default async function handler(req, res) {
       const { id, name } = req.body;
       const database = await connectDatabase();
 
-      let { contact, stripeId } = await database.users.findOne({
+      const { contact, stripeId } = await database.users.findOne({
         _id: id,
       });
 

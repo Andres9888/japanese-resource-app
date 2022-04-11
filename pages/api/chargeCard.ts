@@ -6,14 +6,14 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       const paymentMethods = await stripe.paymentMethods.list({
-        customer: 'cus_LU5vURGxGxbQDE',
+        customer: 'cus_LU66abTLRFOPLM',
         type: 'card',
       });
       console.log(paymentMethods.data[0]);
       const paymentIntent = await stripe.paymentIntents.create({
         amount: 100,
         currency: 'usd',
-        customer: 'cus_LU5vURGxGxbQDE',
+        customer: 'cus_LU66abTLRFOPLM',
         payment_method: 'pm_1Kn7ybBb7SW2HKTCeprPYUvi',
         off_session: true,
         confirm: true,
