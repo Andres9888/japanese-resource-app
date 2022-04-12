@@ -29,11 +29,11 @@ function StripeInput({ viewer }) {
   }, []);
 
   const options = {
-    clientSecret: clientSecret,
+    clientSecret,
   };
   if (!clientSecret && !options.clientSecret) return null;
   return (
-    <Elements stripe={stripePromise} options={options}>
+    <Elements options={options} stripe={stripePromise}>
       <SetupForm />
     </Elements>
   );

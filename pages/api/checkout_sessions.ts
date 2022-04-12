@@ -1,7 +1,9 @@
-import { connectDatabase } from '~server/database';
 import { assert, string } from 'superstruct';
 
+import { connectDatabase } from '~server/database';
+
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
 const viewerIdSchema = string();
 
 export default async function handler(request, response) {
@@ -12,11 +14,7 @@ export default async function handler(request, response) {
       assert(viewerId, viewerIdSchema);
       const database = await connectDatabase();
 
-      const {
-        contact: userEmail,
-        stripeId: userStripeId,
-        name: userName,
-      } = await database.users.findOne({
+      const { contact: userEmail, stripeId: userStripeId, name: userName } = await database.users.findOne({
         _id: viewerId,
       });
 

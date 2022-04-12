@@ -17,6 +17,7 @@ export const LOG_IN = gql`
       hasWallet
       didRequest
       name
+      isCommited
     }
   }
 `;

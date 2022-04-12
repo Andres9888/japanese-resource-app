@@ -26,6 +26,7 @@ export const typeDefs = gql`
     hasWallet: Boolean
     didRequest: Boolean!
     name: String
+    isCommited: Boolean
   }
 
   input LogInInput {
@@ -53,11 +54,11 @@ export const typeDefs = gql`
 
   type Mutation {
     increment(id: ID!, viewer: ID!, resource: String!): CountResult
-    #  setCommitment(viewerId: ID!, isCommited: Boolean!, timeZone: String!): Acknowledged
+    setCommitment(viewerId: ID!, isCommited: Boolean!, timeZone: String!): Acknowledged
     #  setCommitmentLog:( viewerId: ID!, timeZone: String! ): Acknowledged
     logIn(input: LogInInput): Viewer!
     logOut: Viewer!
-    connectStripe(input: ConnectStripeInput!): Viewer!
-    disconnectStripe: Viewer!
+    # connectStripe(input: ConnectStripeInput!): Viewer!
+    # disconnectStripe: Viewer!
   }
 `;

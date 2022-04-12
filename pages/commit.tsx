@@ -1,9 +1,28 @@
 import { useState } from 'react';
+
+import { useMutation } from '@apollo/react-hooks';
 import { Button } from 'antd';
+import gql from 'graphql-tag';
 import styled from 'styled-components';
+
 import StripeInput from '~common/components/stripe';
 
+export const SET_COMMITMENT = gql`
+  mutation setCommitment($viewerId: ID!, $isCommited: Boolean!, $timeZone: String!) {
+    setCommitment(viewerId: ID!, isCommited: Boolean!, timeZone: String!) {
+      acknowledged
+    }
+  }
+`;
+
 const DidIStudyJapanesePage = ({ viewer }) => {
+  const [setCommitment] = useMutation(SET_COMMITMENT);
+  // await setCommitment({
+  //   variables: {
+  //     viewerId: viewer.id,
+  //     isCommited: viewer.id,
+  //     timeZone: resource.id,
+  //   })
   const [showStripe, setShowStripe] = useState(false);
 
   console.log(viewer);
@@ -43,21 +62,21 @@ const Background = styled.div`
 `;
 
 const Container = styled.div`
-  margin: 0 auto;
   display: flex;
-  max-width: 800px;
-  justify-content: center;
   flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 800px;
 `;
 
 const Title = styled.h1`
-  color: #fff;
-  align-self: center;
-  font-size: 34px;
-  background: linear-gradient(rgba(0, 0, 0, 0.2));
-  text-shadow: 0 2px 3px rgba(0, 0, 0, 1);
   -webkit-box-decoration-break: clone;
+  align-self: center;
+  background: linear-gradient(rgba(0, 0, 0, 0.2));
   box-decoration-break: clone;
+  color: #fff;
+  font-size: 34px;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 1);
 `;
 
 const StripeCardInput = styled(StripeInput)`

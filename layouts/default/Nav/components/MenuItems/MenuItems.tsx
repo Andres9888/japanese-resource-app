@@ -23,6 +23,9 @@ const MenuItems = ({ viewer, setViewer }: Props) => {
         <Item key="/user">
           <Link href={`/user/${viewer.id}`}>Profile</Link>
         </Item>
+        <Item key="/user">
+          <Link href="/commit/">Commit</Link>
+        </Item>
         {/* <Item key="/feed">
           <Link href="/feed">Feed</Link>
         </Item>
