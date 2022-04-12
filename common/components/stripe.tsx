@@ -16,8 +16,7 @@ function StripeInput({ viewer }) {
   useEffect(() => {
     const getClientSecret = async () => {
       try {
-        console.log(viewer);
-        const { data: responseData } = await axios.post(`/api/checkout_sessions`, viewer);
+        const { data: responseData } = await axios.post(`/api/checkout_sessions`, { viewerId: viewer.id });
         const { client_secret: clientSecret } = responseData;
 
         setClientSecret(clientSecret);

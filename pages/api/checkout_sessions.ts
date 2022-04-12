@@ -1,33 +1,41 @@
 import { connectDatabase } from '~server/database';
+import { assert, string } from 'superstruct';
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const viewerIdSchema = string();
 
-export default async function handler(req, res) {
-  if (req.method === 'POST') {
+export default async function handler(request, response) {
+  if (request.method === 'POST') {
     try {
-      const { id, name } = req.body;
+      const { viewerId } = request.body;
+
+      assert(viewerId, viewerIdSchema);
       const database = await connectDatabase();
 
-      const { contact, stripeId } = await database.users.findOne({
-        _id: id,
+      const {
+        contact: userEmail,
+        stripeId: userStripeId,
+        name: userName,
+      } = await database.users.findOne({
+        _id: viewerId,
       });
 
-      if (!stripeId) {
-        const customer = await stripe.customers.create({ name: name, email: contact });
-        database.users.updateOne({ _id: id }, { $set: { stripeId: customer.id } }, { upsert: true });
+      if (!userStripeId) {
+        const customer = await stripe.customers.create({ name: userName, email: userEmail });
+        database.users.updateOne({ _id: viewerId }, { $set: { stripeId: customer.id } }, { upsert: true });
       }
 
-      res.send(
+      response.send(
         await stripe.setupIntents.create({
-          customer: stripeId,
+          customer: userStripeId,
           payment_method_types: ['card'],
         })
       );
     } catch (error) {
       // Error code will be authentication_required if authentication is needed
-      console.log('Error code is:', error.code);
-      const paymentIntentRetrieved = await stripe.paymentIntents.retrieve(error.raw.payment_intent.id);
-      console.log('PI retrieved:', paymentIntentRetrieved.id);
+      console.log('Error code is:', error);
+      // const paymentIntentRetrieved = await stripe.paymentIntents.retrieve(error.raw.payment_intent.id);
+      // console.log('PI retrieved:', paymentIntentRetrieved.id);
     }
   }
 }
