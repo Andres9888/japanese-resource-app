@@ -7,22 +7,17 @@ import styled from 'styled-components';
 
 import StripeInput from '~common/components/stripe';
 
-export const SET_COMMITMENT = gql`
-  mutation setCommitment($viewerId: ID!, $isCommited: Boolean!, $timeZone: String!) {
-    setCommitment(viewerId: ID!, isCommited: Boolean!, timeZone: String!) {
-      acknowledged
-    }
-  }
-`;
+// const SET_COMMITMENT = gql`
+//   mutation setCommitment($viewerId: ID!, $isCommited: Boolean!, $timeZone: String!) {
+//     setCommitment(viewerId: ID!, isCommited: Boolean!, timeZone: String!) {
+//       acknowledged
+//     }
+//   }
+// `;
 
 const DidIStudyJapanesePage = ({ viewer }) => {
-  const [setCommitment] = useMutation(SET_COMMITMENT);
-  // await setCommitment({
-  //   variables: {
-  //     viewerId: viewer.id,
-  //     isCommited: viewer.id,
-  //     timeZone: resource.id,
-  //   })
+  // const [setCommitment] = useMutation(SET_COMMITMENT);
+
   const [showStripe, setShowStripe] = useState(false);
 
   console.log(viewer);
@@ -37,12 +32,23 @@ const DidIStudyJapanesePage = ({ viewer }) => {
     );
   }
 
+  const handleClick = () => {
+    // await setCommitment({
+    //   variables: {
+    //     viewerId: viewer.id,
+    //     isCommited: viewer.id,
+    //     timeZone: resource.id,
+    //   })
+    // setShowStripe(true)
+    console.log(Intl.DateTimeFormat().resolvedOptions().timeZone);
+  };
+
   return (
     <Background>
       <Container>
         <Title>Set goal to study Japanese everyday?</Title>
 
-        <Button onClick={() => setShowStripe(true)}>Yes</Button>
+        <Button onClick={handleClick}>{viewer.isCommited ? 'No' : 'Yes'}</Button>
         <StripeCardInput displayStripe={false} viewer={viewer} />
       </Container>
     </Background>
