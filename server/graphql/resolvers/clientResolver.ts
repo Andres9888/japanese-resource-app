@@ -84,6 +84,7 @@ const logInViaGoogle = async (code: string, token: string, res) => {
       avatar: userAvatar,
       contact: userEmail,
       resources: [],
+      committed: false,
     });
     // eslint-disable-next-line prefer-destructuring
     viewer = insertResult.ops[0];
@@ -151,19 +152,19 @@ export const resolvers = {
         throw new Error(`Failed to Vote : ${error}`);
       }
     },
-    // setCommitment: async (_root: undefined, { viewerId, isCommited, timeZone }) => {
-    //   try {
-    //     const database = await getDatabase();
+    setCommitment: async (_root: undefined, { viewerId, isCommited, timeZone }) => {
+      try {
+        const database = await getDatabase();
 
-    //     database.users.updateOne(
-    //       { _id: viewerId },
-    //       { $set: { committed: isCommited, timezone: timeZone, dateCommitted: new Date().toUTCString() } },
-    //       { upsert: true }
-    //     );
-    //   } catch (error) {
-    //     throw new Error(`Failed to setCommitment : ${error}`);
-    //   }
-    // },
+        database.users.updateOne(
+          { _id: viewerId },
+          { $set: { committed: isCommited, timezone: timeZone, dateCommitted: new Date().toUTCString() } },
+          { upsert: true }
+        );
+      } catch (error) {
+        throw new Error(`Failed to setCommitment : ${error}`);
+      }
+    },
     // setCommitmentLog: async (_root: undefined, { viewerId, timeZone }) => {
     //   try {
     //     const database = await getDatabase();
@@ -194,7 +195,7 @@ export const resolvers = {
           avatar: viewer.avatar,
           name: viewer.name,
           walletId: viewer.walletId,
-
+          isCommited: viewer.committed,
           didRequest: true,
         };
       } catch (error) {
@@ -216,81 +217,81 @@ export const resolvers = {
       }
     },
 
-    connectStripe: async (_root: undefined, { input }: ConnectStripeArgs, { req }): Promise<Viewer> => {
-      try {
-        const database = await getDatabase();
-        const { code } = input;
+    // connectStripe: async (_root: undefined, { input }: ConnectStripeArgs, { req }): Promise<Viewer> => {
+    //   try {
+    //     const database = await getDatabase();
+    //     const { code } = input;
 
-        // let viewer = await authorize(database, req);
-        let viewer = await database.users.findOne({
-          _id: req.cookies.viewer,
-        });
-        if (!viewer) {
-          throw new Error('viewer cannot be found');
-        }
+    //     // let viewer = await authorize(database, req);
+    //     let viewer = await database.users.findOne({
+    //       _id: req.cookies.viewer,
+    //     });
+    //     if (!viewer) {
+    //       throw new Error('viewer cannot be found');
+    //     }
 
-        const wallet = await Stripe.connect(code);
-        if (!wallet || !wallet.stripe_user_id) {
-          throw new Error('stripe grant error');
-        }
+    //     const wallet = await Stripe.connect(code);
+    //     if (!wallet || !wallet.stripe_user_id) {
+    //       throw new Error('stripe grant error');
+    //     }
 
-        const updateRes = await database.users.findOneAndUpdate(
-          { _id: viewer._id },
-          { $set: { walletId: wallet.stripe_user_id } },
-          { returnOriginal: false }
-        );
+    //     const updateRes = await database.users.findOneAndUpdate(
+    //       { _id: viewer._id },
+    //       { $set: { walletId: wallet.stripe_user_id } },
+    //       { returnOriginal: false }
+    //     );
 
-        if (!updateRes.value) {
-          throw new Error('viewer could not be updated');
-        }
+    //     if (!updateRes.value) {
+    //       throw new Error('viewer could not be updated');
+    //     }
 
-        viewer = updateRes.value;
+    //     viewer = updateRes.value;
 
-        return {
-          _id: viewer._id,
-          token: viewer.token,
-          avatar: viewer.avatar,
-          walletId: viewer.walletId,
-          didRequest: true,
-        };
-      } catch (error) {
-        throw new Error(`Failed to connect with Stripe: ${error}`);
-      }
-    },
-    disconnectStripe: async (_root: undefined, _arguments: {}, { db, req }: { db: Database; req: Request }): Promise<Viewer> => {
-      try {
-        // let viewer = await authorize(db, req);
-        let viewer = await database.users.findOne({
-          _id: req.cookies.viewer,
-        });
-        if (!viewer || !viewer.walletId) {
-          throw new Error('viewer cannot be found or has not connected with Stripe');
-        }
+    //     return {
+    //       _id: viewer._id,
+    //       token: viewer.token,
+    //       avatar: viewer.avatar,
+    //       walletId: viewer.walletId,
+    //       didRequest: true,
+    //     };
+    //   } catch (error) {
+    //     throw new Error(`Failed to connect with Stripe: ${error}`);
+    //   }
+    // },
+    // disconnectStripe: async (_root: undefined, _arguments: {}, { db, req }: { db: Database; req: Request }): Promise<Viewer> => {
+    //   try {
+    //     // let viewer = await authorize(db, req);
+    //     let viewer = await database.users.findOne({
+    //       _id: req.cookies.viewer,
+    //     });
+    //     if (!viewer || !viewer.walletId) {
+    //       throw new Error('viewer cannot be found or has not connected with Stripe');
+    //     }
 
-        const wallet = await Stripe.disconnect(viewer.walletId);
-        if (!wallet) {
-          throw new Error('stripe disconnect error');
-        }
+    //     const wallet = await Stripe.disconnect(viewer.walletId);
+    //     if (!wallet) {
+    //       throw new Error('stripe disconnect error');
+    //     }
 
-        const updateRes = await db.users.findOneAndUpdate({ _id: viewer._id }, { $set: { walletId: null } }, { returnOriginal: false });
+    //     const updateRes = await db.users.findOneAndUpdate({ _id: viewer._id }, { $set: { walletId: null } }, { returnOriginal: false });
 
-        if (!updateRes.value) {
-          throw new Error('viewer could not be updated');
-        }
+    //     if (!updateRes.value) {
+    //       throw new Error('viewer could not be updated');
+    //     }
 
-        viewer = updateRes.value;
+    //     viewer = updateRes.value;
 
-        return {
-          _id: viewer._id,
-          token: viewer.token,
-          avatar: viewer.avatar,
-          walletId: viewer.walletId,
-          didRequest: true,
-        };
-      } catch (error) {
-        throw new Error(`Failed to disconnect with Stripe: ${error}`);
-      }
-    },
+    //     return {
+    //       _id: viewer._id,
+    //       token: viewer.token,
+    //       avatar: viewer.avatar,
+    //       walletId: viewer.walletId,
+    //       didRequest: true,
+    //     };
+    //   } catch (error) {
+    //     throw new Error(`Failed to disconnect with Stripe: ${error}`);
+    //   }
+    // },
   },
   Listing: {
     id: (listing): string => listing._id.toString(),
