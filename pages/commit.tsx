@@ -41,7 +41,7 @@ const DidIStudyJapanesePage = ({ viewer }) => {
         timeZone: userTimeZone,
       },
     });
-    // setShowStripe(true)
+    setShowStripe(true);
   };
 
   if (viewer.isCommited) {
@@ -57,14 +57,13 @@ const DidIStudyJapanesePage = ({ viewer }) => {
 
   return (
     <Background>
-      <Container>
+      <Container showStripe={showStripe}>
         <Title>Do you want to commit to study Japanese everyday?</Title>
-
         <Button onClick={handleClick}>Yes</Button>
         <Link href="commit-info">
           <a>What does this do?</a>
         </Link>
-        <StripeCardInput displayStripe={false} viewer={viewer} />
+        <StripeCardInput viewer={viewer} />
       </Container>
     </Background>
   );
@@ -75,7 +74,6 @@ const img =
 
 const Background = styled.div`
   background-image: url(${img});
-
   background-repeat: no-repeat;
   border: 1px solid #000;
   height: 100vh;
@@ -88,6 +86,9 @@ const Container = styled.div`
   justify-content: center;
   margin: 0 auto;
   max-width: 800px;
+  form {
+    display: ${props => (props.showStripe ? 'block' : 'none')};
+  }
 `;
 
 const Title = styled.h1`
@@ -100,8 +101,6 @@ const Title = styled.h1`
   text-shadow: 0 2px 3px rgba(0, 0, 0, 1);
 `;
 
-const StripeCardInput = styled(StripeInput)`
-  display: none !important;
-`;
+const StripeCardInput = styled(StripeInput)``;
 
 export default DidIStudyJapanesePage;
