@@ -26,17 +26,11 @@ const MenuItems = ({ viewer, setViewer }: Props) => {
         <Item key="/user">
           <Link href="/commit/">Commit</Link>
         </Item>
-        {/* <Item key="/feed">
-          <Link href="/feed">Feed</Link>
+        <Item key="/user">
+          <Link href="/log">Log</Link>
         </Item>
-        <Item key="/timeline">
-          <Link href="/timeline">Timeline</Link>
-        </Item> */}
-        {/* <Item key="/explore/anime">
-          <Link href="/explore/anime">Explore</Link>
-        </Item> */}
         <Item key="/logout">
-          <LogOutButton setViewer={setViewer} />
+          <LogOutButton setViewer={setViewer}>Sign Out</LogOutButton>
         </Item>
       </SubMenu>
     ) : (

@@ -9,7 +9,7 @@ interface Props {
   setViewer: (viewer: Viewer) => void;
 }
 
-export const LogOutButton = ({ setViewer }: Props) => {
+export const LogOutButton = ({ setViewer, children }: Props) => {
   const [logOut] = useMutation<LogOutData>(LOG_OUT, {
     onCompleted: data => {
       if (data && data.logOut) {
@@ -26,5 +26,5 @@ export const LogOutButton = ({ setViewer }: Props) => {
   const handleLogOut = () => {
     logOut();
   };
-  return <div onClick={handleLogOut}>Log out</div>;
+  return <div onClick={handleLogOut}>{children}</div>;
 };

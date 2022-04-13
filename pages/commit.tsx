@@ -20,8 +20,6 @@ const DidIStudyJapanesePage = ({ viewer }) => {
 
   const [showStripe, setShowStripe] = useState(false);
 
-  console.log(viewer);
-
   if (!viewer.id) {
     return (
       <Background>
@@ -45,12 +43,23 @@ const DidIStudyJapanesePage = ({ viewer }) => {
     // setShowStripe(true)
   };
 
+  if (viewer.isCommited) {
+    return (
+      <Background>
+        <Container>
+          <Title>You are commited to study Japanese</Title>
+          <Button onClick={handleClick}>Remove Commit</Button>
+        </Container>
+      </Background>
+    );
+  }
+
   return (
     <Background>
       <Container>
-        <Title>Set goal to study Japanese everyday?</Title>
+        <Title>Set to commit to study Japanese everyday?</Title>
 
-        <Button onClick={handleClick}>{viewer.isCommited ? 'No' : 'Yes'}</Button>
+        <Button onClick={handleClick}>Yes</Button>
         <StripeCardInput displayStripe={false} viewer={viewer} />
       </Container>
     </Background>

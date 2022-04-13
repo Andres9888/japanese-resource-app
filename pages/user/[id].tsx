@@ -22,6 +22,9 @@ interface recommendationData {
 const stripeAuthUrl = `https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_LNMEYF6XiUD7r5SM74ATo5RzJuOmuTES&scope=read_write`;
 
 function userPage({ viewer }: Props) {
+  if (!viewer.id) {
+    return <div>Log in to View Page</div>;
+  }
   const { data, loading, error } = useQuery<getUserResourceIdsData, getUserResourcesIdsVariables>(GET_USER_RESOURCES_IDS, {
     variables: { id: viewer.id },
   });
@@ -48,9 +51,9 @@ function userPage({ viewer }: Props) {
   if (error || errorResources) {
     return <h2>error</h2>;
   }
-  const userVotedResources = dataResources.listings.filter((resource) => data.getUserResourceIds[0].resources.includes(resource.id));
+  const userVotedResources = dataResources.listings.filter(resource => data.getUserResourceIds[0].resources.includes(resource.id));
 
-  const recommendedResource = dataResources.listings.filter((resource) => resource.id === recommendation);
+  const recommendedResource = dataResources.listings.filter(resource => resource.id === recommendation);
   const redirectToStripe = () => {
     window.location.href = stripeAuthUrl;
   };
@@ -67,7 +70,7 @@ function userPage({ viewer }: Props) {
         <Header>You Might Like This Resource Below</Header>
         <table className="table is-fullwidth is-hoverable">
           <tbody>
-            {recommendedResource.map((resource) => (
+            {recommendedResource.map(resource => (
               <TableRow key={resource.id}>
                 <TableData>
                   <a href={resource.url} rel="noreferrer" target="_blank">
@@ -92,7 +95,7 @@ function userPage({ viewer }: Props) {
         <Header>Your Liked Resources</Header>
         <table className="table is-fullwidth is-hoverable">
           <tbody>
-            {userVotedResources.map((resource) => (
+            {userVotedResources.map(resource => (
               <TableRow key={resource.id}>
                 <TableData>
                   <a href={resource.url} rel="noreferrer" target="_blank">
