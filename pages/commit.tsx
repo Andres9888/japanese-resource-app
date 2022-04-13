@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { Button } from 'antd';
 import gql from 'graphql-tag';
+import Link from 'next/link';
 import styled from 'styled-components';
 
 import StripeInput from '~common/components/stripe';
@@ -57,9 +58,12 @@ const DidIStudyJapanesePage = ({ viewer }) => {
   return (
     <Background>
       <Container>
-        <Title>Set to commit to study Japanese everyday?</Title>
+        <Title>Do you want to commit to study Japanese everyday?</Title>
 
         <Button onClick={handleClick}>Yes</Button>
+        <Link href="commit-info">
+          <a>What does this do?</a>
+        </Link>
         <StripeCardInput displayStripe={false} viewer={viewer} />
       </Container>
     </Background>
