@@ -1,15 +1,13 @@
+import { connectDatabase } from '~server/database';
 import { assert, string } from 'superstruct';
 
-import { connectDatabase } from '~server/database';
-
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-
 const viewerIdSchema = string();
 
-export default async function handler(request, response) {
-  if (request.method === 'POST') {
+export default async function handler(req, res) {
+  if (req.method === 'POST') {
     try {
-      const { viewerId } = request.body;
+      const { viewerId } = req.body;
 
       assert(viewerId, viewerIdSchema);
       const database = await connectDatabase();
@@ -23,7 +21,7 @@ export default async function handler(request, response) {
         database.users.updateOne({ _id: viewerId }, { $set: { stripeId: customer.id } }, { upsert: true });
       }
 
-      response.send(
+      res.send(
         await stripe.setupIntents.create({
           customer: userStripeId,
           payment_method_types: ['card'],

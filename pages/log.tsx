@@ -1,26 +1,18 @@
-import { useState } from 'react';
-
 import { useMutation } from '@apollo/react-hooks';
 import { Button } from 'antd';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 
-import StripeInput from '~common/components/stripe';
-
-const SET_COMMITMENT = gql`
-  mutation setCommitment($viewerId: ID!, $isCommited: Boolean!, $timeZone: String!) {
-    setCommitment(viewerId: $viewerId, isCommited: $isCommited, timeZone: $timeZone) {
+const SET_COMMITMENT_LOG = gql`
+  mutation setCommitmentLog($viewerId: ID!, $timeZone: String!) {
+    setCommitmentLog(viewerId: $viewerId, timeZone: $timeZone) {
       acknowledged
     }
   }
 `;
 
 const DidIStudyJapanesePage = ({ viewer }) => {
-  const [setCommitment] = useMutation(SET_COMMITMENT);
-
-  const [showStripe, setShowStripe] = useState(false);
-
-  console.log(viewer);
+  const [setCommitmentLog] = useMutation(SET_COMMITMENT_LOG);
 
   if (!viewer.id) {
     return (
@@ -35,23 +27,20 @@ const DidIStudyJapanesePage = ({ viewer }) => {
   const handleClick = async () => {
     const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-    await setCommitment({
+    await setCommitmentLog({
       variables: {
         viewerId: viewer.id,
-        isCommited: !viewer.isCommited,
         timeZone: userTimeZone,
       },
     });
-    // setShowStripe(true)
   };
 
   return (
     <Background>
       <Container>
-        <Title>Set goal to study Japanese everyday?</Title>
+        <Title>Did you study Japanese Today?</Title>
 
-        <Button onClick={handleClick}>{viewer.isCommited ? 'No' : 'Yes'}</Button>
-        <StripeCardInput displayStripe={false} viewer={viewer} />
+        <Button onClick={handleClick}>Yes</Button>
       </Container>
     </Background>
   );
@@ -85,10 +74,6 @@ const Title = styled.h1`
   color: #fff;
   font-size: 34px;
   text-shadow: 0 2px 3px rgba(0, 0, 0, 1);
-`;
-
-const StripeCardInput = styled(StripeInput)`
-  display: none !important;
 `;
 
 export default DidIStudyJapanesePage;
