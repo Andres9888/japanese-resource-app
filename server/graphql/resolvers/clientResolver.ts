@@ -194,7 +194,7 @@ export const resolvers = {
           token: viewer.token,
           avatar: viewer.avatar,
           name: viewer.name,
-          walletId: viewer.walletId,
+          walletId: viewer.stripeId,
           isCommited: viewer.committed,
           didRequest: true,
         };
