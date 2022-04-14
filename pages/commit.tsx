@@ -7,6 +7,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 
 import StripeInput from '~common/components/stripe';
+import { openNotification } from '~lib/utils';
 
 const SET_COMMITMENT = gql`
   mutation setCommitment($viewerId: ID!, $isCommited: Boolean!, $timeZone: String!) {
@@ -41,15 +42,18 @@ const DidIStudyJapanesePage = ({ viewer }) => {
         timeZone: userTimeZone,
       },
     });
-    setShowStripe(true);
+    openNotification('Nice!', 'You have to submit payment card details to finish setting commitment unless you have a card on file');
+    setShowStripe(!showStripe);
   };
 
   if (viewer.isCommited) {
     return (
       <Background>
-        <Container>
+        <Container showStripe={showStripe}>
           <Title>You are commited to study Japanese</Title>
           <Button onClick={handleClick}>Remove Commit</Button>
+          <Button onClick={() => setShowStripe(true)}>Update Card</Button>
+          <StripeCardInput viewer={viewer} />
         </Container>
       </Background>
     );

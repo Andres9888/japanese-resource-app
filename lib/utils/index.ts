@@ -21,3 +21,16 @@ export const displaySuccessNotification = (message: string, description?: string
 export const displayErrorMessage = (error: string) => {
   return message.error(error);
 };
+export const openNotification = (message: string, description?: string) => {
+  const arguments_ = {
+    message,
+    description,
+    placement: 'topLeft',
+    style: {
+      marginTop: 600,
+    },
+
+    duration: 0,
+  };
+  notification.info(arguments_);
+};
