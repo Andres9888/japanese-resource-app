@@ -57,23 +57,25 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  line-height: 1.5;
+  letter-spacing: -0.333px;
+  line-height: 1.65;
   margin: 0 auto;
-  max-width: 600px;
+  max-width: 720px;
 `;
 
 const Title = styled.h1`
   align-self: center;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
+  font-family: 'OpenDyslexic';
+  font-style: normal;
+
   font-size: 34px;
-  font-weight: 700;
-  line-height: 1.5715;
+  font-weight: 500;
+
   margin-bottom: 20px;
   margin-top: 20px;
 `;
 const Content = styled.p`
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: 'OpenDyslexic';
   font-size: 21px;
   font-weight: 400;
 
@@ -86,7 +88,7 @@ const Content = styled.p`
   @media (max-width: 400px) {
     font-size: 10px;
   }
-  line-height: 1.5715;
+
   text-align: left;
 `;
 export default DidIStudyJapanesePage;

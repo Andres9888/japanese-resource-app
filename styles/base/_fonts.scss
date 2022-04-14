@@ -1,16 +1,25 @@
 /* poppins-300 - latin */
-// @font-face {
-//   font-family: 'Poppins';
-//   font-style: normal;
-//   font-weight: 300;
-//   src: url('/static/fonts/poppins/fonts/poppins-v6-latin-300.eot'); /* IE9 Compat Modes */
-//   src: local('Poppins Light'), local('Poppins-Light'),
-//        url('/static/fonts/poppins/fonts/poppins-v6-latin-300.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-//        url('/static/fonts/poppins/fonts/poppins-v6-latin-300.woff2') format('woff2'), /* Super Modern Browsers */
-//        url('/static/fonts/poppins/fonts/poppins-v6-latin-300.woff') format('woff'), /* Modern Browsers */
-//        url('/static/fonts/poppins/fonts/poppins-v6-latin-300.ttf') format('truetype'), /* Safari, Android, iOS */
-//        url('/static/fonts/poppins/fonts/poppins-v6-latin-300.svg#Poppins') format('svg'); /* Legacy iOS */
-// }
+@font-face {
+  font-family: 'OpenDyslexic';
+  font-style: normal;
+  font-weight: 400;
+ 
+  src: url('/static/fonts/OpenDyslexic-Regular.otf') format('opentype'); /* Safari, Android, iOS */
+     
+
+
+}
+
+@font-face {
+  font-family: 'OpenDyslexic';
+  font-style: normal;
+  font-weight: 500;
+ 
+  src: url('/static/fonts/OpenDyslexic-Bold.otf') format('opentype'); /* Safari, Android, iOS */
+     
+
+
+}
  
 // /* poppins-regular - latin */
 // @font-face {
