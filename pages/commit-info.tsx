@@ -45,38 +45,48 @@ const img =
   'https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F28%2F2018%2F03%2Fblossoms-JCBUPDATE0318.jpg';
 
 const Background = styled.div`
-  background-image: url(${img});
-
-  background-repeat: no-repeat;
-  border: 1px solid #000;
   height: 100vh;
+  margin: 0;
+  padding: 0;
+  text-align: center;
   width: 100%;
 `;
 
 const Container = styled.div`
-  margin: 0 auto;
+  color: black;
   display: flex;
-  max-width: 800px;
-  justify-content: center;
   flex-direction: column;
+  justify-content: center;
+  line-height: 1.5;
+  margin: 0 auto;
+  max-width: 600px;
 `;
 
 const Title = styled.h1`
-  color: #fff;
   align-self: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
   font-size: 34px;
-  background: linear-gradient(rgba(0, 0, 0, 0.2));
-  text-shadow: 0 2px 3px rgba(0, 0, 0, 1);
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
+  font-weight: 700;
+  line-height: 1.5715;
+  margin-bottom: 20px;
+  margin-top: 20px;
 `;
 const Content = styled.p`
-  color: #fff;
-  align-self: center;
+  font-family: 'Source Sans Pro', sans-serif;
   font-size: 21px;
-  background: linear-gradient(rgba(0, 0, 0, 0.2));
-  text-shadow: 0 2px 3px rgba(0, 0, 0, 1);
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
+  font-weight: 400;
+
+  @media (max-width: 800px) {
+    font-size: 16px;
+  }
+  @media (max-width: 600px) {
+    font-size: 12px;
+  }
+  @media (max-width: 400px) {
+    font-size: 10px;
+  }
+  line-height: 1.5715;
+  text-align: left;
 `;
 export default DidIStudyJapanesePage;

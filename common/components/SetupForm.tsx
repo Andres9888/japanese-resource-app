@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 
 const SetupForm = () => {
@@ -7,7 +8,7 @@ const SetupForm = () => {
 
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     // We don't want to let default form submission happen here,
     // which would refresh the page.
     event.preventDefault();
@@ -19,7 +20,7 @@ const SetupForm = () => {
     }
 
     const { error } = await stripe.confirmSetup({
-      //`Elements` instance that was used to create the Payment Element
+      // `Elements` instance that was used to create the Payment Element
       elements,
       confirmParams: {
         return_url: 'http://localhost:3000/paymentstatus',
