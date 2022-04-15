@@ -1,8 +1,6 @@
 import ReactPlayer from 'react-player';
 import styled from 'styled-components';
 
-import content from '../@types/graphql';
-
 const DidIStudyJapanesePage = ({ viewer }) => {
   if (!viewer) {
     <Background>
