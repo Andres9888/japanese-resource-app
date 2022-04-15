@@ -1,4 +1,7 @@
+import ReactPlayer from 'react-player';
 import styled from 'styled-components';
+
+import content from '../@types/graphql';
 
 const DidIStudyJapanesePage = ({ viewer }) => {
   if (!viewer) {
@@ -12,40 +15,56 @@ const DidIStudyJapanesePage = ({ viewer }) => {
   return (
     <Background>
       <Container>
-        <Title>Will you study Japanese everyday?</Title>
+        <Title>Fear your way into getting fluent.</Title>
         <Content>
           Studying Japanese is hard but everyone can come become fluent and achieve their goals. The most important part is that you stick to your
-          goal. A lot of the information is base on this youtube Video by Andrew Huberman # The Science of Setting & Achieving Goals | Huberman Lab
-          Podcast #55https://www.youtube.com/watch?v=t1F7EEGPQwo&t=11s
-          <br />
-          <br />
-          Much of goal directed behavior is to avoid things which cause fear visualization - is it effective? visualization of the end goal is
-          effective in getting the goal process started, however not good for maintaining the goal - over time the visual of the end goal becomes a
-          poor thing to rely on in maintaining the goal - visualizing failure is the optimal way towards accomplishing the goal. thinking about all
-          the ways one could fail en route to said goal - - near doubling in probability of reaching a goal if focusing routinely on foreshadowing
-          failure - - thinking about the way things could fail if you did this or that or didn't take this action - - option a : think about how great
-          you will feel at end point (good at start) - - option b : think about what's gonna happen if you don't do this? (good for maintaining
-          progress) - - foreshadowing failure is best way to reach goals. think about how bad its going to be if you fail. how disappointing in
-          yourself you will feel if you don't do it, how negatively it will impact you, how much you will regret not doing it, etc. - - the more
-          specific you can get in writing and visualizing how bad its going to be if you don't do it, the greater chance you will attain your goal
-          (note: this made me laugh) - the brain is much better at moving away from fearful things than towards things we want - visualize in a
-          positive away at beginning of goal, then focus on avoiding failure, and be very clear on what those failures would look like and feel like -
-          - what kind of goal does it need to be? inspirational and exciting. when people set goals, if goal is too easy it doesn't recruit enough of
-          nervous system to make pursuit of said goal likely. if a goal is too far away/hard, it produces a similar outcome. - - when goals are
-          moderate/moderately hard, just out of immediate abilities, or one felt that would take a lot of effort but is in range, then there was near
-          doubling in likelihood of engaging in pursuit of said goal. - - there needs to be a concrete plan. a specific set of action steps that get
-          right down to what success would look like. - - goals need to have extremely specific and detailed information about action steps in pursuit
-          of goal, and we need to constantly be updating those action steps so that have a higher probability of meeting those action steps - - how
-          often should one assess progress? weekly is a good starting place for addressing performance. based on performance, update action steps for
-          upcoming week
+          goal.
         </Content>
+        <Content>
+          The next question you might ask is how will I stick to my goal? To answer that you will have to understand what is the best way to get
+          yourself to stay with your goal.
+        </Content>
+        <Content>When I watched this YouTube Video by Andrew Huberman I was able to get a better answer to that question.</Content>
+        <Content>
+          <ReactPlayer controls url="https://www.youtube.com/watch?v=t1F7EEGPQwo&t=11s" />
+        </Content>
+        <Content>To Summarize what he says much of goal directed behavior is to avoid things which cause fear.</Content>
+        <Content>Visualization of the end goal is effective in getting the goal process started, however not good for maintaining the goal. </Content>
+        <Content>Over time the visual of the end goal becomes a poor thing to rely on in maintaining the goal. </Content>
+        <Content>
+          Visualizing failure is the optimal way towards accomplishing the goal. Thinking about all the ways one could fail on route to said goal.{' '}
+        </Content>
+        <Content>
+          There is a Near doubling in probability of reaching a goal if focusing routinely on foreshadowing failure - - thinking about the way things
+          could fail if you did this or that or didn't take this action
+        </Content>
+        <Content>
+          So you have two options
+          <br />
+          <ul>
+            <li>option a : think about how great you will feel at end point (good at start) - -</li>
+            <li>option b : think about what'sgonna happen if you don't do this? (good for maintaining progress)</li>{' '}
+          </ul>
+        </Content>
+        <Content>
+          Foreshadowing failure is best way to reach goals. Think about how bad its going to be if you fail. how disappointing in yourself you will
+          feel if you don't do it, how negatively it will impact you, how much you will regret not doing it, etc. - - the more specific you can get in
+          writing and visualizing how bad its going to be if you don't do it, the greater chance you will attain your goal - - the brain is much
+          better at moving away from fearful things than towards things we want - visualize in a positive away at beginning of goal, then focus on
+          avoiding failure, and be very clear on what those failures would look like and feel like
+        </Content>
+        <Content>What I am trying to do is give you negative consequences for not studying Japanese .</Content>
+        <Content>
+          The way it works is when you commit to studying Japanese and enter your card information you will charged a one dollar ($1.00) everyday you
+          do not log that you studied Japanese.
+        </Content>
+        <Content>You can change your commitment anytime and will not be charged.</Content>
+        <Content>The money will go to me and helps me improve this site.</Content>
+        <Content>Thanks for reading all feedback is appreciated.</Content>
       </Container>
     </Background>
   );
 };
-
-const img =
-  'https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F28%2F2018%2F03%2Fblossoms-JCBUPDATE0318.jpg';
 
 const Background = styled.div`
   background-color: white;
