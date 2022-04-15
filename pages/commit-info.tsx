@@ -48,11 +48,12 @@ const img =
   'https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F28%2F2018%2F03%2Fblossoms-JCBUPDATE0318.jpg';
 
 const Background = styled.div`
-  height: 100vh;
+  height: 100%;
   margin: 0;
   padding: 0;
   text-align: center;
   width: 100%;
+  background-color: #edd1b0;
 `;
 
 const Container = styled.div`
@@ -60,8 +61,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  letter-spacing: -0.333px;
-  line-height: 1.7;
+
   margin: 0 auto;
   max-width: 720px;
 `;
@@ -74,14 +74,15 @@ const Title = styled.h1`
   font-style: normal;
   font-weight: 500;
 
-  margin-bottom: 20px;
-  margin-top: 20px;
+  margin-bottom: 27px;
+  margin-top: 27px;
 `;
 const Content = styled.p`
   font-family: 'OpenDyslexic';
   font-size: 21px;
   font-weight: 400;
-
+  letter-spacing: 0.5px;
+  line-height: 1.7;
   @media (max-width: 800px) {
     font-size: 16px;
   }

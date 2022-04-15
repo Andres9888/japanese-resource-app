@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useMutation } from '@apollo/react-hooks';
 
 import { LogOut as LogOutData } from '~graphql/mutations/__generated__/LogOut';

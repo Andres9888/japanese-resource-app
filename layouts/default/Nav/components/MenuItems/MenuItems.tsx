@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Avatar, Button, Menu } from 'antd';
 import Link from 'next/link';
 

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { message, notification } from 'antd';
 
 export const iconColor = '#1890ff';

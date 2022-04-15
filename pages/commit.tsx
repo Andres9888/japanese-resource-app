@@ -7,18 +7,42 @@ import Link from 'next/link';
 import styled from 'styled-components';
 
 import StripeInput from '~common/components/stripe';
-import { openNotification } from '~lib/utils';
+import { openNotification, displaySuccessNotification, displayErrorMessage } from '~lib/utils';
 
 const SET_COMMITMENT = gql`
   mutation setCommitment($viewerId: ID!, $isCommited: Boolean!, $timeZone: String!) {
     setCommitment(viewerId: $viewerId, isCommited: $isCommited, timeZone: $timeZone) {
-      acknowledged
+      id
+      token
+      avatar
+      hasWallet
+      didRequest
+      name
+      isCommited
     }
   }
 `;
 
-const DidIStudyJapanesePage = ({ viewer }) => {
-  const [setCommitment] = useMutation(SET_COMMITMENT);
+const DidIStudyJapanesePage = ({ viewer, setViewer }) => {
+  const [setCommitment] = useMutation(SET_COMMITMENT, {
+    onCompleted: data => {
+      if (data && data.setCommitment.isCommited !== undefined) {
+        setViewer({ ...viewer, isCommited: data.setCommitment.isCommited });
+        displaySuccessNotification(
+          `You've successfully, ${
+            data.setCommitment.isCommited
+              ? 'commited you will be charged a dollar a day that you do not log that you studied Japanese that day.'
+              : 'removed your commitment you will not be charged anymore.'
+          }, you can change your commitment at any time.`
+        );
+      }
+    },
+    onError: () => {
+      displayErrorMessage(
+        "Sorry! We weren't able to Commit. Please try again later! If it still doesn't work, just message me and sorry about that."
+      );
+    },
+  });
 
   const [showStripe, setShowStripe] = useState(false);
 
@@ -39,10 +63,10 @@ const DidIStudyJapanesePage = ({ viewer }) => {
       variables: {
         viewerId: viewer.id,
         isCommited: !viewer.isCommited,
-        timeZone: userTimeZone,
+        timeZone: !viewer.isCommited ? userTimeZone : '',
       },
     });
-    openNotification('Nice!', 'You have to submit payment card details to finish setting commitment unless you have a card on file');
+    // openNotification('Nice!', 'You have to submit payment card details to finish setting commitment unless you have a card on file');
     setShowStripe(!showStripe);
   };
 

@@ -156,11 +156,27 @@ export const resolvers = {
       try {
         const database = await getDatabase();
 
-        database.users.updateOne(
+        const updateRes = await database.users.findOneAndUpdate(
           { _id: viewerId },
-          { $set: { committed: isCommited, timezone: timeZone, dateCommitted: new Date().toUTCString() } },
-          { upsert: true }
+          { $set: { committed: isCommited, timezone: timeZone, dateCommitted: isCommited ? new Date().toUTCString() : '' } },
+          { upsert: true, returnDocument: 'after' }
         );
+
+        if (!updateRes.value) {
+          throw new Error('viewer could not be updated');
+        }
+
+        const viewer = updateRes.value;
+        console.log('viewer', viewer);
+        return {
+          _id: viewer._id,
+          token: viewer.token,
+          avatar: viewer.avatar,
+          name: viewer.name,
+          walletId: viewer.stripeId,
+          isCommited: viewer.committed,
+          didRequest: true,
+        };
       } catch (error) {
         throw new Error(`Failed to setCommitment : ${error}`);
       }

@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/react-hooks';
 import { Button } from 'antd';
 import gql from 'graphql-tag';
+import Link from 'next/link';
 import styled from 'styled-components';
 
 const SET_COMMITMENT_LOG = gql`
@@ -19,6 +20,18 @@ const DidIStudyJapanesePage = ({ viewer }) => {
       <Background>
         <Container>
           <Title>You have to Login to View this page</Title>
+        </Container>
+      </Background>
+    );
+  }
+  if (!viewer.isCommited) {
+    return (
+      <Background>
+        <Container>
+          <Title>You have to be Commited to Log</Title>
+          <Link href="/commit">
+            <a>Go to Commit Page</a>
+          </Link>
         </Container>
       </Background>
     );
