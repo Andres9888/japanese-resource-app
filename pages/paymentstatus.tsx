@@ -11,19 +11,7 @@ import { useRouter } from 'next/router';
 import { displaySuccessNotification, displayErrorMessage, openNotification } from '~lib/utils';
 
 const stripePromise = loadStripe('pk_test_51KhIeyBb7SW2HKTCYBSUyXDid0B9Wf9j6p6BZLzFDGR4F040zXV1ikmb7qEZ2R57Xi5MWj1juiM8psrpcexMN5VQ00STrPccDE');
-const SET_COMMITMENT = gql`
-  mutation setCommitment($viewerId: ID!, $isCommited: Boolean!, $timeZone: String!) {
-    setCommitment(viewerId: $viewerId, isCommited: $isCommited, timeZone: $timeZone) {
-      id
-      token
-      avatar
-      hasWallet
-      didRequest
-      name
-      isCommited
-    }
-  }
-`;
+
 const SET_STRIPE_CARD_STATUS = gql`
   mutation setStripeCardStatus($viewerId: ID!) {
     setStripeCardStatus(viewerId: $viewerId) {
@@ -39,27 +27,6 @@ const SET_STRIPE_CARD_STATUS = gql`
 `;
 const PaymentStatus = ({ viewer, setViewer }) => {
   const router = useRouter();
-
-  const [setCommitment] = useMutation(SET_COMMITMENT, {
-    onCompleted: data => {
-      if (data && data.setCommitment.isCommited !== undefined) {
-        setViewer({ ...viewer, isCommited: data.setCommitment.isCommited });
-
-        displaySuccessNotification(
-          `You've successfully, ${
-            data.setCommitment.isCommited
-              ? 'commited you will be charged a dollar a day that you do not log that you studied Japanese.'
-              : 'removed your commitment you will not be charged anymore.'
-          }You can change your commitment at any time.`
-        );
-      }
-    },
-    onError: () => {
-      displayErrorMessage(
-        "Sorry! We weren't able to Commit. Please try again later! If it still doesn't work, just message me and sorry about that."
-      );
-    },
-  });
 
   const [setStripeCardStatus] = useMutation(SET_STRIPE_CARD_STATUS, {
     onCompleted: data => {
@@ -86,18 +53,6 @@ const PaymentStatus = ({ viewer, setViewer }) => {
     }
 
     const handleSuccess = async () => {
-      // if (wantsToCommit) {
-      //   const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-      //   await setCommitment({
-      //     variables: {
-      //       viewerId: viewer.id,
-      //       isCommited: !viewer.isCommited,
-      //       timeZone: !viewer.isCommited ? userTimeZone : '',
-      //     },
-      //   });
-      // }
-
       await setStripeCardStatus({
         variables: {
           viewerId: viewer.id,

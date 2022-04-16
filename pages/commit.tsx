@@ -1,27 +1,12 @@
 import { useState, useEffect } from 'react';
 
 import { useMutation } from '@apollo/react-hooks';
-import { Button } from 'antd';
-import gql from 'graphql-tag';
 import Link from 'next/link';
 import styled from 'styled-components';
 
 import StripeInput from '~common/components/stripe';
+import { SET_COMMITMENT } from '~graphql/mutations/mutations';
 import { openNotification, displaySuccessNotification, displayErrorMessage } from '~lib/utils';
-
-const SET_COMMITMENT = gql`
-  mutation setCommitment($viewerId: ID!, $isCommited: Boolean!, $timeZone: String!) {
-    setCommitment(viewerId: $viewerId, isCommited: $isCommited, timeZone: $timeZone) {
-      id
-      token
-      avatar
-      hasWallet
-      didRequest
-      name
-      isCommited
-    }
-  }
-`;
 
 const DidIStudyJapanesePage = ({ viewer, setViewer }) => {
   const [showStripe, setShowStripe] = useState(false);
@@ -96,8 +81,8 @@ const DidIStudyJapanesePage = ({ viewer, setViewer }) => {
       <Background>
         <Container showStripe={showStripe}>
           <Title>You are commited to study Japanese</Title>
-          <Button onClick={handleClick}>Remove Commit</Button>
-          <Button onClick={() => setShowStripe(true)}>{viewer.hasWallet ? 'Update Card' : 'Add Card'}</Button>
+          <StyledButton onClick={handleClick}>Remove Commit</StyledButton>
+          <StyledButton onClick={() => setShowStripe(true)}>{viewer.hasWallet ? 'Update Card' : 'Add Card'}</StyledButton>
           <StripeCardInput viewer={viewer} />
         </Container>
       </Background>
@@ -108,9 +93,11 @@ const DidIStudyJapanesePage = ({ viewer, setViewer }) => {
     <Background>
       <Container showStripe={showStripe}>
         <Title>Do you want to commit to study Japanese everyday?</Title>
-        <Button onClick={handleClick}>Yes</Button>
+        <StyledButton onClick={handleClick}>⚡Yes</StyledButton>
         <Link href="commit-info">
-          <a>What does this do?</a>
+          <Content>
+            <a>What does this do?</a>
+          </Content>
         </Link>
         <StripeCardInput viewer={viewer} wantsToCommit={wantsToCommit} />
       </Container>
@@ -141,15 +128,48 @@ const Container = styled.div`
 `;
 
 const Title = styled.h1`
-  -webkit-box-decoration-break: clone;
   align-self: center;
-  background: linear-gradient(rgba(0, 0, 0, 0.2));
-  box-decoration-break: clone;
+
   color: #fff;
+  font-family: 'OpenDyslexic';
   font-size: 34px;
-  text-shadow: 0 2px 3px rgba(0, 0, 0, 1);
+
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: -0.512px;
+  line-height: 1.2;
+  margin-bottom: 27px;
+  margin-top: 27px;
+  text-align: center;
 `;
 
 const StripeCardInput = styled(StripeInput)``;
+const StyledButton = styled.button`
+  background-color: #fff;
+  border: 1px solid #fff;
+
+  border-radius: 4px;
+  font-family: 'OpenDyslexic';
+  font-size: 34px;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: -0.512px;
+  line-height: 1.2;
+  margin-bottom: 27px;
+  margin-top: 27px;
+  padding: 1.5rem;
+  text-align: center;
+  width: 100%;
+`;
+
+const Content = styled.p`
+  font-family: 'OpenDyslexic';
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: -0.06px;
+  line-height: 1.6;
+  margin-bottom: 27px;
+  text-align: left;
+`;
 
 export default DidIStudyJapanesePage;
