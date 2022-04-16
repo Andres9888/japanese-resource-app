@@ -67,7 +67,7 @@ function StripeInput({ viewer, wantsToCommit }: Props) {
   if (!clientSecret && !options.clientSecret) return null;
   return (
     <Elements options={options} stripe={stripePromise}>
-      <SetupForm wantsToCommit={wantsToCommit} />
+      <SetupForm viewer={viewer} wantsToCommit={wantsToCommit} />
     </Elements>
   );
 }

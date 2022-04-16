@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 import styled from 'styled-components';
 
-const SetupForm = ({ wantsToCommit }) => {
+const SetupForm = ({ wantsToCommit, viewer }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [errorMessage, setErrorMessage] = useState(null);
@@ -42,7 +42,7 @@ const SetupForm = ({ wantsToCommit }) => {
   return (
     <form onSubmit={handleSubmit}>
       <PaymentElement />
-      <StyledButton disabled={!stripe}>Submit</StyledButton>
+      <StyledButton disabled={!stripe}>{viewer.hasWallet ? 'Update Card' : 'Submit'}</StyledButton>
       {/* Show error message to your customers */}
       {errorMessage && <div>{errorMessage}</div>}
     </form>
