@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useMutation } from '@apollo/react-hooks';
 import { Button } from 'antd';
@@ -25,6 +25,7 @@ const SET_COMMITMENT = gql`
 
 const DidIStudyJapanesePage = ({ viewer, setViewer }) => {
   const [showStripe, setShowStripe] = useState(false);
+  const [wantsToCommit, setWantsToCommit] = useState(false);
   const [setCommitment] = useMutation(SET_COMMITMENT, {
     onCompleted: data => {
       if (data && data.setCommitment.isCommited !== undefined) {
@@ -45,7 +46,23 @@ const DidIStudyJapanesePage = ({ viewer, setViewer }) => {
       );
     },
   });
+  useEffect(() => {
+    const wantsToCommitParameter = new URLSearchParams(window.location.search).get('wantsToCommit');
+    const handleSuccess = async () => {
+      if (wantsToCommitParameter) {
+        const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
+        await setCommitment({
+          variables: {
+            viewerId: viewer.id,
+            isCommited: !viewer.isCommited,
+            timeZone: !viewer.isCommited ? userTimeZone : '',
+          },
+        });
+      }
+    };
+    handleSuccess();
+  }, []);
   if (!viewer.id) {
     return (
       <Background>
@@ -59,6 +76,7 @@ const DidIStudyJapanesePage = ({ viewer, setViewer }) => {
   const handleClick = async () => {
     if (!viewer.hasWallet) {
       setShowStripe(true);
+      setWantsToCommit(true);
       openNotification('Nice!', 'You have to submit payment card details to finish setting commitment.');
     } else {
       const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -94,7 +112,7 @@ const DidIStudyJapanesePage = ({ viewer, setViewer }) => {
         <Link href="commit-info">
           <a>What does this do?</a>
         </Link>
-        <StripeCardInput viewer={viewer} />
+        <StripeCardInput viewer={viewer} wantsToCommit={wantsToCommit} />
       </Container>
     </Background>
   );

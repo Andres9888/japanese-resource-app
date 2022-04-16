@@ -14,7 +14,7 @@ interface Props {
   viewer: Viewer;
 }
 
-function StripeInput({ viewer }: Props) {
+function StripeInput({ viewer, wantsToCommit }: Props) {
   const [clientSecret, setClientSecret] = useState();
 
   useEffect(() => {
@@ -38,7 +38,7 @@ function StripeInput({ viewer }: Props) {
   if (!clientSecret && !options.clientSecret) return null;
   return (
     <Elements options={options} stripe={stripePromise}>
-      <SetupForm />
+      <SetupForm wantsToCommit={wantsToCommit} />
     </Elements>
   );
 }

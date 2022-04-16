@@ -29,9 +29,6 @@ export const openNotification = (message: string, description?: string) => {
     message,
     description,
     placement: 'topLeft',
-    style: {
-      marginTop: 600,
-    },
 
     duration: 0,
   };

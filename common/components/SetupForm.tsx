@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 
-const SetupForm = () => {
+const SetupForm = ({ wantsToCommit }) => {
   const stripe = useStripe();
   const elements = useElements();
-
   const [errorMessage, setErrorMessage] = useState(null);
 
   const handleSubmit = async event => {
@@ -18,12 +17,12 @@ const SetupForm = () => {
       // Make sure to disable form submission until Stripe.js has loaded.
       return;
     }
-
+    console.log(wantsToCommit);
     const { error } = await stripe.confirmSetup({
       // `Elements` instance that was used to create the Payment Element
       elements,
       confirmParams: {
-        return_url: 'http://localhost:3000/paymentstatus',
+        return_url: `http://localhost:3000/paymentstatus${wantsToCommit ? '?wantsToCommit=true' : ''}`,
       },
     });
 
