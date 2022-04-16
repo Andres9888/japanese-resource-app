@@ -4,12 +4,16 @@ import React, { useState, useEffect } from 'react';
 
 import { Elements, useStripe } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import { useRouter } from 'next/router';
+
+import { displaySuccessNotification, displayErrorMessage, openNotification } from '~lib/utils';
 
 const stripePromise = loadStripe('pk_test_51KhIeyBb7SW2HKTCYBSUyXDid0B9Wf9j6p6BZLzFDGR4F040zXV1ikmb7qEZ2R57Xi5MWj1juiM8psrpcexMN5VQ00STrPccDE');
 
 const PaymentStatus = () => {
   const stripe = useStripe();
-  const [message, setMessage] = useState(null);
+  const [message] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (!stripe) {
@@ -31,17 +35,20 @@ const PaymentStatus = () => {
       // [0]: https://stripe.com/docs/payments/payment-methods#payment-notification
       switch (setupIntent.status) {
         case 'succeeded':
-          setMessage('Success! Your payment method has been saved.');
+          displaySuccessNotification('Success! Your payment method has been saved.');
+          router.push('/log');
           break;
 
         case 'processing':
-          setMessage("Processing payment details. We'll update you when processing is complete.");
+          openNotification("Processing payment details. We'll update you when processing is complete.");
+          router.push('/log');
           break;
 
         case 'requires_payment_method':
           // Redirect your user back to your payment page to attempt collecting
           // payment again
-          setMessage('Failed to process payment details. Please try another payment method.');
+          displayErrorMessage('Failed to process payment details. Please try another payment method.');
+          router.push('/commit');
           break;
       }
     });

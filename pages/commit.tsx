@@ -7,7 +7,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 
 import StripeInput from '~common/components/stripe';
-import { openNotification, displaySuccessNotification, displayErrorMessage } from '~lib/utils';
+import { displaySuccessNotification, displayErrorMessage } from '~lib/utils';
 
 const SET_COMMITMENT = gql`
   mutation setCommitment($viewerId: ID!, $isCommited: Boolean!, $timeZone: String!) {
@@ -24,16 +24,18 @@ const SET_COMMITMENT = gql`
 `;
 
 const DidIStudyJapanesePage = ({ viewer, setViewer }) => {
+  const [showStripe, setShowStripe] = useState(false);
   const [setCommitment] = useMutation(SET_COMMITMENT, {
     onCompleted: data => {
       if (data && data.setCommitment.isCommited !== undefined) {
         setViewer({ ...viewer, isCommited: data.setCommitment.isCommited });
+        setShowStripe(!showStripe);
         displaySuccessNotification(
           `You've successfully, ${
             data.setCommitment.isCommited
-              ? 'commited you will be charged a dollar a day that you do not log that you studied Japanese that day.'
+              ? 'commited you will be charged a dollar a day that you do not log that you studied Japanese.'
               : 'removed your commitment you will not be charged anymore.'
-          }, you can change your commitment at any time.`
+          }You can change your commitment at any time.`
         );
       }
     },
@@ -43,8 +45,6 @@ const DidIStudyJapanesePage = ({ viewer, setViewer }) => {
       );
     },
   });
-
-  const [showStripe, setShowStripe] = useState(false);
 
   if (!viewer.id) {
     return (
@@ -67,7 +67,6 @@ const DidIStudyJapanesePage = ({ viewer, setViewer }) => {
       },
     });
     // openNotification('Nice!', 'You have to submit payment card details to finish setting commitment unless you have a card on file');
-    setShowStripe(!showStripe);
   };
 
   if (viewer.isCommited) {
@@ -76,7 +75,7 @@ const DidIStudyJapanesePage = ({ viewer, setViewer }) => {
         <Container showStripe={showStripe}>
           <Title>You are commited to study Japanese</Title>
           <Button onClick={handleClick}>Remove Commit</Button>
-          <Button onClick={() => setShowStripe(true)}>Update Card</Button>
+          <Button onClick={() => setShowStripe(true)}>{viewer.hasWallet ? 'Update Card' : 'Add Card'}</Button>
           <StripeCardInput viewer={viewer} />
         </Container>
       </Background>
@@ -91,17 +90,16 @@ const DidIStudyJapanesePage = ({ viewer, setViewer }) => {
         <Link href="commit-info">
           <a>What does this do?</a>
         </Link>
-        <StripeCardInput viewer={viewer} />
       </Container>
     </Background>
   );
 };
 
-const img =
+const backgroundImg =
   'https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F28%2F2018%2F03%2Fblossoms-JCBUPDATE0318.jpg';
 
 const Background = styled.div`
-  background-image: url(${img});
+  background-image: url(${backgroundImg});
   background-repeat: no-repeat;
   border: 1px solid #000;
   height: 100vh;

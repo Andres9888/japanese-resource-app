@@ -17,6 +17,7 @@ export const displaySuccessNotification = (message: string, description?: string
     style: {
       marginTop: 50,
     },
+    duration: 0,
   });
 };
 
