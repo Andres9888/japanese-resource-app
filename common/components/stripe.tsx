@@ -31,9 +31,38 @@ function StripeInput({ viewer, wantsToCommit }: Props) {
 
     getClientSecret();
   }, []);
+  const appearance = {
+    theme: 'none',
+    variables: {
+      fontFamily: 'Verdana',
+      fontSize: '18',
+      fontLineHeight: '1.5',
+      borderRadius: '4',
+      colorBackground: '#dfdfdf',
+    },
+    rules: {
+      '.Input': {
+        backgroundColor: '#ffffff',
+        boxShadow: 'inset -1px -1px #ffffff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080',
+      },
+      '.Input--invalid': {
+        color: '#DF1B41',
+      },
+      '.Tab, .Block': {
+        boxShadow: 'inset -1px -1px #0a0a0a, inset 1px 1px #ffffff, inset -2px -2px #808080, inset 2px 2px #dfdfdf',
+      },
+      '.Tab:hover': {
+        backgroundColor: '#eee',
+      },
+      '.Tab--selected, .Tab--selected:focus, .Tab--selected:hover': {
+        backgroundColor: '#ccc',
+      },
+    },
+  };
 
   const options = {
     clientSecret,
+    appearance,
   };
   if (!clientSecret && !options.clientSecret) return null;
   return (

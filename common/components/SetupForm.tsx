@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
+import styled from 'styled-components';
 
 const SetupForm = ({ wantsToCommit }) => {
   const stripe = useStripe();
@@ -41,7 +42,7 @@ const SetupForm = ({ wantsToCommit }) => {
   return (
     <form onSubmit={handleSubmit}>
       <PaymentElement />
-      <button disabled={!stripe}>Submit</button>
+      <StyledButton disabled={!stripe}>Submit</StyledButton>
       {/* Show error message to your customers */}
       {errorMessage && <div>{errorMessage}</div>}
     </form>
@@ -49,3 +50,21 @@ const SetupForm = ({ wantsToCommit }) => {
 };
 
 export default SetupForm;
+
+const StyledButton = styled.button`
+  background-color: #fb8987;
+  border: 1px inset #fff;
+
+  border-radius: 4px;
+  font-family: 'OpenDyslexic';
+  font-size: 34px;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: -0.512px;
+  line-height: 1.2;
+  margin-bottom: 27px;
+  margin-top: 27px;
+  padding: 1.5rem;
+  text-align: center;
+  width: 100%;
+`;

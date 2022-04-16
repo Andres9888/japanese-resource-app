@@ -53,7 +53,7 @@ const DidIStudyJapanesePage = ({ viewer }) => {
       <Container>
         <Title>Did you study Japanese Today?</Title>
 
-        <Button onClick={handleClick}>Yes</Button>
+        <StyledButton onClick={handleClick}>Yes</StyledButton>
       </Container>
     </Background>
   );
@@ -80,13 +80,47 @@ const Container = styled.div`
 `;
 
 const Title = styled.h1`
-  -webkit-box-decoration-break: clone;
   align-self: center;
-  background: linear-gradient(rgba(0, 0, 0, 0.2));
-  box-decoration-break: clone;
+
   color: #fff;
+  font-family: 'OpenDyslexic';
   font-size: 34px;
-  text-shadow: 0 2px 3px rgba(0, 0, 0, 1);
+
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: -0.512px;
+  line-height: 1.2;
+  margin-bottom: 27px;
+  margin-top: 27px;
+  text-align: center;
+`;
+
+const StyledButton = styled.button`
+  background-color: #fff;
+  border: 1px solid #fff;
+
+  border-radius: 4px;
+  font-family: 'OpenDyslexic';
+  font-size: 34px;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: -0.512px;
+  line-height: 1.2;
+  margin-bottom: 27px;
+  margin-top: 27px;
+  padding: 1.5rem;
+  text-align: center;
+  width: 100%;
+`;
+
+const Content = styled.p`
+  font-family: 'OpenDyslexic';
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: -0.06px;
+  line-height: 1.6;
+  margin-bottom: 27px;
+  text-align: left;
 `;
 
 export default DidIStudyJapanesePage;
