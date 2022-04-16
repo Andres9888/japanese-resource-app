@@ -82,7 +82,9 @@ const DidIStudyJapanesePage = ({ viewer, setViewer }) => {
         <Container showStripe={showStripe}>
           <Title>You are commited to study Japanese</Title>
           <StyledButton onClick={handleClick}>Remove Commit</StyledButton>
-          <StyledButton onClick={() => setShowStripe(true)}>{viewer.hasWallet ? 'Update Card' : 'Add Card'}</StyledButton>
+          <UpdateCardButton showStripe={showStripe} onClick={() => setShowStripe(true)}>
+            {viewer.hasWallet ? 'Update Card' : 'Add Card'}
+          </UpdateCardButton>
           <StripeCardInput viewer={viewer} />
         </Container>
       </Background>
@@ -148,6 +150,24 @@ const StyledButton = styled.button`
   background-color: #fff;
   border: 1px solid #fff;
 
+  border-radius: 4px;
+  font-family: 'OpenDyslexic';
+  font-size: 34px;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: -0.512px;
+  line-height: 1.2;
+  margin-bottom: 27px;
+  margin-top: 27px;
+  padding: 1.5rem;
+  text-align: center;
+  width: 100%;
+`;
+
+const UpdateCardButton = styled.button`
+  background-color: #fff;
+  border: 1px solid #fff;
+  display: ${props => (props.showStripe ? 'none' : 'block')};
   border-radius: 4px;
   font-family: 'OpenDyslexic';
   font-size: 34px;
