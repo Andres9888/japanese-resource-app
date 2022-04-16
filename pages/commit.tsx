@@ -7,7 +7,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 
 import StripeInput from '~common/components/stripe';
-import { displaySuccessNotification, displayErrorMessage } from '~lib/utils';
+import { openNotification, displaySuccessNotification, displayErrorMessage } from '~lib/utils';
 
 const SET_COMMITMENT = gql`
   mutation setCommitment($viewerId: ID!, $isCommited: Boolean!, $timeZone: String!) {
@@ -57,16 +57,20 @@ const DidIStudyJapanesePage = ({ viewer, setViewer }) => {
   }
 
   const handleClick = async () => {
-    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (!viewer.hasWallet) {
+      setShowStripe(true);
+      openNotification('Nice!', 'You have to submit payment card details to finish setting commitment.');
+    } else {
+      const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-    await setCommitment({
-      variables: {
-        viewerId: viewer.id,
-        isCommited: !viewer.isCommited,
-        timeZone: !viewer.isCommited ? userTimeZone : '',
-      },
-    });
-    // openNotification('Nice!', 'You have to submit payment card details to finish setting commitment unless you have a card on file');
+      await setCommitment({
+        variables: {
+          viewerId: viewer.id,
+          isCommited: !viewer.isCommited,
+          timeZone: !viewer.isCommited ? userTimeZone : '',
+        },
+      });
+    }
   };
 
   if (viewer.isCommited) {
@@ -90,6 +94,7 @@ const DidIStudyJapanesePage = ({ viewer, setViewer }) => {
         <Link href="commit-info">
           <a>What does this do?</a>
         </Link>
+        <StripeCardInput viewer={viewer} />
       </Container>
     </Background>
   );

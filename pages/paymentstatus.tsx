@@ -29,6 +29,8 @@ const PaymentStatus = ({ viewer, setViewer }) => {
     onCompleted: data => {
       if (data && data.setStripeCardStatus.hasWallet !== undefined) {
         setViewer({ ...viewer, hasWallet: data.setStripeCardStatus.hasWallet });
+        displaySuccessNotification('Success! Your payment method has been saved.');
+        router.push('/commit');
       }
     },
     onError: () => {
@@ -47,14 +49,11 @@ const PaymentStatus = ({ viewer, setViewer }) => {
       return;
     }
     const handleSuccess = async () => {
-      displaySuccessNotification('Success! Your payment method has been saved.');
-
       await setStripeCardStatus({
         variables: {
           viewerId: viewer.id,
         },
       });
-      router.push('/log');
     };
     // Retrieve the "setup_intent_client_secret" query parameter appended to
     // your return_url by Stripe.js
@@ -76,7 +75,7 @@ const PaymentStatus = ({ viewer, setViewer }) => {
 
         case 'processing':
           openNotification("Processing payment details. We'll update you when processing is complete.");
-          router.push('/log');
+          router.push('/commit');
           break;
 
         case 'requires_payment_method':
