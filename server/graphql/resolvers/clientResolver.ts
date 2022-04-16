@@ -167,13 +167,14 @@ export const resolvers = {
         }
 
         const viewer = updateRes.value;
-        console.log('viewer', viewer);
+
         return {
           _id: viewer._id,
           token: viewer.token,
           avatar: viewer.avatar,
           name: viewer.name,
           walletId: viewer.stripeId,
+          stripeHasCard: viewer.stripeHasCard,
           isCommited: viewer.committed,
           didRequest: true,
         };
@@ -194,6 +195,36 @@ export const resolvers = {
         throw new Error(`Failed to setCommitment : ${error}`);
       }
     },
+    setStripeCardStatus: async (_root: undefined, { viewerId }) => {
+      try {
+        const database = await getDatabase();
+
+        const updateRes = await database.users.findOneAndUpdate(
+          { _id: viewerId },
+          { $set: { stripeHasCard: true } },
+          { upsert: true, returnDocument: 'after' }
+        );
+
+        if (!updateRes.value) {
+          throw new Error('viewer could not be updated');
+        }
+
+        const viewer = updateRes.value;
+
+        return {
+          _id: viewer._id,
+          token: viewer.token,
+          avatar: viewer.avatar,
+          name: viewer.name,
+          walletId: viewer.stripeId,
+          stripeHasCard: viewer.stripeHasCard,
+          isCommited: viewer.committed,
+          didRequest: true,
+        };
+      } catch (error) {
+        throw new Error(`Failed to setStripeCardStatus : ${error}`);
+      }
+    },
     logIn: async (_root: undefined, { input }, { req, res }) => {
       try {
         const code = input ? input.code : null;
@@ -211,6 +242,7 @@ export const resolvers = {
           avatar: viewer.avatar,
           name: viewer.name,
           walletId: viewer.stripeId,
+          stripeHasCard: viewer.stripeHasCard,
           isCommited: viewer.committed,
           didRequest: true,
         };
@@ -241,7 +273,7 @@ export const resolvers = {
       return viewer._id;
     },
     hasWallet: (viewer: Viewer): boolean | undefined => {
-      return viewer.walletId ? true : undefined;
+      return viewer.walletId && viewer.stripeHasCard ? true : undefined;
     },
   },
 };
