@@ -158,7 +158,7 @@ export const resolvers = {
 
         const updateRes = await database.users.findOneAndUpdate(
           { _id: viewerId },
-          { $set: { committed: isCommited, timezone: timeZone, dateCommitted: isCommited ? new Date().toUTCString() : '' } },
+          { $set: { committed: isCommited, timezone: timeZone, dateCommitted: isCommited ? new Date() : '' } },
           { upsert: true, returnDocument: 'after' }
         );
 
@@ -188,7 +188,7 @@ export const resolvers = {
 
         return database.users.updateOne(
           { _id: viewerId },
-          { $push: { committedLog: { timezone: timeZone, dateCommitted: new Date().toUTCString() } } },
+          { $push: { committedLog: { timezone: timeZone, dateCommitted: new Date() } } },
           { upsert: true }
         );
       } catch (error) {

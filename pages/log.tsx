@@ -18,10 +18,9 @@ const SET_COMMITMENT_LOG = gql`
 const DidIStudyJapanesePage = ({ viewer }) => {
   const [setCommitmentLog] = useMutation(SET_COMMITMENT_LOG, {
     onCompleted: data => {
-      console.log(data);
-      // if (data && data.setCommitmentLog.setCommitmentLog.matchedCount && data.setCommitmentLog.setCommitmentLog.modifiedCount) {
-      //   displaySuccessNotification("You've successfully");
-      // }
+      if (data && data.setCommitmentLog.matchedCount && data.setCommitmentLog.modifiedCount) {
+        displaySuccessNotification("You've successfully");
+      }
     },
     onError: () => {
       displayErrorMessage(
