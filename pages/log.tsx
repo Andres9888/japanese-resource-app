@@ -4,16 +4,31 @@ import gql from 'graphql-tag';
 import Link from 'next/link';
 import styled from 'styled-components';
 
+import { displaySuccessNotification, displayErrorMessage } from '~lib/utils';
+
 const SET_COMMITMENT_LOG = gql`
   mutation setCommitmentLog($viewerId: ID!, $timeZone: String!) {
     setCommitmentLog(viewerId: $viewerId, timeZone: $timeZone) {
-      acknowledged
+      matchedCount
+      modifiedCount
     }
   }
 `;
 
 const DidIStudyJapanesePage = ({ viewer }) => {
-  const [setCommitmentLog] = useMutation(SET_COMMITMENT_LOG);
+  const [setCommitmentLog] = useMutation(SET_COMMITMENT_LOG, {
+    onCompleted: data => {
+      console.log(data);
+      // if (data && data.setCommitmentLog.setCommitmentLog.matchedCount && data.setCommitmentLog.setCommitmentLog.modifiedCount) {
+      //   displaySuccessNotification("You've successfully");
+      // }
+    },
+    onError: () => {
+      displayErrorMessage(
+        "Sorry! We weren't able to Commit. Please try again later! If it still doesn't work, just message me and sorry about that."
+      );
+    },
+  });
 
   if (!viewer.id) {
     return (

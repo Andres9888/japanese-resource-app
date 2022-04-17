@@ -186,7 +186,7 @@ export const resolvers = {
       try {
         const database = await getDatabase();
 
-        database.users.updateOne(
+        return database.users.updateOne(
           { _id: viewerId },
           { $push: { committedLog: { timezone: timeZone, dateCommitted: new Date().toUTCString() } } },
           { upsert: true }

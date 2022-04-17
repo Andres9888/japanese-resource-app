@@ -29,6 +29,11 @@ export const typeDefs = gql`
     isCommited: Boolean
   }
 
+  type LogConfirm {
+    matchedCount: Int!
+    modifiedCount: Int!
+  }
+
   input LogInInput {
     code: String!
   }
@@ -56,7 +61,7 @@ export const typeDefs = gql`
     increment(id: ID!, viewer: ID!, resource: String!): CountResult
     setCommitment(viewerId: ID!, isCommited: Boolean!, timeZone: String!): Viewer!
     setStripeCardStatus(viewerId: ID!): Viewer!
-    setCommitmentLog(viewerId: ID!, timeZone: String!): Acknowledged
+    setCommitmentLog(viewerId: ID!, timeZone: String!): LogConfirm!
     logIn(input: LogInInput): Viewer!
     logOut: Viewer!
     # connectStripe(input: ConnectStripeInput!): Viewer!
