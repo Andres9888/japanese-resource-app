@@ -1,3 +1,8 @@
+
+## Screenshots
+
+![App Screenshot](https://res.cloudinary.com/andres9888/image/upload/v1650638932/Screen_Shot_2022-04-22_at_10.42.23-fullpage_k71xwy.png)
+
 <h1 align="center">React + GraphQL + Next.js + Apollo + Scss + Typescript Starter</h1>
 <h1 align="center">Your can watch me code this project out on youtube by click this link (<a href="https://www.youtube.com/playlist?list=PLC0KM3xw4Iyu_SyFSJCeZ6kIGJN_WUUbl" target="_blank">Here</a>)</h1>
 <p align="center">
@@ -35,17 +40,9 @@ npm run dev
 You can access your .env variables by deconstructing 'process.env' object, both on client and server.
 Just make sure that you reboot the server when updating .env file.
 
-## Configuration
 
-You should configure things like eslint, tsconfig, prettier etc. with things that suit you and your project.
-Configuration in this project is not perfect - it's just my own preference, and I'm open to suggestions :)
 
-## To see before coding;
 
-- [pure-functions-immutability-and-other-software-superpowers](https://medium.com/dailyjs/pure-functions-immutability-and-other-software-superpowers-dfe6039af8f6)
-- [Check out this to read more about /server/graphql workings](https://github.com/Urigo/merge-graphql-schemas)
-- [Context management choice](https://www.youtube.com/watch?v=Q54YDGC_t3Y)
-- [Apollo context management](https://www.apollographql.com/docs/react/data/local-state/)
-- [graphql-tag](https://devstore.io/js/graphql-tag)
+
 
 

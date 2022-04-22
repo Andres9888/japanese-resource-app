@@ -53,12 +53,13 @@ const TableDataTags = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
+  font-family: 'OpenDyslexic';
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.06px;
+  line-height: 1.6;
   margin-top:20px;
   margin-bottom:20px;
-  font-weight: 700;
-  line-height: 1.5715;
   overflow-wrap: break-word;
 
   width: 100%;
