@@ -13,7 +13,7 @@ const apolloServerMicro = new ApolloServer({
   resolvers,
   schema,
   playground,
-  context: async ({ req, res }) => ({ req, res, prisma }),
+  context: async ({ req, res }) => ({ req, res }),
 });
 
 export const config = {

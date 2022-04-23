@@ -11,8 +11,6 @@ import { Google, Stripe } from '~lib/api';
 import { connectDatabase } from '~server/database';
 import { Viewer } from '~types/globalTypes';
 
-const prisma = new PrismaClient();
-
 const getDatabase = async () => {
   return connectDatabase();
 };
@@ -117,6 +115,7 @@ export const resolvers = {
   Query: {
     listings: async (_root: undefined) => {
       try {
+        const prisma = new PrismaClient();
         const allResources = await prisma.japanese_resources_collection.findMany();
         console.log(allResources);
         console.log(typeof allResources);
@@ -272,9 +271,9 @@ export const resolvers = {
       }
     },
   },
-  Listing: {
-    id: (listing): string => listing._id.toString(),
-  },
+  // Listing: {
+  //   id: (listing): string => listing._id.toString(),
+  // },
   Viewer: {
     id: (viewer: Viewer): string | undefined => {
       return viewer._id;
