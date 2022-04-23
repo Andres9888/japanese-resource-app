@@ -11,6 +11,7 @@ import { Google, Stripe } from '~lib/api';
 import { connectDatabase } from '~server/database';
 import { Viewer } from '~types/globalTypes';
 
+const prisma = new PrismaClient();
 const getDatabase = async () => {
   return connectDatabase();
 };
@@ -115,16 +116,13 @@ export const resolvers = {
   Query: {
     listings: async (_root: undefined) => {
       try {
-        const prisma = new PrismaClient();
-        const allResources = await prisma.japanese_resources_collection.findMany();
-        console.log(allResources);
-        console.log(typeof allResources);
-        return allResources;
-        // const database = await getDatabase();
-        // return database.listings
-        //   .find({})
-        //   .sort({ count: -1 })
-        //   .toArray();
+        return await prisma.japanese_resources_collection.findMany({
+          orderBy: [
+            {
+              count: 'desc',
+            },
+          ],
+        });
       } catch (error) {
         throw new Error(`Failed to query listings: ${error}`);
       }
