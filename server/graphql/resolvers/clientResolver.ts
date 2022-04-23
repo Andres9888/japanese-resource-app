@@ -2,7 +2,7 @@
 // @ts-nocheck
 import crypto from 'crypto';
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Resource } from '@prisma/client';
 import { serialize } from 'cookie';
 import { ObjectId } from 'mongodb';
 
@@ -114,9 +114,9 @@ const logInViaCookie = async (token: string, req: Request, res: Response): Promi
 };
 export const resolvers = {
   Query: {
-    listings: async (_root: undefined) => {
+    listings: async (): Promise<Resource[]> => {
       try {
-        return await prisma.japanese_resources_collection.findMany({
+        return await prisma.resource.findMany({
           orderBy: [
             {
               count: 'desc',
@@ -124,7 +124,7 @@ export const resolvers = {
           ],
         });
       } catch (error) {
-        throw new Error(`Failed to query listings: ${error}`);
+        throw new Error(`Failed to query resources: ${error}`);
       }
     },
     getUserResourceIds: async (_root: undefined, { id }) => {
@@ -162,7 +162,7 @@ export const resolvers = {
 
         const updateRes = await database.users.findOneAndUpdate(
           { _id: viewerId },
-          { $set: { committed: isCommited, timezone: timeZone, dateCommitted: isCommited ? new Date() : '' } },
+          { $set: { committed: isCommited, timezone: timeZone, dateCommitted: isCommited ? new Date() : null } },
           { upsert: true, returnDocument: 'after' }
         );
 

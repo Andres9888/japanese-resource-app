@@ -12,7 +12,7 @@ type UsersCommittedLog {
   timezone      String?
 }
 
-model japanese_resources_collection {
+model Resource {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   count       Int
   description String
@@ -30,8 +30,7 @@ model users {
   committed     Boolean?
   committedLog  UsersCommittedLog[]
   contact       String
-  /// Multiple data types found: String: 50%, DateTime (Date): 50% out of 2 sampled entries
-  dateCommitted Json?
+  dateCommitted DateTime?           @db.Date
   name          String
   resources     String[]
   stripeHasCard Boolean?
