@@ -36,6 +36,7 @@
   "dependencies": {
     "@apollo/client": "^3.3.15",
     "@apollo/react-hooks": "^3.1.5",
+    "@prisma/client": "^3.12.0",
     "@sanv/eslint-config-unicorn-typescript": "^2.0.3",
     "@stripe/react-stripe-js": "^1.7.0",
     "@stripe/stripe-js": "^1.26.0",
@@ -134,6 +135,7 @@
     "node-sass": "^5.0.0",
     "nodemon": "^1.19.4",
     "prettier": "^1.15.3",
+    "prisma": "^3.12.0",
     "stylelint": "^11.1.1",
     "stylelint-config-standard": "^19.0.0",
     "stylelint-scss": "^3.19.0",

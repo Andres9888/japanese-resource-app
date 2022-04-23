@@ -2,6 +2,7 @@
 // @ts-nocheck
 import crypto from 'crypto';
 
+import { PrismaClient } from '@prisma/client';
 import { serialize } from 'cookie';
 import { ObjectId } from 'mongodb';
 
@@ -9,6 +10,8 @@ import { incrementCountVariables } from '~graphql/mutations/__generated__/increm
 import { Google, Stripe } from '~lib/api';
 import { connectDatabase } from '~server/database';
 import { Viewer } from '~types/globalTypes';
+
+const prisma = new PrismaClient();
 
 const getDatabase = async () => {
   return connectDatabase();
@@ -114,11 +117,15 @@ export const resolvers = {
   Query: {
     listings: async (_root: undefined) => {
       try {
-        const database = await getDatabase();
-        return database.listings
-          .find({})
-          .sort({ count: -1 })
-          .toArray();
+        const allResources = await prisma.japanese_resources_collection.findMany();
+        console.log(allResources);
+        console.log(typeof allResources);
+        return allResources;
+        // const database = await getDatabase();
+        // return database.listings
+        //   .find({})
+        //   .sort({ count: -1 })
+        //   .toArray();
       } catch (error) {
         throw new Error(`Failed to query listings: ${error}`);
       }

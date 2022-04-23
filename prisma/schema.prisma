@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+type UsersCommittedLog {
+  dateCommitted DateTime @db.Date
+  timezone      String?
+}
+
+model japanese_resources_collection {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  count       Int
+  description String
+  image       String
+  tags        String[]
+  title       String
+  url         String
+
+  @@map("japanese-resources-collection")
+}
+
+model users {
+  id            String              @id @map("_id")
+  avatar        String
+  committed     Boolean?
+  committedLog  UsersCommittedLog[]
+  contact       String
+  /// Multiple data types found: String: 50%, DateTime (Date): 50% out of 2 sampled entries
+  dateCommitted Json?
+  name          String
+  resources     String[]
+  stripeHasCard Boolean?
+  stripeId      String?
+  timezone      String?
+  token         String
+}
