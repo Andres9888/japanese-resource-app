@@ -24,7 +24,7 @@ model Resource {
   @@map("japanese-resources-collection")
 }
 
-model users {
+model User {
   id            String              @id @map("_id")
   avatar        String
   committed     Boolean?
