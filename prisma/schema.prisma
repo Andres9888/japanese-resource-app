@@ -37,4 +37,6 @@ model User {
   stripeId      String?
   timezone      String?
   token         String
+
+  @@map("users")
 }
