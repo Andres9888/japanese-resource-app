@@ -6,34 +6,43 @@ import { DateTime } from 'luxon';
 const prisma = new PrismaClient();
 export default async (req, res) => {
   try {
-    const getYesterdayStart = () => {
+    const gettwoYesterdayStart = () => {
       return DateTime.now()
         .setZone('utc')
         .minus({ days: 2 })
         .startOf('day')
         .toJSDate();
     };
-    // const getYesterdayStart = timezone => {
-    //   return DateTime.now()
-    //     .setZone(timezone)
-    //     .minus({ days: 5 })
-    //     .startOf('day')
-    //     .toJSDate();
-    // };
-    // const getYesterdayEnd = timezone => {
-    //   return DateTime.now()
-    //     .setZone(timezone)
-    //     .minus({ days: 5 })
-    //     .endOf('day')
-    //     .toJSDate();
-    // };
+    const getYesterdayStart = timezone => {
+      return DateTime.now()
+        .setZone(timezone)
+        .minus({ days: 5 })
+        .startOf('day')
+        .toJSDate();
+    };
+    const getYesterdayEnd = timezone => {
+      return DateTime.now()
+        .setZone(timezone)
+        .minus({ days: 5 })
+        .endOf('day')
+        .toJSDate();
+    };
     const commits = await prisma.user.findMany({
       where: {
         committed: true,
         dateCommitted: {
-          gte: getYesterdayStart(),
+          gte: gettwoYesterdayStart(),
         },
       },
+    });
+
+    const userId = commits.map(user => {
+      return user.committedLog.filter(log => {
+        if (log.dateCommitted >= getYesterdayStart(user.timezone) && log.dateCommitted <= getYesterdayEnd(user.timezone)) {
+          return log;
+        }
+        return false;
+      });
     });
 
     // Search for documents in the current collection.
@@ -73,7 +82,7 @@ export default async (req, res) => {
 
     // const commits = await database.users.aggregate(agg).toArray();
 
-    res.status(200).json({ commits });
+    res.status(200).json({ userId });
   } catch (error) {
     throw new Error(`Failed to query listings: ${error}`);
   }
