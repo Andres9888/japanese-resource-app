@@ -16,35 +16,48 @@ export default async (req, res) => {
     const getYesterdayStart = timezone => {
       return DateTime.now()
         .setZone(timezone)
-        .minus({ days: 5 })
+        .minus({ days: 6 })
         .startOf('day')
-        .toJSDate();
+        .toMillis();
     };
     const getYesterdayEnd = timezone => {
       return DateTime.now()
         .setZone(timezone)
-        .minus({ days: 5 })
+        .minus({ days: 6 })
         .endOf('day')
-        .toJSDate();
+        .toMillis();
+    };
+    const getSeconds = isoTime => {
+      return DateTime.fromJSDate(isoTime).toMillis();
     };
     const commits = await prisma.user.findMany({
       where: {
         committed: true,
-        dateCommitted: {
-          gte: gettwoYesterdayStart(),
-        },
+        //dateCommitted: {
+        // gte: gettwoYesterdayStart(),
+        //},
       },
     });
 
-    const userId = commits.map(user => {
-      return user.committedLog.filter(log => {
-        if (log.dateCommitted >= getYesterdayStart(user.timezone) && log.dateCommitted <= getYesterdayEnd(user.timezone)) {
-          return log;
-        }
-        return false;
-      });
-    });
+    const userId = () => {
+      let stripeId = [];
+      for (const user of commits) {
+        const filteredCommits = user.committedLog.filter(log => {
+          if (getSeconds(log.dateCommitted) >= getYesterdayStart(user.timezone) && getSeconds(log.dateCommitted) <= getYesterdayEnd(user.timezone)) {
+            return true;
+          }
+          return false;
+        });
 
+        if (filteredCommits.length === 0) {
+          stripeId.push({ userId: user.id, commits: filteredCommits.length, stripeId: user.stripeId });
+        }
+      }
+      return stripeId;
+    };
+
+    const userIds = userId();
+    console.log(userId());
     // Search for documents in the current collection.
 
     // const agg = [
@@ -82,7 +95,7 @@ export default async (req, res) => {
 
     // const commits = await database.users.aggregate(agg).toArray();
 
-    res.status(200).json({ userId });
+    res.status(200).json({ userIds });
   } catch (error) {
     throw new Error(`Failed to query listings: ${error}`);
   }
