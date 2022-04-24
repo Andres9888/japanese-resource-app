@@ -15,14 +15,14 @@ export default async (_req, res) => {
     const getYesterdayStart = timezone => {
       return DateTime.now()
         .setZone(timezone)
-        .minus({ days: 6 })
+        .minus({ days: 1 })
         .startOf('day')
         .toMillis();
     };
     const getYesterdayEnd = timezone => {
       return DateTime.now()
         .setZone(timezone)
-        .minus({ days: 6 })
+        .minus({ days: 1 })
         .endOf('day')
         .toMillis();
     };
@@ -43,26 +43,24 @@ export default async (_req, res) => {
     const commits = await prisma.user.findMany({
       where: {
         committed: true,
-        dateCommitted: {
-          gte: getTwoDaysAgo(),
-        },
+        //   dateCommitted: {
+        //     lte: getTwoDaysAgo(),
+        //   },
+        // },
       },
     });
 
-    const userId = () => {
+    const getIdsToCharge = () => {
       return commits.filter(user => {
-        const filteredCommits = user.committedLog.filter(log => didlogYesterday(log, user));
+        const yesterdaysLogs = user.committedLog.filter(log => didlogYesterday(log, user));
 
-        if (filteredCommits.length === 0) {
-          return { userId: user.id, commits: filteredCommits.length, stripeId: user.stripeId };
-        }
-        return false;
+        return yesterdaysLogs.length === 0;
       });
     };
 
-    const userIds = userId();
+    const idsToCharge = getIdsToCharge();
 
-    res.status(200).json({ userIds });
+    res.status(200).json({ idsToCharge });
   } catch (error) {
     throw new Error(`Failed to query listings: ${error}`);
   }
