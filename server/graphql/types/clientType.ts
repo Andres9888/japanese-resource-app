@@ -63,7 +63,5 @@ export const typeDefs = gql`
     setCommitmentLog(viewerId: ID!, timeZone: String!): LogConfirm!
     logIn(input: LogInInput): Viewer!
     logOut: Viewer!
-    # connectStripe(input: ConnectStripeInput!): Viewer!
-    # disconnectStripe: Viewer!
   }
 `;

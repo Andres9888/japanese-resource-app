@@ -2,6 +2,7 @@ import { useMutation } from '@apollo/react-hooks';
 import Link from 'next/link';
 import styled from 'styled-components';
 
+import { setCommitmentLog as setCommitmentLogInData, setCommitmentLogVariables } from '~graphql/mutations/__generated__/setCommitmentLog';
 import { SET_COMMITMENT_LOG } from '~graphql/mutations/mutations';
 import { displaySuccessNotification, displayErrorMessage } from '~lib/utils';
 import { Viewer } from '~types/globalTypes';
@@ -11,7 +12,7 @@ interface Props {
 }
 
 const Log = ({ viewer }: Props) => {
-  const [setCommitmentLog] = useMutation(SET_COMMITMENT_LOG, {
+  const [setCommitmentLog] = useMutation<setCommitmentLogInData, setCommitmentLogVariables>(SET_COMMITMENT_LOG, {
     onCompleted: data => {
       if (data && data.setCommitmentLog.status) {
         displaySuccessNotification("You've successfully logged your commitment for today");
