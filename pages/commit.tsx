@@ -102,7 +102,7 @@ const Commit = ({ viewer, setViewer }: Props) => {
       <Container showStripe={showStripe}>
         <Title>Do you want to commit to study Japanese everyday?</Title>
         <StyledButton onClick={handleClick}>⚡Yes</StyledButton>
-        <Link href="commit-info">
+        <Link href="/goals">
           <Content>
             <a>What does this do?</a>
           </Content>

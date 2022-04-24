@@ -1,3 +1,5 @@
+// @ts-nocheck
+/* eslint-disable */
 // Instantiate a new client (server side)
 
 const stream = require('getstream');

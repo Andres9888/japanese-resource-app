@@ -1,8 +1,12 @@
-// @ts-nocheck
 import ReactPlayer from 'react-player';
 import styled from 'styled-components';
 
-const DidIStudyJapanesePage = ({ viewer }) => {
+import { Viewer } from '~types/globalTypes';
+
+interface Props {
+  viewer: Viewer;
+}
+const Goals = ({ viewer }: Props) => {
   if (!viewer) {
     <Background>
       <Container>
@@ -103,4 +107,4 @@ const Content = styled.p`
   margin-bottom: 27px;
   text-align: left;
 `;
-export default DidIStudyJapanesePage;
+export default Goals;

@@ -1,6 +1,4 @@
-// @ts-nocheck
-
-import { message, notification } from 'antd';
+import { message as antdMessage, notification } from 'antd';
 
 export const iconColor = '#1890ff';
 
@@ -22,7 +20,7 @@ export const displaySuccessNotification = (message: string, description?: string
 };
 
 export const displayErrorMessage = (error: string) => {
-  return message.error(error);
+  return antdMessage.error(error);
 };
 export const openNotification = (message: string, description?: string) => {
   const arguments_ = {

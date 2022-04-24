@@ -1,3 +1,5 @@
+// @ts-nocheck
+/* eslint-disable */
 import { connectDatabase } from '~server/database';
 import { assert, string } from 'superstruct';
 

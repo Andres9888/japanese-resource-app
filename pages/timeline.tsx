@@ -1,4 +1,5 @@
 // @ts-nocheck
+/* eslint-disable */
 import { useState } from 'react';
 
 import { Form, Input, Button, Comment, Avatar, List } from 'antd';
