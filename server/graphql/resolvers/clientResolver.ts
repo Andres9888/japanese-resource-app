@@ -7,7 +7,8 @@ import { serialize } from 'cookie';
 import { ObjectId } from 'mongodb';
 
 import { incrementCountVariables } from '~graphql/mutations/__generated__/incrementCount';
-import { setCommitmentVariables, setCommitmentVariables } from '~graphql/mutations/__generated__/setCommitment';
+import { setCommitmentVariables } from '~graphql/mutations/__generated__/setCommitment';
+import { setCommitmentLogVariables } from '~graphql/mutations/__generated__/setCommitmentLog';
 import { Google } from '~lib/api';
 import { connectDatabase } from '~server/database';
 import { Viewer } from '~types/globalTypes';
@@ -186,7 +187,7 @@ export const resolvers = {
         throw new Error(`Failed to setCommitment : ${error}`);
       }
     },
-    setCommitmentLog: async (_root: undefined, { viewerId, timeZone }: setCommitmentVariables) => {
+    setCommitmentLog: async (_root: undefined, { viewerId, timeZone }: setCommitmentLogVariables) => {
       try {
         const updateResponse = await prisma.user.update({
           where: {
