@@ -8,8 +8,8 @@ datasource db {
 }
 
 type UsersCommittedLog {
-  dateCommitted DateTime @db.Date
-  timezone      String?
+  dateLogged DateTime @db.Date
+  timezone   String?
 }
 
 model Resource {

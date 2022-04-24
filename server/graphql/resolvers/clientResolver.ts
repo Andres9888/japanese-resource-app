@@ -192,7 +192,7 @@ export const resolvers = {
 
         return database.users.updateOne(
           { _id: viewerId },
-          { $push: { committedLog: { timezone: timeZone, dateCommitted: new Date() } } },
+          { $push: { committedLog: { timezone: timeZone, dateLogged: new Date() } } },
           { upsert: true }
         );
       } catch (error) {

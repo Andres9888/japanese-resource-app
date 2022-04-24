@@ -5,38 +5,12 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 export default async function handler(request, response) {
   if (request.method === 'POST') {
     try {
-      const users = [
-        {
-          _id: '112016378414675480907',
-          stripeId: 'cus_LU66abTLRFOPLM',
-          committedLog: [
-            // {
-            //   "timezone": "America/New_York",
-            //   "dateCommitted": {
-            //     "$date": "2022-04-17T18:18:33.374Z"
-            //   }
-            // },
-            // {
-            //   "timezone": "America/New_York",
-            //   "dateCommitted": {
-            //     "$date": "2022-04-17T12:00:00Z"
-            //   }
-            // }
-          ],
-        },
-        {
-          _id: '101519960088728259910',
-          stripeId: 'cus_LVArTNmmAUkW10',
-          committedLog: null,
-        },
-      ];
-
-      const userToCharge = users.reduce((accumulator, current) => {
-        if (current.committedLog === null || current.committedLog.length === 0) {
-          accumulator.push(current.stripeId);
-        }
-        return accumulator;
-      }, []);
+      // const userToCharge = users.reduce((accumulator, current) => {
+      //   if (current.committedLog === null || current.committedLog.length === 0) {
+      //     accumulator.push(current.stripeId);
+      //   }
+      //   return accumulator;
+      // }, []);
 
       const testChargeArray = ['cus_LU66abTLRFOPLM'];
 
