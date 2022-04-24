@@ -2,12 +2,12 @@
 // @ts-nocheck
 import crypto from 'crypto';
 
-import { PrismaClient, Resource } from '@prisma/client';
+import { PrismaClient, Resource, User } from '@prisma/client';
 import { serialize } from 'cookie';
 import { ObjectId } from 'mongodb';
 
 import { incrementCountVariables } from '~graphql/mutations/__generated__/incrementCount';
-import { Google, Stripe } from '~lib/api';
+import { Google } from '~lib/api';
 import { connectDatabase } from '~server/database';
 import { Viewer } from '~types/globalTypes';
 
@@ -158,22 +158,21 @@ export const resolvers = {
     },
     setCommitment: async (_root: undefined, { viewerId, isCommited, timeZone }) => {
       try {
-        const database = await getDatabase();
+        const updateResponse: User = await prisma.user.update({
+          where: {
+            id: viewerId,
+          },
+          data: { committed: isCommited, timezone: timeZone, dateCommitted: isCommited ? new Date() : null },
+        });
 
-        const updateRes = await database.users.findOneAndUpdate(
-          { _id: viewerId },
-          { $set: { committed: isCommited, timezone: timeZone, dateCommitted: isCommited ? new Date() : null } },
-          { upsert: true, returnDocument: 'after' }
-        );
-
-        if (!updateRes.value) {
-          throw new Error('viewer could not be updated');
+        if (!updateResponse) {
+          throw new Error('Viewer could not be updated');
         }
 
-        const viewer = updateRes.value;
+        const viewer = updateResponse;
 
         return {
-          _id: viewer._id,
+          _id: viewer.id,
           token: viewer.token,
           avatar: viewer.avatar,
           name: viewer.name,
@@ -188,13 +187,21 @@ export const resolvers = {
     },
     setCommitmentLog: async (_root: undefined, { viewerId, timeZone }) => {
       try {
-        const database = await getDatabase();
+        const updateResponse = await prisma.user.update({
+          where: {
+            id: viewerId,
+          },
+          data: {
+            committedLog: {
+              push: { timezone: timeZone, dateLogged: new Date() },
+            },
+          },
+        });
+        if (!updateResponse) {
+          throw new Error('Viewer could not be updated');
+        }
 
-        return database.users.updateOne(
-          { _id: viewerId },
-          { $push: { committedLog: { timezone: timeZone, dateLogged: new Date() } } },
-          { upsert: true }
-        );
+        return { status: true };
       } catch (error) {
         throw new Error(`Failed to setCommitment : ${error}`);
       }

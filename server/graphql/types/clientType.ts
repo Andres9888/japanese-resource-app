@@ -30,8 +30,7 @@ export const typeDefs = gql`
   }
 
   type LogConfirm {
-    matchedCount: Int!
-    modifiedCount: Int!
+    status: Boolean!
   }
 
   input LogInInput {
