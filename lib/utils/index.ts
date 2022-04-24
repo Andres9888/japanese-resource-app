@@ -1,3 +1,5 @@
+// @ts-nocheck
+/* eslint-disable */
 import { message as antdMessage, notification } from 'antd';
 
 export const iconColor = '#1890ff';
@@ -27,7 +29,6 @@ export const openNotification = (message: string, description?: string) => {
     message,
     description,
     placement: 'topLeft',
-
     duration: 0,
   };
   notification.info(arguments_);

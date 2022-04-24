@@ -48,7 +48,6 @@ export const typeDefs = gql`
   type Query {
     listings: [Listing!]!
     authUrl: String!
-    checkUserVote(id: ID!, resource: String!): [User!]!
     getUserResourceIds(id: ID!): [User!]!
   }
 

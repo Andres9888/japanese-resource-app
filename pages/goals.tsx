@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import ReactPlayer from 'react-player';
 import styled from 'styled-components';
 

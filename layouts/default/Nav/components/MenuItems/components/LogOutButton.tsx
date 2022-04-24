@@ -1,4 +1,5 @@
 // @ts-nocheck
+/* eslint-disable */
 
 import { useMutation } from '@apollo/react-hooks';
 
@@ -9,6 +10,7 @@ import { Viewer } from '~types/globalTypes';
 
 interface Props {
   setViewer: (viewer: Viewer) => void;
+  children: string;
 }
 
 export const LogOutButton = ({ setViewer, children }: Props) => {
