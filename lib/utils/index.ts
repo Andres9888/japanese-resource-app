@@ -17,6 +17,7 @@ export const displaySuccessNotification = (message: string, description?: string
     style: {
       marginTop: 50,
     },
+    duration: 0,
   });
 };
 
@@ -28,9 +29,6 @@ export const openNotification = (message: string, description?: string) => {
     message,
     description,
     placement: 'topLeft',
-    style: {
-      marginTop: 600,
-    },
 
     duration: 0,
   };

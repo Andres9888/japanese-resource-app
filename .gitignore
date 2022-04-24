@@ -34,3 +34,5 @@ lib/api/hidden.ts
 public/static/images/flat_750x_075_f-pad_750x1000_f8f8f8_sh4wbg.jpgZone.Identifier
 public/static/fonts/OpenDyslexic-Bold.otfZone.Identifier
 public/static/fonts/OpenDyslexic-Regular.otfZone.Identifier
+public/static/fonts/OpenDyslexic-Bold.otf:Zone.Identifier
+public/static/fonts/OpenDyslexic-Regular.otf:Zone.Identifier

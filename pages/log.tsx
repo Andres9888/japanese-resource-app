@@ -1,19 +1,29 @@
 import { useMutation } from '@apollo/react-hooks';
-import { Button } from 'antd';
-import gql from 'graphql-tag';
 import Link from 'next/link';
 import styled from 'styled-components';
 
-const SET_COMMITMENT_LOG = gql`
-  mutation setCommitmentLog($viewerId: ID!, $timeZone: String!) {
-    setCommitmentLog(viewerId: $viewerId, timeZone: $timeZone) {
-      acknowledged
-    }
-  }
-`;
+import { setCommitmentLog as setCommitmentLogInData, setCommitmentLogVariables } from '~graphql/mutations/__generated__/setCommitmentLog';
+import { SET_COMMITMENT_LOG } from '~graphql/mutations/mutations';
+import { displaySuccessNotification, displayErrorMessage } from '~lib/utils';
+import { Viewer } from '~types/globalTypes';
 
-const DidIStudyJapanesePage = ({ viewer }) => {
-  const [setCommitmentLog] = useMutation(SET_COMMITMENT_LOG);
+interface Props {
+  viewer: Viewer;
+}
+
+const Log = ({ viewer }: Props) => {
+  const [setCommitmentLog] = useMutation<setCommitmentLogInData, setCommitmentLogVariables>(SET_COMMITMENT_LOG, {
+    onCompleted: data => {
+      if (data && data.setCommitmentLog.status) {
+        displaySuccessNotification("You've successfully logged your commitment for today");
+      }
+    },
+    onError: () => {
+      displayErrorMessage(
+        "Sorry! We weren't able to Commit. Please try again later! If it still doesn't work, just message me and sorry about that."
+      );
+    },
+  });
 
   if (!viewer.id) {
     return (
@@ -53,17 +63,17 @@ const DidIStudyJapanesePage = ({ viewer }) => {
       <Container>
         <Title>Did you study Japanese Today?</Title>
 
-        <Button onClick={handleClick}>Yes</Button>
+        <StyledButton onClick={handleClick}>Yes</StyledButton>
       </Container>
     </Background>
   );
 };
 
-const img =
+const imgURL =
   'https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F28%2F2018%2F03%2Fblossoms-JCBUPDATE0318.jpg';
 
 const Background = styled.div`
-  background-image: url(${img});
+  background-image: url(${imgURL});
 
   background-repeat: no-repeat;
   border: 1px solid #000;
@@ -80,13 +90,37 @@ const Container = styled.div`
 `;
 
 const Title = styled.h1`
-  -webkit-box-decoration-break: clone;
   align-self: center;
-  background: linear-gradient(rgba(0, 0, 0, 0.2));
-  box-decoration-break: clone;
+
   color: #fff;
+  font-family: 'OpenDyslexic';
   font-size: 34px;
-  text-shadow: 0 2px 3px rgba(0, 0, 0, 1);
+
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: -0.512px;
+  line-height: 1.2;
+  margin-bottom: 27px;
+  margin-top: 27px;
+  text-align: center;
 `;
 
-export default DidIStudyJapanesePage;
+const StyledButton = styled.button`
+  background-color: #fff;
+  border: 1px solid #fff;
+
+  border-radius: 4px;
+  font-family: 'OpenDyslexic';
+  font-size: 34px;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: -0.512px;
+  line-height: 1.2;
+  margin-bottom: 27px;
+  margin-top: 27px;
+  padding: 1.5rem;
+  text-align: center;
+  width: 100%;
+`;
+
+export default Log;

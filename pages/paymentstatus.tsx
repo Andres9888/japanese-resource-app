@@ -2,24 +2,66 @@
 
 import React, { useState, useEffect } from 'react';
 
+import { useMutation } from '@apollo/react-hooks';
 import { Elements, useStripe } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import gql from 'graphql-tag';
+import { useRouter } from 'next/router';
+
+import { displaySuccessNotification, displayErrorMessage, openNotification } from '~lib/utils';
 
 const stripePromise = loadStripe('pk_test_51KhIeyBb7SW2HKTCYBSUyXDid0B9Wf9j6p6BZLzFDGR4F040zXV1ikmb7qEZ2R57Xi5MWj1juiM8psrpcexMN5VQ00STrPccDE');
 
-const PaymentStatus = () => {
+const SET_STRIPE_CARD_STATUS = gql`
+  mutation setStripeCardStatus($viewerId: ID!) {
+    setStripeCardStatus(viewerId: $viewerId) {
+      id
+      token
+      avatar
+      hasWallet
+      didRequest
+      name
+      isCommited
+    }
+  }
+`;
+const PaymentStatus = ({ viewer, setViewer }) => {
+  const router = useRouter();
+
+  const [setStripeCardStatus] = useMutation(SET_STRIPE_CARD_STATUS, {
+    onCompleted: data => {
+      if (data && data.setStripeCardStatus.hasWallet !== undefined) {
+        setViewer({ ...viewer, hasWallet: data.setStripeCardStatus.hasWallet });
+        displaySuccessNotification('Success! Your payment method has been saved.');
+        const wantsToCommit = new URL(window.location.href).searchParams.get('wantsToCommit');
+        router.push(`/commit${wantsToCommit ? '?wantsToCommit=true' : ''}`);
+      }
+    },
+    onError: () => {
+      displayErrorMessage(
+        "Sorry! We weren't able to Commit. Please try again later! If it still doesn't work, just message me and sorry about that."
+      );
+    },
+  });
+
   const stripe = useStripe();
-  const [message, setMessage] = useState(null);
+  const [message] = useState(null);
 
   useEffect(() => {
     if (!stripe) {
       return;
     }
 
+    const handleSuccess = async () => {
+      await setStripeCardStatus({
+        variables: {
+          viewerId: viewer.id,
+        },
+      });
+    };
     // Retrieve the "setup_intent_client_secret" query parameter appended to
     // your return_url by Stripe.js
     const clientSecret = new URLSearchParams(window.location.search).get('setup_intent_client_secret');
-
     // Retrieve the SetupIntent
     stripe.retrieveSetupIntent(clientSecret).then(({ setupIntent }) => {
       // Inspect the SetupIntent `status` to indicate the status of the payment
@@ -31,17 +73,19 @@ const PaymentStatus = () => {
       // [0]: https://stripe.com/docs/payments/payment-methods#payment-notification
       switch (setupIntent.status) {
         case 'succeeded':
-          setMessage('Success! Your payment method has been saved.');
+          handleSuccess();
           break;
 
         case 'processing':
-          setMessage("Processing payment details. We'll update you when processing is complete.");
+          openNotification("Processing payment details. We'll update you when processing is complete.");
+          router.push('/commit');
           break;
 
         case 'requires_payment_method':
           // Redirect your user back to your payment page to attempt collecting
           // payment again
-          setMessage('Failed to process payment details. Please try another payment method.');
+          displayErrorMessage('Failed to process payment details. Please try another payment method.');
+          router.push('/commit');
           break;
       }
     });
@@ -53,10 +97,10 @@ const PaymentStatus = () => {
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
 
-function App() {
+function App({ viewer, setViewer }) {
   return (
     <Elements stripe={stripePromise}>
-      <PaymentStatus />
+      <PaymentStatus setViewer={setViewer} viewer={viewer} />
     </Elements>
   );
 }

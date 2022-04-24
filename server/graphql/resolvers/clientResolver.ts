@@ -2,14 +2,18 @@
 // @ts-nocheck
 import crypto from 'crypto';
 
+import { PrismaClient, Resource, User } from '@prisma/client';
 import { serialize } from 'cookie';
 import { ObjectId } from 'mongodb';
 
 import { incrementCountVariables } from '~graphql/mutations/__generated__/incrementCount';
-import { Google, Stripe } from '~lib/api';
+import { setCommitmentVariables } from '~graphql/mutations/__generated__/setCommitment';
+import { setCommitmentLogVariables } from '~graphql/mutations/__generated__/setCommitmentLog';
+import { Google } from '~lib/api';
 import { connectDatabase } from '~server/database';
 import { Viewer } from '~types/globalTypes';
 
+const prisma = new PrismaClient();
 const getDatabase = async () => {
   return connectDatabase();
 };
@@ -112,15 +116,17 @@ const logInViaCookie = async (token: string, req: Request, res: Response): Promi
 };
 export const resolvers = {
   Query: {
-    listings: async (_root: undefined) => {
+    listings: async (): Promise<Resource[]> => {
       try {
-        const database = await getDatabase();
-        return database.listings
-          .find({})
-          .sort({ count: -1 })
-          .toArray();
+        return await prisma.resource.findMany({
+          orderBy: [
+            {
+              count: 'desc',
+            },
+          ],
+        });
       } catch (error) {
-        throw new Error(`Failed to query listings: ${error}`);
+        throw new Error(`Failed to query resources: ${error}`);
       }
     },
     getUserResourceIds: async (_root: undefined, { id }) => {
@@ -152,13 +158,63 @@ export const resolvers = {
         throw new Error(`Failed to Vote : ${error}`);
       }
     },
-    setCommitment: async (_root: undefined, { viewerId, isCommited, timeZone }) => {
+    setCommitment: async (_root: undefined, { viewerId, isCommited, timeZone }: setCommitmentVariables) => {
+      try {
+        const updateResponse: User = await prisma.user.update({
+          where: {
+            id: viewerId,
+          },
+          data: { committed: isCommited, timezone: timeZone, dateCommitted: isCommited ? new Date() : null },
+        });
+
+        if (!updateResponse) {
+          throw new Error('Viewer could not be updated');
+        }
+
+        const viewer = updateResponse;
+
+        return {
+          _id: viewer.id,
+          token: viewer.token,
+          avatar: viewer.avatar,
+          name: viewer.name,
+          walletId: viewer.stripeId,
+          stripeHasCard: viewer.stripeHasCard,
+          isCommited: viewer.committed,
+          didRequest: true,
+        };
+      } catch (error) {
+        throw new Error(`Failed to setCommitment : ${error}`);
+      }
+    },
+    setCommitmentLog: async (_root: undefined, { viewerId, timeZone }: setCommitmentLogVariables) => {
+      try {
+        const updateResponse = await prisma.user.update({
+          where: {
+            id: viewerId,
+          },
+          data: {
+            committedLog: {
+              push: { timezone: timeZone, dateLogged: new Date() },
+            },
+          },
+        });
+        if (!updateResponse) {
+          throw new Error('Viewer could not be updated');
+        }
+
+        return { status: true };
+      } catch (error) {
+        throw new Error(`Failed to setCommitment : ${error}`);
+      }
+    },
+    setStripeCardStatus: async (_root: undefined, { viewerId }) => {
       try {
         const database = await getDatabase();
 
         const updateRes = await database.users.findOneAndUpdate(
           { _id: viewerId },
-          { $set: { committed: isCommited, timezone: timeZone, dateCommitted: isCommited ? new Date().toUTCString() : '' } },
+          { $set: { stripeHasCard: true } },
           { upsert: true, returnDocument: 'after' }
         );
 
@@ -167,31 +223,19 @@ export const resolvers = {
         }
 
         const viewer = updateRes.value;
-        console.log('viewer', viewer);
+
         return {
           _id: viewer._id,
           token: viewer.token,
           avatar: viewer.avatar,
           name: viewer.name,
           walletId: viewer.stripeId,
+          stripeHasCard: viewer.stripeHasCard,
           isCommited: viewer.committed,
           didRequest: true,
         };
       } catch (error) {
-        throw new Error(`Failed to setCommitment : ${error}`);
-      }
-    },
-    setCommitmentLog: async (_root: undefined, { viewerId, timeZone }) => {
-      try {
-        const database = await getDatabase();
-
-        database.users.updateOne(
-          { _id: viewerId },
-          { $push: { committedLog: { timezone: timeZone, dateCommitted: new Date().toUTCString() } } },
-          { upsert: true }
-        );
-      } catch (error) {
-        throw new Error(`Failed to setCommitment : ${error}`);
+        throw new Error(`Failed to setStripeCardStatus : ${error}`);
       }
     },
     logIn: async (_root: undefined, { input }, { req, res }) => {
@@ -211,6 +255,7 @@ export const resolvers = {
           avatar: viewer.avatar,
           name: viewer.name,
           walletId: viewer.stripeId,
+          stripeHasCard: viewer.stripeHasCard,
           isCommited: viewer.committed,
           didRequest: true,
         };
@@ -233,15 +278,15 @@ export const resolvers = {
       }
     },
   },
-  Listing: {
-    id: (listing): string => listing._id.toString(),
-  },
+  // Listing: {
+  //   id: (listing): string => listing._id.toString(),
+  // },
   Viewer: {
     id: (viewer: Viewer): string | undefined => {
       return viewer._id;
     },
     hasWallet: (viewer: Viewer): boolean | undefined => {
-      return viewer.walletId ? true : undefined;
+      return viewer.walletId && viewer.stripeHasCard ? true : undefined;
     },
   },
 };

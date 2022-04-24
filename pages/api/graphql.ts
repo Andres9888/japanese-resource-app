@@ -1,3 +1,4 @@
+import { PrismaClient } from '@prisma/client';
 import { ApolloServer } from 'apollo-server-micro';
 
 import { schema } from '~lib/schema';
@@ -13,7 +14,7 @@ const apolloServerMicro = new ApolloServer({
   resolvers,
   schema,
   playground,
-  context: ({ req, res }) => ({ req, res }),
+  context: async ({ req, res }) => ({ req, res }),
 });
 
 export const config = {

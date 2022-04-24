@@ -29,6 +29,9 @@ const MenuItems = ({ viewer, setViewer }: Props) => {
           <Link href="/commit/">Commit</Link>
         </Item>
         <Item key="/user">
+          <Link href="/commit-info/">Goal Setting</Link>
+        </Item>
+        <Item key="/user">
           <Link href="/log">Log</Link>
         </Item>
         <Item key="/logout">
