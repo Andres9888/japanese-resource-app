@@ -1,3 +1,5 @@
+// @ts-nocheck
+/* eslint-disable */
 import { useState, useEffect } from 'react';
 
 import { useMutation } from '@apollo/react-hooks';

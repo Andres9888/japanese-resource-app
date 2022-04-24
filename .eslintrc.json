@@ -36,7 +36,7 @@
   "rules": {
     "unicorn/prefer-node-protocol": "off",
     "unicorn/filename-case": [
-      "error",
+      "warn",
       {
         "cases": {
           "camelCase": true,

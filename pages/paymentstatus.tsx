@@ -1,5 +1,5 @@
-// PaymentStatus.jsx
-
+// @ts-nocheck
+/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 
 import { useMutation } from '@apollo/react-hooks';
