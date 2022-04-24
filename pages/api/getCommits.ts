@@ -33,15 +33,14 @@ export default async (req, res) => {
     const commits = await prisma.user.findMany({
       where: {
         committed: true,
-        //dateCommitted: {
+        // dateCommitted: {
         // gte: gettwoYesterdayStart(),
-        //},
+        // },
       },
     });
 
     const userId = () => {
-      let stripeId = [];
-      for (const user of commits) {
+      return commits.filter(user => {
         const filteredCommits = user.committedLog.filter(log => {
           if (getSeconds(log.dateCommitted) >= getYesterdayStart(user.timezone) && getSeconds(log.dateCommitted) <= getYesterdayEnd(user.timezone)) {
             return true;
@@ -50,10 +49,10 @@ export default async (req, res) => {
         });
 
         if (filteredCommits.length === 0) {
-          stripeId.push({ userId: user.id, commits: filteredCommits.length, stripeId: user.stripeId });
+          return { userId: user.id, commits: filteredCommits.length, stripeId: user.stripeId };
         }
-      }
-      return stripeId;
+        return false;
+      });
     };
 
     const userIds = userId();
