@@ -19,14 +19,17 @@
 - React.js
 - Next.js
 - Typescript
-- SCSS
 - Apollo
 - GraphQl
+- Prisma
+- SCSS
+- Styled Components
+
 - EsLint
 - Prettier
 - Jest tests
 - Nodemon
-- Styled Components
+
 
 ## How to use
 
