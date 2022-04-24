@@ -1,8 +1,8 @@
 import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 import Link from 'next/link';
 import styled from 'styled-components';
 
+import { SET_COMMITMENT_LOG } from '~graphql/mutations/mutations';
 import { displaySuccessNotification, displayErrorMessage } from '~lib/utils';
 import { Viewer } from '~types/globalTypes';
 
@@ -10,15 +10,7 @@ interface Props {
   viewer: Viewer;
 }
 
-const SET_COMMITMENT_LOG = gql`
-  mutation setCommitmentLog($viewerId: ID!, $timeZone: String!) {
-    setCommitmentLog(viewerId: $viewerId, timeZone: $timeZone) {
-      status
-    }
-  }
-`;
-
-const DidIStudyJapanesePage = ({ viewer }: Props) => {
+const Log = ({ viewer }: Props) => {
   const [setCommitmentLog] = useMutation(SET_COMMITMENT_LOG, {
     onCompleted: data => {
       if (data && data.setCommitmentLog.status) {
@@ -130,4 +122,4 @@ const StyledButton = styled.button`
   width: 100%;
 `;
 
-export default DidIStudyJapanesePage;
+export default Log;

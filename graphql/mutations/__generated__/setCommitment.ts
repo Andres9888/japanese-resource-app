@@ -3,13 +3,11 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { LogInInput } from "./../../../__generated__/globalTypes";
-
 // ====================================================
-// GraphQL mutation operation: LogIn
+// GraphQL mutation operation: setCommitment
 // ====================================================
 
-export interface LogIn_logIn {
+export interface setCommitment_setCommitment {
   __typename: "Viewer";
   id: string | null;
   token: string | null;
@@ -20,10 +18,12 @@ export interface LogIn_logIn {
   isCommited: boolean | null;
 }
 
-export interface LogIn {
-  logIn: LogIn_logIn;
+export interface setCommitment {
+  setCommitment: setCommitment_setCommitment;
 }
 
-export interface LogInVariables {
-  input?: LogInInput | null;
+export interface setCommitmentVariables {
+  viewerId: string;
+  isCommited: boolean;
+  timeZone: string;
 }

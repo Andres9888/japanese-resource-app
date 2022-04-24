@@ -5,13 +5,19 @@ import Link from 'next/link';
 import styled from 'styled-components';
 
 import StripeInput from '~common/components/stripe';
+import { setCommitment as setCommitmentData, setCommitmentVariables } from '~graphql/mutations/__generated__/setCommitment';
 import { SET_COMMITMENT } from '~graphql/mutations/mutations';
 import { openNotification, displaySuccessNotification, displayErrorMessage } from '~lib/utils';
+import { Viewer } from '~types/globalTypes';
 
-const DidIStudyJapanesePage = ({ viewer, setViewer }) => {
+interface Props {
+  viewer: Viewer;
+  setViewer: (viewer: Viewer) => void;
+}
+const Commit = ({ viewer, setViewer }: Props) => {
   const [showStripe, setShowStripe] = useState(false);
   const [wantsToCommit, setWantsToCommit] = useState(false);
-  const [setCommitment] = useMutation(SET_COMMITMENT, {
+  const [setCommitment] = useMutation<setCommitmentData, setCommitmentVariables>(SET_COMMITMENT, {
     onCompleted: data => {
       if (data && data.setCommitment.isCommited !== undefined) {
         setViewer({ ...viewer, isCommited: data.setCommitment.isCommited });
@@ -192,4 +198,4 @@ const Content = styled.p`
   text-align: left;
 `;
 
-export default DidIStudyJapanesePage;
+export default Commit;
