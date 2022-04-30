@@ -15,8 +15,11 @@ type UserStripeDetails = {
   name: string;
   stripeId: string | null;
 };
-
-const handler = async (request:NextApiRequest, response:NextApiResponse) => {
+type ResponseData = {
+  client_secret?: string;
+  success?: boolean;
+}
+const handler = async (request:NextApiRequest, response:NextApiResponse<ResponseData>) => {
   if (request.method === 'POST') {
     try {
       const { viewerId } = request.body;
@@ -50,19 +53,19 @@ const handler = async (request:NextApiRequest, response:NextApiResponse) => {
           },
         });
       }
-      const clientSecret = await stripe.setupIntents.create({
+      const stripeSetupIntentResponse = await stripe.setupIntents.create({
         customer: userStripeId,
         payment_method_types: ['card'],
       });
 
-     return response.status(200).send(clientSecret);
+     return response.status(200).json({client_secret:stripeSetupIntentResponse.client_secret});
     } catch (error) {
       // Error code will be authentication_required if authentication is needed
       console.log('Error code is:', error);
       Sentry.captureException(error);
       return response
       .status(500)
-      .send({ success: false });
+      .json({ success: false });
 
       // const paymentIntentRetrieved = await stripe.paymentIntents.retrieve(error.raw.payment_intent.id);
       // console.log('PI retrieved:', paymentIntentRetrieved.id);
