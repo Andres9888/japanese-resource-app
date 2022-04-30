@@ -76,7 +76,6 @@ const imgURL =
 
 const Background = styled.div`
   background-image: url(${imgURL});
-
   background-repeat: no-repeat;
   border: 1px solid #000;
   height: 100vh;
@@ -93,11 +92,9 @@ const Container = styled.div`
 
 const Title = styled.h1`
   align-self: center;
-
   color: #fff;
   font-family: 'OpenDyslexic';
   font-size: 34px;
-
   font-style: normal;
   font-weight: 500;
   letter-spacing: -0.512px;
@@ -110,7 +107,6 @@ const Title = styled.h1`
 const StyledButton = styled.button`
   background-color: #fff;
   border: 1px solid #fff;
-
   border-radius: 4px;
   font-family: 'OpenDyslexic';
   font-size: 34px;

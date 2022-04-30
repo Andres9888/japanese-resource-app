@@ -1,54 +1,23 @@
-// @ts-nocheck
-/* eslint-disable */
 import { PrismaClient } from '@prisma/client';
-import { DateTime } from 'luxon';
+
+import { getTwoDaysAgo, didlogYesterday } from '~lib/utils/timeFunctions';
 
 const prisma = new PrismaClient();
 
-export default async (_req, res) => {
+export default async (request, response) => {
+  if (request.query.COMMIT_ROUTE_SECRET !== process.env.COMMIT_ROUTE_SECRET) {
+    return response.status(401).json({
+      error: 'Invalid secret',
+    });
+  }
+
   try {
-    const getTwoDaysAgo = () => {
-      return DateTime.now()
-        .setZone('utc')
-        .minus({ days: 2 })
-        .startOf('day')
-        .toJSDate();
-    };
-    const getYesterdayStart = timezone => {
-      return DateTime.now()
-        .setZone(timezone)
-        .minus({ days: 1 })
-        .startOf('day')
-        .toMillis();
-    };
-    const getYesterdayEnd = timezone => {
-      return DateTime.now()
-        .setZone(timezone)
-        .minus({ days: 1 })
-        .endOf('day')
-        .toMillis();
-    };
-    const convertToMilliseconds = isoTime => {
-      return DateTime.fromJSDate(isoTime).toMillis();
-    };
-
-    const didlogYesterday = (log, user) => {
-      if (
-        convertToMilliseconds(log.dateLogged) >= getYesterdayStart(user.timezone) &&
-        convertToMilliseconds(log.dateLogged) <= getYesterdayEnd(user.timezone)
-      ) {
-        return true;
-      }
-      return false;
-    };
-
     const commits = await prisma.user.findMany({
       where: {
         committed: true,
-        //   dateCommitted: {
-        //     lte: getTwoDaysAgo(),
-        //   },
-        // },
+        dateCommitted: {
+          lte: getTwoDaysAgo(),
+        },
       },
     });
 
@@ -62,7 +31,7 @@ export default async (_req, res) => {
 
     const idsToCharge = getIdsToCharge();
 
-    res.status(200).json({ idsToCharge });
+    return response.status(200).json({ idsToCharge });
   } catch (error) {
     throw new Error(`Failed to query listings: ${error}`);
   }

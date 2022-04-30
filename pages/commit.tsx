@@ -1,16 +1,16 @@
-// @ts-nocheck
-/* eslint-disable */
 import { useState, useEffect } from 'react';
 
 import { useMutation } from '@apollo/react-hooks';
 import Link from 'next/link';
 import styled from 'styled-components';
 
-import StripeInput from '~common/components/stripe';
+import { StripeInput } from '~common/components/Stripe';
 import { setCommitment as setCommitmentData, setCommitmentVariables } from '~graphql/mutations/__generated__/setCommitment';
 import { SET_COMMITMENT } from '~graphql/mutations/mutations';
 import { openNotification, displaySuccessNotification, displayErrorMessage } from '~lib/utils';
 import { Viewer } from '~types/globalTypes';
+
+// create unit this for Commit component
 
 interface Props {
   viewer: Viewer;
@@ -104,10 +104,8 @@ const Commit = ({ viewer, setViewer }: Props) => {
       <Container showStripe={showStripe}>
         <Title>Do you want to commit to study Japanese everyday?</Title>
         <StyledButton onClick={handleClick}>⚡Yes</StyledButton>
-        <Link href="/goals">
-          <Content>
-            <a>What does this do?</a>
-          </Content>
+        <Link passHref href="/goals">
+          <Content>What does this do?</Content>
         </Link>
         <StripeCardInput viewer={viewer} wantsToCommit={wantsToCommit} />
       </Container>
@@ -115,10 +113,13 @@ const Commit = ({ viewer, setViewer }: Props) => {
   );
 };
 
+export default Commit;
 const backgroundImg =
   'https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F28%2F2018%2F03%2Fblossoms-JCBUPDATE0318.jpg';
 
-const Background = styled.div`
+const Background = styled.div.attrs({
+  className: 'log-container',
+})`
   background-image: url(${backgroundImg});
   background-repeat: no-repeat;
   border: 1px solid #000;
@@ -190,7 +191,7 @@ const UpdateCardButton = styled.button`
   width: 100%;
 `;
 
-const Content = styled.p`
+const Content = styled.a`
   font-family: 'OpenDyslexic';
   font-size: 20px;
   font-weight: 400;
@@ -199,5 +200,3 @@ const Content = styled.p`
   margin-bottom: 27px;
   text-align: left;
 `;
-
-export default Commit;

@@ -18,6 +18,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
     "paths": {
       "~layouts/*": [
@@ -59,7 +60,8 @@
       "~pages/*": [
         "./pages/*"
       ]
-    }
+    },
+    "incremental": true
   },
   "exclude": [
     "node_modules"
