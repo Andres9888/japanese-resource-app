@@ -36,3 +36,6 @@ public/static/fonts/OpenDyslexic-Bold.otfZone.Identifier
 public/static/fonts/OpenDyslexic-Regular.otfZone.Identifier
 public/static/fonts/OpenDyslexic-Bold.otf:Zone.Identifier
 public/static/fonts/OpenDyslexic-Regular.otf:Zone.Identifier
+
+# Sentry
+.sentryclirc

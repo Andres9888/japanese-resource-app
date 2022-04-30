@@ -1,5 +1,19 @@
 import gql from 'graphql-tag';
 
+export const SET_STRIPE_CARD_STATUS = gql`
+  mutation setStripeCardStatus($viewerId: ID!) {
+    setStripeCardStatus(viewerId: $viewerId) {
+      id
+      token
+      avatar
+      hasWallet
+      didRequest
+      name
+      isCommited
+    }
+  }
+`;
+
 export const SET_COMMITMENT_LOG = gql`
   mutation setCommitmentLog($viewerId: ID!, $timeZone: String!) {
     setCommitmentLog(viewerId: $viewerId, timeZone: $timeZone) {

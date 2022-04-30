@@ -1,15 +1,13 @@
-const { withSentryConfig } = require('@sentry/nextjs');
-
-const moduleExports = {
-  images: {
-    domains: ['res.cloudinary.com'],
-  },
-};
-
 // This file sets a custom webpack configuration to use your Next.js app
 // with Sentry.
 // https://nextjs.org/docs/api-reference/next.config.js/introduction
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
+
+const { withSentryConfig } = require('@sentry/nextjs');
+
+const moduleExports = {
+  // Your existing module.exports
+};
 
 const sentryWebpackPluginOptions = {
   // Additional config options for the Sentry Webpack plugin. Keep in mind that

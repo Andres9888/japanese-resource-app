@@ -1,30 +1,17 @@
 // @ts-nocheck
 /* eslint-disable */
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useMutation } from '@apollo/react-hooks';
 import { Elements, useStripe } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import gql from 'graphql-tag';
-import { useRouter } from 'next/router';
 
+import { useRouter } from 'next/router';
+import { SET_STRIPE_CARD_STATUS } from '~graphql/mutations';
 import { displaySuccessNotification, displayErrorMessage, openNotification } from '~lib/utils';
 
 const stripePromise = loadStripe('pk_test_51KhIeyBb7SW2HKTCYBSUyXDid0B9Wf9j6p6BZLzFDGR4F040zXV1ikmb7qEZ2R57Xi5MWj1juiM8psrpcexMN5VQ00STrPccDE');
 
-const SET_STRIPE_CARD_STATUS = gql`
-  mutation setStripeCardStatus($viewerId: ID!) {
-    setStripeCardStatus(viewerId: $viewerId) {
-      id
-      token
-      avatar
-      hasWallet
-      didRequest
-      name
-      isCommited
-    }
-  }
-`;
 const PaymentStatus = ({ viewer, setViewer }) => {
   const router = useRouter();
 
