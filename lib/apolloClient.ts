@@ -11,12 +11,12 @@ const { HttpLink } = require('@apollo/client/link/http');
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-const link = new HttpLink({ uri: '/api/graphql' });
+const link = new HttpLink({ uri: '/api/graphql', fetch: (...args) => fetch(...args) });
 
-const thirdPartyLink = new HttpLink({
-  uri: 'https://kitsu.io/api/graphql',
-  // other link options...
-});
+// const thirdPartyLink = new HttpLink({
+//   uri: 'https://kitsu.io/api/graphql',
+//   // other link options...
+// });
 
 const authMiddleware = new ApolloLink((operation, forward) => {
   operation.setContext({

@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import React from 'react';
 
 import { ApolloProvider } from '@apollo/react-hooks';
@@ -14,6 +17,8 @@ import { Viewer } from '~types/globalTypes';
 
 afterEach(cleanup);
 describe('Commit component', () => {
+  const apolloClient = initializeApollo();
+
   const viewer: Viewer = {
     id: '1',
     isCommited: false,
@@ -27,24 +32,11 @@ describe('Commit component', () => {
   const setViewer = jest.fn();
   it('should render without error', () => {
     const { getByText } = render(
-      <Commit
-        client={{
-          mutate: jest.fn().mockResolvedValue({
-            data: {
-              setCommitment: {
-                viewer: {
-                  ...viewer,
-                  isCommited: false,
-                },
-              },
-            },
-          }),
-        }}
-        setViewer={setViewer}
-        viewer={{ ...viewer, isCommited: true }}
-      />
+      <ApolloProvider client={apolloClient}>
+        <Commit setViewer={setViewer} viewer={viewer} />
+      </ApolloProvider>
     );
-    expect(getByText('Remove Commitment')).toBeInTheDocument();
+    expect(getByText(/Yes/i)).toBeInTheDocument();
   });
 
   // it('should render the commit button', () => {

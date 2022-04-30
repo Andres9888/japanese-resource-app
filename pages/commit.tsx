@@ -10,12 +10,11 @@ import { SET_COMMITMENT } from '~graphql/mutations/mutations';
 import { openNotification, displaySuccessNotification, displayErrorMessage } from '~lib/utils';
 import { Viewer } from '~types/globalTypes';
 
-// create unit this for Commit component
-
 interface Props {
   viewer: Viewer;
   setViewer: (viewer: Viewer) => void;
 }
+
 const Commit = ({ viewer, setViewer }: Props) => {
   const [showStripe, setShowStripe] = useState(false);
   const [wantsToCommit, setWantsToCommit] = useState(false);
