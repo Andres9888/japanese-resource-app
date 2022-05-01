@@ -26,7 +26,7 @@ export const typeDefs = gql`
     isCommited: Boolean
   }
 
-  type LogConfirm {
+  type ConfirmStatus {
     status: Boolean!
   }
 
@@ -53,10 +53,10 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    increment(id: ID!, viewer: ID!, resource: String!): CountResult
+    increment(id: ID!, viewer: ID!, resource: String!): ConfirmStatus!
     setCommitment(viewerId: ID!, isCommited: Boolean!, timeZone: String!): Viewer!
     setStripeCardStatus(viewerId: ID!): Viewer!
-    setCommitmentLog(viewerId: ID!, timeZone: String!): LogConfirm!
+    setCommitmentLog(viewerId: ID!, timeZone: String!): ConfirmStatus!
     logIn(input: LogInInput): Viewer!
     logOut: Viewer!
   }

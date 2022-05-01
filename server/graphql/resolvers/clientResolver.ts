@@ -64,25 +64,46 @@ const logInViaGoogle = async (code: string, token: string, res) => {
     throw new Error('Google login error');
   }
 
-  const database = await getDatabase();
-  const updateRes = await database.users.findOneAndUpdate(
-    { _id: userId },
-    {
-      $set: {
-        name: userName,
-        avatar: userAvatar,
-        contact: userEmail,
-        token,
-      },
-    },
-    { returnOriginal: false }
-  );
+  // const database = await getDatabase();
+  // const updateRes = await database.users.findOneAndUpdate(
+  //   { _id: userId },
+  //   {
+  //     $set: {
+  //       name: userName,
+  //       avatar: userAvatar,
+  //       contact: userEmail,
+  //       token,
+  //     },
+  //   },
+  //   { returnOriginal: false }
+  // );
 
-  let viewer = updateRes.value;
+  const updateResponse = await prisma.user.update({
+    data: {
+      name: userName,
+      avatar: userAvatar,
+      contact: userEmail,
+      token,
+    },
+    where: {
+      id: userId,
+    },
+  });
+
+  let viewer = updateResponse;
 
   if (!viewer) {
-    const insertResult = await database.users.insertOne({
-      _id: userId,
+    // const insertResult = await database.users.insertOne({
+    //   _id: userId,
+    //   token,
+    //   name: userName,
+    //   avatar: userAvatar,
+    //   contact: userEmail,
+    //   resources: [],
+    //   committed: false,
+    // });
+    const insertResult = await User.create({
+      id: userId,
       token,
       name: userName,
       avatar: userAvatar,
@@ -90,8 +111,8 @@ const logInViaGoogle = async (code: string, token: string, res) => {
       resources: [],
       committed: false,
     });
-    // eslint-disable-next-line prefer-destructuring
-    viewer = insertResult.ops[0];
+
+    viewer = insertResult;
   }
   res.setHeader('Set-Cookie', serialize('viewer', userId, cookieOptions));
 
@@ -99,9 +120,21 @@ const logInViaGoogle = async (code: string, token: string, res) => {
 };
 const logInViaCookie = async (token: string, req: Request, res: Response): Promise<User | undefined> => {
   const database = await getDatabase();
-  const updateRes = await database.users.findOneAndUpdate({ _id: req.cookies.viewer }, { $set: { token } }, { returnOriginal: false });
-
-  const viewer = updateRes.value;
+  const updateResponse = await database.users.findOneAndUpdate({ _id: req.cookies.viewer }, { $set: { token } }, { returnOriginal: false });
+  // const updateResponse = await prisma.user.update({
+  //   data: {
+  //     token,
+  //   },
+  //   where: {
+  //     id: req.cookies.viewer || undefined,
+  //   },
+  // });
+  // const updateResponse = await prisma.user.findUnique({
+  //   where: {
+  //     id: req.cookies.viewer || undefined,
+  //   },
+  // });
+  const viewer = updateResponse.value;
 
   if (!viewer) {
     res.setHeader(
@@ -155,11 +188,23 @@ export const resolvers = {
   Mutation: {
     increment: async (_root: undefined, { id, viewer, resource }: incrementCountVariables) => {
       try {
-        const database = await getDatabase();
-        return (
-          await database.listings.updateOne({ _id: new ObjectId(id) }, { $inc: { count: 1 } }),
-          database.users.updateOne({ _id: viewer }, { $addToSet: { resources: resource } })
-        );
+        const incrementResource = prisma.resource.update({
+          where: { id },
+          data: { count: { increment: 1 } },
+        });
+        const addResourceToUser = prisma.user.update({
+          where: {
+            id: viewer,
+          },
+          data: {
+            resources: {
+              push: resource,
+            },
+          },
+        });
+        await prisma.$transaction([incrementResource, addResourceToUser]);
+
+        return { status: true };
       } catch (error) {
         throw new Error(`Failed to Vote : ${error}`);
       }
@@ -216,22 +261,32 @@ export const resolvers = {
     },
     setStripeCardStatus: async (_root: undefined, { viewerId }) => {
       try {
-        const database = await getDatabase();
+        const updateReponse = await prisma.user.update({
+          data: {
+            stripeHasCard: true,
+          },
+          where: {
+            id: viewerId,
+          },
+          select: {
+            id: true,
+            token: true,
+            avatar: true,
+            name: true,
+            stripeId: true,
+            stripeHasCard: true,
+            committed: true,
+          },
+        });
 
-        const updateRes = await database.users.findOneAndUpdate(
-          { _id: viewerId },
-          { $set: { stripeHasCard: true } },
-          { upsert: true, returnDocument: 'after' }
-        );
-
-        if (!updateRes.value) {
+        if (!updateReponse) {
           throw new Error('viewer could not be updated');
         }
 
-        const viewer = updateRes.value;
+        const viewer = updateReponse;
 
         return {
-          _id: viewer._id,
+          id: viewer.id,
           token: viewer.token,
           avatar: viewer.avatar,
           name: viewer.name,
@@ -256,7 +311,7 @@ export const resolvers = {
         }
 
         return {
-          _id: viewer._id,
+          id: viewer.id,
           token: viewer.token,
           avatar: viewer.avatar,
           name: viewer.name,
@@ -288,9 +343,9 @@ export const resolvers = {
   //   id: (listing): string => listing._id.toString(),
   // },
   Viewer: {
-    id: (viewer: Viewer): string | undefined => {
-      return viewer._id;
-    },
+    // id: (viewer: Viewer): string | undefined => {
+    //   return viewer.id;
+    // },
     hasWallet: (viewer: Viewer): boolean | undefined => {
       return viewer.walletId && viewer.stripeHasCard ? true : undefined;
     },
