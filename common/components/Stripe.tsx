@@ -21,13 +21,12 @@ export const StripeInput = ({ viewer, wantsToCommit }: Props) => {
   useEffect(() => {
     const getClientSecret = async () => {
       try {
-        const { data: responseData } = await axios.post(`/api/checkoutSessions`, { viewerId: viewer.id });
-        const { client_secret: clientSecretReponse } = responseData;
+        const { data: responseData } = await axios.post(`/api/checkout_sessions`, { viewerId: viewer.id });
+        const { client_secret: clientSecret } = responseData;
 
-        setClientSecret(clientSecretReponse);
+        setClientSecret(clientSecret);
       } catch (error) {
         console.log(error);
-        Sentry.captureException(error);
       }
     };
 
@@ -69,4 +68,7 @@ export const StripeInput = ({ viewer, wantsToCommit }: Props) => {
   if (!clientSecret && !options.clientSecret) return null;
   return (
     <Elements options={options} stripe={stripePromise}>
-      <SetupForm viewer={vie
+      <SetupForm viewer={viewer} wantsToCommit={wantsToCommit} />
+    </Elements>
+  );
+};
