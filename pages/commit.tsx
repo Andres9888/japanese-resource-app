@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/react-hooks';
 import Link from 'next/link';
 import styled from 'styled-components';
 
-import { StripeInput } from '~common/components/Stripe';
+import { StripeInput } from '~common/components/StripeInput';
 import { setCommitment as setCommitmentData, setCommitmentVariables } from '~graphql/mutations/__generated__/setCommitment';
 import { SET_COMMITMENT } from '~graphql/mutations/mutations';
 import { openNotification, displaySuccessNotification, displayErrorMessage } from '~lib/utils';

@@ -21,12 +21,13 @@ export const StripeInput = ({ viewer, wantsToCommit }: Props) => {
   useEffect(() => {
     const getClientSecret = async () => {
       try {
-        const { data: responseData } = await axios.post(`/api/checkout_sessions`, { viewerId: viewer.id });
-        const { client_secret: clientSecret } = responseData;
+        const { data: responseData } = await axios.post(`/api/checkoutSessions`, { viewerId: viewer.id });
+        const { client_secret: clientSecretResponse } = responseData;
 
-        setClientSecret(clientSecret);
+        setClientSecret(clientSecretResponse);
       } catch (error) {
         console.log(error);
+        Sentry.captureException(error);
       }
     };
 
