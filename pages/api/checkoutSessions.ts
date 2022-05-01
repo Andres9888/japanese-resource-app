@@ -1,9 +1,10 @@
+/* tslint:disable */
+/* eslint-disable */
 import { PrismaClient } from '@prisma/client';
 import { withSentry } from '@sentry/nextjs';
 import * as Sentry from '@sentry/nextjs';
+import { NextApiRequest, NextApiResponse } from 'next';
 import { assert, string } from 'superstruct';
-
-import type { NextApiRequest, NextApiResponse } from 'next'
 
 const prisma = new PrismaClient();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
@@ -18,8 +19,8 @@ type UserStripeDetails = {
 type ResponseData = {
   client_secret?: string;
   success?: boolean;
-}
-const handler = async (request:NextApiRequest, response:NextApiResponse<ResponseData>) => {
+};
+const handler = async (request, response /* : NextApiResponse<ResponseData> */) => {
   if (request.method === 'POST') {
     try {
       const { viewerId } = request.body;
@@ -58,14 +59,12 @@ const handler = async (request:NextApiRequest, response:NextApiResponse<Response
         payment_method_types: ['card'],
       });
 
-     return response.status(200).json({client_secret:stripeSetupIntentResponse.client_secret});
+      return response.status(200).json({ client_secret: stripeSetupIntentResponse.client_secret });
     } catch (error) {
       // Error code will be authentication_required if authentication is needed
       console.log('Error code is:', error);
       Sentry.captureException(error);
-      return response
-      .status(500)
-      .json({ success: false });
+      return response.status(500).json({ success: false });
 
       // const paymentIntentRetrieved = await stripe.paymentIntents.retrieve(error.raw.payment_intent.id);
       // console.log('PI retrieved:', paymentIntentRetrieved.id);
