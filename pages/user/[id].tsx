@@ -54,9 +54,7 @@ function userPage({ viewer }: Props) {
   const userVotedResources = dataResources.listings.filter(resource => data.getUserResourceIds[0].resources.includes(resource.id));
 
   const recommendedResource = dataResources.listings.filter(resource => resource.id === recommendation);
-  const redirectToStripe = () => {
-    window.location.href = stripeAuthUrl;
-  };
+
   return (
     <div>
       <div className="user-profile">

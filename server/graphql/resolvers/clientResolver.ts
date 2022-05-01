@@ -131,8 +131,14 @@ export const resolvers = {
     },
     getUserResourceIds: async (_root: undefined, { id }) => {
       try {
-        const database = await getDatabase();
-        return database.users.find({ _id: id }).toArray();
+        return await prisma.user.findMany({
+          where: {
+            id,
+          },
+          select: {
+            resources: true,
+          },
+        });
       } catch (error) {
         throw new Error(`Failed to query user resources Ids: ${error}`);
       }

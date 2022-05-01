@@ -1,9 +1,10 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import { useMutation } from '@apollo/react-hooks';
 import Link from 'next/link';
 import styled from 'styled-components';
 
-// @ts-nocheck
-/* eslint-disable */
 import { setCommitmentLog as setCommitmentLogInData, setCommitmentLogVariables } from '~graphql/mutations/__generated__/setCommitmentLog';
 import { SET_COMMITMENT_LOG } from '~graphql/mutations/mutations';
 import { displaySuccessNotification, displayErrorMessage } from '~lib/utils';

@@ -12,10 +12,7 @@ export const typeDefs = gql`
     count: Int!
   }
 
-  type User {
-    id: ID
-    token: String
-    avatar: String
+  type UserResources {
     resources: [String!]!
   }
 
@@ -48,7 +45,7 @@ export const typeDefs = gql`
   type Query {
     listings: [Listing!]!
     authUrl: String!
-    getUserResourceIds(id: ID!): [User!]!
+    getUserResourceIds(id: ID!): [UserResources!]!
   }
 
   input ConnectStripeInput {
