@@ -63,89 +63,63 @@ const logInViaGoogle = async (code: string, token: string, res) => {
   if (!userId || !userName || !userAvatar || !userEmail) {
     throw new Error('Google login error');
   }
-
-  // const database = await getDatabase();
-  // const updateRes = await database.users.findOneAndUpdate(
-  //   { _id: userId },
-  //   {
-  //     $set: {
-  //       name: userName,
-  //       avatar: userAvatar,
-  //       contact: userEmail,
-  //       token,
-  //     },
-  //   },
-  //   { returnOriginal: false }
-  // );
-
-  const updateResponse = await prisma.user.update({
-    data: {
-      name: userName,
-      avatar: userAvatar,
-      contact: userEmail,
-      token,
-    },
-    where: {
-      id: userId,
-    },
-  });
-
-  let viewer = updateResponse;
-
-  if (!viewer) {
-    // const insertResult = await database.users.insertOne({
-    //   _id: userId,
-    //   token,
-    //   name: userName,
-    //   avatar: userAvatar,
-    //   contact: userEmail,
-    //   resources: [],
-    //   committed: false,
-    // });
-    const insertResult = await User.create({
-      id: userId,
-      token,
-      name: userName,
-      avatar: userAvatar,
-      contact: userEmail,
-      resources: [],
-      committed: false,
+  try {
+    const updateResponse = await prisma.user.upsert({
+      where: {
+        id: userId,
+      },
+      update: {
+        name: userName,
+        avatar: userAvatar,
+        contact: userEmail,
+        token,
+      },
+      create: {
+        id: userId,
+        token,
+        name: userName,
+        avatar: userAvatar,
+        contact: userEmail,
+        resources: [],
+        committed: false,
+      },
     });
 
-    viewer = insertResult;
-  }
-  res.setHeader('Set-Cookie', serialize('viewer', userId, cookieOptions));
+    let viewer = updateResponse;
 
-  return viewer;
+    res.setHeader('Set-Cookie', serialize('viewer', userId, cookieOptions));
+
+    return viewer;
+  } catch (e) {
+    console.log(e);
+  }
 };
 const logInViaCookie = async (token: string, req: Request, res: Response): Promise<User | undefined> => {
-  const database = await getDatabase();
-  const updateResponse = await database.users.findOneAndUpdate({ _id: req.cookies.viewer }, { $set: { token } }, { returnOriginal: false });
-  // const updateResponse = await prisma.user.update({
-  //   data: {
-  //     token,
-  //   },
-  //   where: {
-  //     id: req.cookies.viewer || undefined,
-  //   },
-  // });
-  // const updateResponse = await prisma.user.findUnique({
-  //   where: {
-  //     id: req.cookies.viewer || undefined,
-  //   },
-  // });
-  const viewer = updateResponse.value;
+  try {
+    const updateResponse = await prisma.user.update({
+      data: {
+        token,
+      },
+      where: {
+        id: req.cookies.viewer,
+      },
+    });
 
-  if (!viewer) {
-    res.setHeader(
-      'Set-Cookie',
-      serialize('viewer', '', {
-        maxAge: -1,
-      })
-    );
+    const viewer = updateResponse;
+
+    if (!viewer) {
+      res.setHeader(
+        'Set-Cookie',
+        serialize('viewer', '', {
+          maxAge: -1,
+        })
+      );
+    }
+
+    return viewer;
+  } catch (e) {
+    console.log(e);
   }
-
-  return viewer;
 };
 export const resolvers = {
   Query: {
@@ -217,10 +191,6 @@ export const resolvers = {
           },
           data: { committed: isCommited, timezone: timeZone, dateCommitted: isCommited ? new Date() : null },
         });
-
-        if (!updateResponse) {
-          throw new Error('Viewer could not be updated');
-        }
 
         const viewer = updateResponse;
 
