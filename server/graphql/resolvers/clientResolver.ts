@@ -4,19 +4,14 @@ import crypto from 'crypto';
 
 import { PrismaClient, Resource, User } from '@prisma/client';
 import { serialize } from 'cookie';
-import { ObjectId } from 'mongodb';
 
 import { incrementCountVariables } from '~graphql/mutations/__generated__/incrementCount';
 import { setCommitmentVariables } from '~graphql/mutations/__generated__/setCommitment';
 import { setCommitmentLogVariables } from '~graphql/mutations/__generated__/setCommitmentLog';
 import { Google } from '~lib/api';
-import { connectDatabase } from '~server/database';
 import { Viewer } from '~types/globalTypes';
 
 const prisma = new PrismaClient();
-const getDatabase = async () => {
-  return connectDatabase();
-};
 
 const cookieOptions = {
   httpOnly: true,
@@ -26,15 +21,15 @@ const cookieOptions = {
   maxAge: 365 * 24 * 60 * 60 * 1000,
 };
 
-const authorize = async (database: Database, req: Request): Promise<User | null> => {
-  const token = req.get('X-CSRF-TOKEN');
-  console.log('x-csrf-token', token);
+// const authorize = async (database: Database, req: Request): Promise<User | null> => {
+//   const token = req.get('X-CSRF-TOKEN');
+//   console.log('x-csrf-token', token);
 
-  return await database.users.findOne({
-    _id: req.cookies.viewer,
-    token,
-  });
-};
+//   return await database.users.findOne({
+//     _id: req.cookies.viewer,
+//     token,
+//   });
+// };
 
 const logInViaGoogle = async (code: string, token: string, res) => {
   const { user } = await Google.logIn(code);
@@ -85,13 +80,13 @@ const logInViaGoogle = async (code: string, token: string, res) => {
       },
     });
 
-    let viewer = updateResponse;
+    const viewer = updateResponse;
 
     res.setHeader('Set-Cookie', serialize('viewer', userId, cookieOptions));
 
     return viewer;
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.log(error);
   }
 };
 const logInViaCookie = async (token: string, req: Request, res: Response): Promise<User | undefined> => {
@@ -117,13 +112,13 @@ const logInViaCookie = async (token: string, req: Request, res: Response): Promi
     }
 
     return viewer;
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.log(error);
   }
 };
 export const resolvers = {
   Query: {
-    listings: async (): Promise<Resource[]> => {
+    resources: async (): Promise<Resource[]> => {
       try {
         return await prisma.resource.findMany({
           orderBy: [
@@ -294,7 +289,7 @@ export const resolvers = {
         throw new Error(`Failed to log in: ${error}`);
       }
     },
-    logOut: (_root: undefined, _arguments: {}, { res }: { res: Response }): Viewer => {
+    logOut: (_root: undefined, _arguments: Record<string, never>, { res }: { res: Response }): Viewer => {
       try {
         res.setHeader(
           'Set-Cookie',
@@ -309,13 +304,8 @@ export const resolvers = {
       }
     },
   },
-  // Listing: {
-  //   id: (listing): string => listing._id.toString(),
-  // },
+
   Viewer: {
-    // id: (viewer: Viewer): string | undefined => {
-    //   return viewer.id;
-    // },
     hasWallet: (viewer: Viewer): boolean | undefined => {
       return viewer.walletId && viewer.stripeHasCard ? true : undefined;
     },

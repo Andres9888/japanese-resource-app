@@ -16,7 +16,7 @@
         "specifiedByUrl": null,
         "fields": [
           {
-            "name": "listings",
+            "name": "resources",
             "description": null,
             "args": [],
             "type": {
@@ -30,7 +30,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "Listing",
+                    "name": "Resource",
                     "ofType": null
                   }
                 }
@@ -87,7 +87,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "User",
+                    "name": "UserResources",
                     "ofType": null
                   }
                 }
@@ -126,7 +126,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "Listing",
+        "name": "Resource",
         "description": null,
         "specifiedByUrl": null,
         "fields": [
@@ -269,46 +269,10 @@
       },
       {
         "kind": "OBJECT",
-        "name": "User",
+        "name": "UserResources",
         "description": null,
         "specifiedByUrl": null,
         "fields": [
-          {
-            "name": "id",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "token",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "avatar",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
           {
             "name": "resources",
             "description": null,
@@ -399,9 +363,13 @@
               }
             ],
             "type": {
-              "kind": "OBJECT",
-              "name": "CountResult",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "ConfirmStatus",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -546,7 +514,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "LogConfirm",
+                "name": "ConfirmStatus",
                 "ofType": null
               }
             },
@@ -617,18 +585,22 @@
       },
       {
         "kind": "OBJECT",
-        "name": "CountResult",
+        "name": "ConfirmStatus",
         "description": null,
         "specifiedByUrl": null,
         "fields": [
           {
-            "name": "acknowledged",
+            "name": "status",
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -740,34 +712,6 @@
         "possibleTypes": null
       },
       {
-        "kind": "OBJECT",
-        "name": "LogConfirm",
-        "description": null,
-        "specifiedByUrl": null,
-        "fields": [
-          {
-            "name": "status",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
         "kind": "INPUT_OBJECT",
         "name": "LogInInput",
         "description": null,
@@ -820,6 +764,30 @@
           }
         ],
         "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "CountResult",
+        "description": null,
+        "specifiedByUrl": null,
+        "fields": [
+          {
+            "name": "acknowledged",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
         "enumValues": null,
         "possibleTypes": null
       },

@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { incrementCount as incrementCountData, incrementCountVariables } from '~graphql/mutations/__generated__/incrementCount';
 import { INCREMENT_COUNT } from '~graphql/mutations/mutations';
 // eslint-disable-next-line camelcase
-import { getResources_listings } from '~graphql/queries/__generated__/getResources';
+import { getResources_resources } from '~graphql/queries/__generated__/getResources';
 import { getUserResourcesIds as getUserResourcesIdsData } from '~graphql/queries/__generated__/getUserResourcesIds';
 import { displayErrorMessage } from '~lib/utils';
 import { Viewer } from '~types/globalTypes';
@@ -15,7 +15,7 @@ import { Viewer } from '~types/globalTypes';
 interface Props {
   viewer: Viewer;
   // eslint-disable-next-line camelcase
-  resource: getResources_listings;
+  resource: getResources_resources;
   userResourcesIds: getUserResourcesIdsData;
   refetch: () => Promise<void>;
   refetchUserResourcesIds: () => Promise<void>;

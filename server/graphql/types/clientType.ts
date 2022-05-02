@@ -2,7 +2,7 @@
 import { gql } from '@apollo/client';
 
 export const typeDefs = gql`
-  type Listing {
+  type Resource {
     id: ID!
     image: String!
     url: String!
@@ -42,14 +42,13 @@ export const typeDefs = gql`
   type Acknowledged {
     acknowledged: Boolean
   }
-  type Query {
-    listings: [Listing!]!
-    authUrl: String!
-    getUserResourceIds(id: ID!): [UserResources!]!
-  }
-
   input ConnectStripeInput {
     code: String!
+  }
+  type Query {
+    resources: [Resource!]!
+    authUrl: String!
+    getUserResourceIds(id: ID!): [UserResources!]!
   }
 
   type Mutation {

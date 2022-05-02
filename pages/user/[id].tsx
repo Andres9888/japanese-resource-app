@@ -19,8 +19,6 @@ interface recommendationData {
   data: string;
 }
 
-const stripeAuthUrl = `https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_LNMEYF6XiUD7r5SM74ATo5RzJuOmuTES&scope=read_write`;
-
 function userPage({ viewer }: Props) {
   if (!viewer.id) {
     return <div>Log in to View Page</div>;
@@ -51,9 +49,9 @@ function userPage({ viewer }: Props) {
   if (error || errorResources) {
     return <h2>error</h2>;
   }
-  const userVotedResources = dataResources.listings.filter(resource => data.getUserResourceIds[0].resources.includes(resource.id));
+  const userVotedResources = dataResources.resources.filter(resource => data.getUserResourceIds[0].resources.includes(resource.id));
 
-  const recommendedResource = dataResources.listings.filter(resource => resource.id === recommendation);
+  const recommendedResource = dataResources.resources.filter(resource => resource.id === recommendation);
 
   return (
     <div>

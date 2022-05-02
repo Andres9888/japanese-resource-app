@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { useState, useEffect } from 'react';
 
 import { useQuery } from '@apollo/react-hooks';
@@ -23,7 +21,7 @@ interface Props {
 
 export default function Home({ viewer, searchTerm, setSearchTerm }: Props) {
   const {
-    data: { listings },
+    data: { resources },
     loading,
     error,
     refetch,
@@ -32,27 +30,26 @@ export default function Home({ viewer, searchTerm, setSearchTerm }: Props) {
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    const filteredData = listings.filter(
-      item =>
-        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.tags.includes(searchTerm.toLowerCase())
+    const filteredData = resources.filter(
+      ({ title, description, tags }) =>
+        title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        tags.includes(searchTerm.toLowerCase())
     );
     setSearchResults(filteredData);
-  }, [searchTerm, listings]);
+  }, [searchTerm, resources]);
 
   if (loading) {
     return <Image alt="" height={116} src={loadingImageUrl} width={538} />;
   }
   if (error) {
-    return <h1>error</h1>;
+    return <h1>Sorry, just message me and I will try to fix it</h1>;
   }
 
   return (
     <>
       <Head>
         <title>Japanese Resources Site</title>
-
         <meta
           content="Finding Quality Japanese Resources can be hard to find in the beginning. This site is here to make it easier for you. I currated a list of Japanese study material that I found useful and wanted to share. You can search and filter what type of resources and vote, track, and share the resources you like."
           name="description"

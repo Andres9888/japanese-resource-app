@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 export const RESOURCES = gql`
   query getResources {
-    listings {
+    resources {
       id
       title
       description

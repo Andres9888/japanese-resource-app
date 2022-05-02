@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface getUserResourcesIds_getUserResourceIds {
-  __typename: "User";
+  __typename: "UserResources";
   resources: string[];
 }
 

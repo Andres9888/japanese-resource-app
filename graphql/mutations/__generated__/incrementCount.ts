@@ -8,12 +8,12 @@
 // ====================================================
 
 export interface incrementCount_increment {
-  __typename: "CountResult";
-  acknowledged: boolean | null;
+  __typename: "ConfirmStatus";
+  status: boolean;
 }
 
 export interface incrementCount {
-  increment: incrementCount_increment | null;
+  increment: incrementCount_increment;
 }
 
 export interface incrementCountVariables {

@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface setCommitmentLog_setCommitmentLog {
-  __typename: "LogConfirm";
+  __typename: "ConfirmStatus";
   status: boolean;
 }
 

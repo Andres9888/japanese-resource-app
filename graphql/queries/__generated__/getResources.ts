@@ -7,8 +7,8 @@
 // GraphQL query operation: getResources
 // ====================================================
 
-export interface getResources_listings {
-  __typename: "Listing";
+export interface getResources_resources {
+  __typename: "Resource";
   id: string;
   title: string;
   description: string;
@@ -19,5 +19,5 @@ export interface getResources_listings {
 }
 
 export interface getResources {
-  listings: getResources_listings[];
+  resources: getResources_resources[];
 }
