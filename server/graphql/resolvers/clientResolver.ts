@@ -31,6 +31,8 @@ const cookieOptions = {
 //   });
 // };
 
+const SET_COOKIE = 'Set-Cookie';
+
 const logInViaGoogle = async (code: string, token: string, res) => {
   const { user } = await Google.logIn(code);
 
@@ -82,7 +84,7 @@ const logInViaGoogle = async (code: string, token: string, res) => {
 
     const viewer = updateResponse;
 
-    res.setHeader('Set-Cookie', serialize('viewer', userId, cookieOptions));
+    res.setHeader(SET_COOKIE, serialize('viewer', userId, cookieOptions));
 
     return viewer;
   } catch (error) {
@@ -104,7 +106,7 @@ const logInViaCookie = async (token: string, req: Request, res: Response): Promi
 
     if (!viewer) {
       res.setHeader(
-        'Set-Cookie',
+        SET_COOKIE,
         serialize('viewer', '', {
           maxAge: -1,
         })
@@ -292,7 +294,7 @@ export const resolvers = {
     logOut: (_root: undefined, _arguments: Record<string, never>, { res }: { res: Response }): Viewer => {
       try {
         res.setHeader(
-          'Set-Cookie',
+          SET_COOKIE,
           serialize('viewer', '', {
             maxAge: -1,
           })

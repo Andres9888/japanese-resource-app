@@ -3,7 +3,13 @@ import React, { useState } from 'react';
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 import styled from 'styled-components';
 
-const SetupForm = ({ wantsToCommit, viewer }) => {
+import { Viewer } from '~types/globalTypes';
+
+interface Props {
+  viewer: Viewer;
+  wantsToCommit: boolean;
+}
+const SetupForm = ({ wantsToCommit, viewer }: Props) => {
   const stripe = useStripe();
   const elements = useElements();
   const [errorMessage, setErrorMessage] = useState(null);

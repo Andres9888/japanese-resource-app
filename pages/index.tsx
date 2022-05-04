@@ -19,7 +19,7 @@ interface Props {
   setSearchTerm: (searchTerm: string) => void;
 }
 
-export default function Home({ viewer, searchTerm, setSearchTerm }: Props) {
+const Home = ({ viewer, searchTerm, setSearchTerm }: Props) => {
   const {
     data: { resources },
     loading,
@@ -61,7 +61,9 @@ export default function Home({ viewer, searchTerm, setSearchTerm }: Props) {
       </div>
     </>
   );
-}
+};
+
+export default Home;
 
 export async function getServerSideProps() {
   const apolloClient = initializeApollo();
