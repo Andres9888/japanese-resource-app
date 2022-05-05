@@ -19,7 +19,9 @@ export const RESOURCES = gql`
 export const GET_USER_RESOURCES_IDS = gql`
   query getUserResourcesIds($id: ID!) {
     getUserResourceIds(id: $id) {
-      resources
+      resources {
+        resourceId
+      }
     }
   }
 `;

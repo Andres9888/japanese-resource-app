@@ -18,8 +18,14 @@ export const typeDefs = gql`
     count: Int
   }
 
+  type ResourceId {
+    id: Int
+    resourceId: String
+    userId: String
+  }
+
   type UserResources {
-    resources: [String!]!
+    resources: [ResourceId!]!
   }
 
   type Viewer {

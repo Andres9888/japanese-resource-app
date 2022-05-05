@@ -56,7 +56,6 @@ const Home = ({ viewer, searchTerm, setSearchTerm }: Props) => {
         />
       </Head>
       <div className="container">
-        {console.log(resources)}
         <FilterByTag setSearchTerm={setSearchTerm} />
         <ResourceTable refetch={refetch} searchResults={searchResults} viewer={viewer} />
       </div>

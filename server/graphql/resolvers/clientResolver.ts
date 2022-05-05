@@ -108,10 +108,10 @@ const logInViaCookie = async (token: string, req: Request, res: Response): Promi
     let viewer;
     const userExist = await prisma.user.findUnique({
       where: {
-        id: req.cookies.viewer,
+        id: req.cookies.viewer || '',
       },
     });
-    console.log('userExist', userExist);
+
     if (userExist) {
       const updateResponse = await prisma.user.update({
         data: {

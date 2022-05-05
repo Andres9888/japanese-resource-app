@@ -28,7 +28,7 @@ const VoteButton = ({ resource, viewer, refetch, refetchUserResourcesIds, userRe
   // eslint-disable-next-line no-shadow
   const handleIncrementCount = async resource => {
     if (viewer.id) {
-      const didVote = userResourcesIds.getUserResourceIds[0].resources.includes(resource.id);
+      const didVote = userResourcesIds.getUserResourceIds[0].resources.some(({ resourceId }) => resourceId === resource.id);
 
       if (!didVote) {
         await incrementCount({
