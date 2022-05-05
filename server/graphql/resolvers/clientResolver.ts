@@ -111,7 +111,7 @@ const logInViaCookie = async (token: string, req: Request, res: Response): Promi
         id: req.cookies.viewer,
       },
     });
-
+    console.log('userExist', userExist);
     if (userExist) {
       const updateResponse = await prisma.user.update({
         data: {
@@ -136,7 +136,7 @@ const logInViaCookie = async (token: string, req: Request, res: Response): Promi
     return viewer;
   } catch (error) {
     Sentry.captureException(error);
-    throw new Error(`Failed to Login  with Cookies: ${error}`);
+    throw new Error(`Failed to Login with Cookies: ${error}`);
   }
 };
 export const resolvers = {
@@ -186,15 +186,18 @@ export const resolvers = {
           where: { id },
           data: { count: { increment: 1 } },
         });
-        const addResourceToUser = prisma.user.update({
-          where: {
-            id: viewer,
-          },
-          data: {
-            resources: {
-              push: resource,
-            },
-          },
+        // const addResourceToUser = prisma.user.update({
+        //   where: {
+        //     id: viewer,
+        //   },
+        //   data: {
+        //     resources: {
+        //       push: resource,
+        //     },
+        //   },
+        // });
+        const addResourceToUser = prisma.resourceId.create({
+          data: { userId: viewer, resourceId: resource },
         });
         await prisma.$transaction([incrementResource, addResourceToUser]);
 
