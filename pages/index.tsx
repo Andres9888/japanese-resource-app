@@ -34,7 +34,7 @@ const Home = ({ viewer, searchTerm, setSearchTerm }: Props) => {
       ({ title, description, tags }) =>
         title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        tags.includes(searchTerm.toLowerCase())
+        tags.name.includes(searchTerm.toLowerCase())
     );
     setSearchResults(filteredData);
   }, [searchTerm, resources]);

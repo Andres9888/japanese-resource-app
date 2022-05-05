@@ -1,44 +1,68 @@
-generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["dataProxy"]
-
-}
+// An empty Prisma Schema with no models, perfect as a starting point for your own schema.
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
 }
 
-type UsersCommittedLog {
-  dateLogged DateTime @db.Date
-  timezone   String?
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["dataProxy", "referentialIntegrity"]
+}
+
+model Tag {
+  id Int @id @default(autoincrement())
+
+  name String
+
+  resourceId String
+  resource   Resource @relation(fields: [resourceId], references: [id])
+
+  @@index([resourceId])
 }
 
 model Resource {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  count       Int
+  id          String @id @default(cuid())
+  count       Int    @default(0)
   description String
   image       String
-  tags        String[]
   title       String
   url         String
+  tags        Tag[]
+}
 
-  @@map("japanese-resources-collection")
+model ResourceId {
+  id         Int    @id @default(autoincrement())
+  resourceId String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@index([userId])
+}
+
+model CommittedLog {
+  id         Int      @id @default(autoincrement())
+  dateLogged DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@index([userId])
 }
 
 model User {
-  id            String              @id @map("_id")
+  id            String         @id @default(cuid())
+  contact       String         @unique
+  name          String
   avatar        String
   committed     Boolean?
-  committedLog  UsersCommittedLog[]
-  contact       String
-  dateCommitted DateTime?           @db.Date
-  name          String
-  resources     String[]
+  dateCommitted DateTime?
+  stripeId      String?        @unique
   stripeHasCard Boolean?
-  stripeId      String?
   timezone      String?
-  token         String
-
-  @@map("users")
+  committedLog  CommittedLog[]
+  resources     ResourceId[]
+  token         String         @unique
 }

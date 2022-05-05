@@ -128,6 +128,7 @@ export const resolvers = {
               count: 'desc',
             },
           ],
+          include: { tags: true },
         });
       } catch (error) {
         throw new Error(`Failed to query resources: ${error}`);

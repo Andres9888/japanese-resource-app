@@ -91,10 +91,10 @@ const ResourceTable = ({ viewer, searchResults, refetch }: Props) => {
             </TableDataDescription>
             <TableDataTags>
               <div className="field is-grouped is-grouped-multiline">
-                {resource.tags.map(tag => (
-                  <div key={`${`${resource.id}-${tag}`}`} className="control">
+                {resource.tags.map(({ name: tagName }) => (
+                  <div key={`${resource.id}-${tagName}`} className="control">
                     <div className="tags has-addons">
-                      <span className="tag is-link">{tag}</span>
+                      <span className="tag is-link">{tagName}</span>
                     </div>
                   </div>
                 ))}

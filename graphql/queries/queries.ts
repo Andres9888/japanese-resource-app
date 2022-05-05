@@ -8,7 +8,9 @@ export const RESOURCES = gql`
       description
       image
       url
-      tags
+      tags {
+        name
+      }
       count
     }
   }

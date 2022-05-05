@@ -2,14 +2,20 @@
 import { gql } from '@apollo/client';
 
 export const typeDefs = gql`
+  type Tags {
+    id: Int
+    name: String
+    resourceId: String
+  }
+
   type Resource {
-    id: ID!
-    image: String!
-    url: String!
-    title: String!
-    description: String!
-    tags: [String!]!
-    count: Int!
+    id: ID
+    image: String
+    url: String
+    title: String
+    description: String
+    tags: [Tags!]!
+    count: Int
   }
 
   type UserResources {
