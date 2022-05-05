@@ -209,7 +209,7 @@ export const resolvers = {
         const viewer = updateResponse;
 
         return {
-          _id: viewer.id,
+          id: viewer.id,
           token: viewer.token,
           avatar: viewer.avatar,
           name: viewer.name,
