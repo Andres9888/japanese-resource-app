@@ -186,16 +186,7 @@ export const resolvers = {
           where: { id },
           data: { count: { increment: 1 } },
         });
-        // const addResourceToUser = prisma.user.update({
-        //   where: {
-        //     id: viewer,
-        //   },
-        //   data: {
-        //     resources: {
-        //       push: resource,
-        //     },
-        //   },
-        // });
+
         const addResourceToUser = prisma.resourceId.create({
           data: { userId: viewer, resourceId: resource },
         });
