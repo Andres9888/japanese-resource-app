@@ -3,6 +3,7 @@
 import crypto from 'crypto';
 
 import { PrismaClient, Resource, User } from '@prisma/client';
+import * as Sentry from '@sentry/nextjs';
 import { serialize } from 'cookie';
 
 import { incrementCountVariables } from '~graphql/mutations/__generated__/incrementCount';
@@ -61,28 +62,38 @@ const logInViaGoogle = async (code: string, token: string, res) => {
     throw new Error('Google login error');
   }
   try {
-    const updateResponse = await prisma.user.upsert({
+    let viewer;
+    const userExist = await prisma.user.findUnique({
       where: {
         id: userId,
       },
-      update: {
-        name: userName,
-        avatar: userAvatar,
-        contact: userEmail,
-        token,
-      },
-      create: {
-        id: userId,
-        token,
-        name: userName,
-        avatar: userAvatar,
-        contact: userEmail,
-        resources: [],
-        committed: false,
-      },
     });
 
-    const viewer = updateResponse;
+    if (userExist) {
+      const updateResponse = await prisma.user.update({
+        data: {
+          name: userName,
+          avatar: userAvatar,
+          contact: userEmail,
+          token,
+        },
+        where: {
+          id: userId,
+        },
+      });
+      viewer = updateResponse;
+    } else {
+      const createResponse = await prisma.user.create({
+        data: {
+          id: userId,
+          token,
+          name: userName,
+          avatar: userAvatar,
+          contact: userEmail,
+        },
+      });
+      viewer = createResponse;
+    }
 
     res.setHeader(SET_COOKIE, serialize('viewer', userId, cookieOptions));
 
@@ -93,16 +104,27 @@ const logInViaGoogle = async (code: string, token: string, res) => {
 };
 const logInViaCookie = async (token: string, req: Request, res: Response): Promise<User | undefined> => {
   try {
-    const updateResponse = await prisma.user.update({
-      data: {
-        token,
-      },
+    let viewer;
+    const userExist = await prisma.user.findUnique({
       where: {
         id: req.cookies.viewer,
       },
     });
 
-    const viewer = updateResponse;
+    if (userExist) {
+      const updateResponse = await prisma.user.update({
+        data: {
+          name: userName,
+          avatar: userAvatar,
+          contact: userEmail,
+          token,
+        },
+        where: {
+          id: userId,
+        },
+      });
+      viewer = updateResponse;
+    }
 
     if (!viewer) {
       res.setHeader(
@@ -116,6 +138,7 @@ const logInViaCookie = async (token: string, req: Request, res: Response): Promi
     return viewer;
   } catch (error) {
     console.log(error);
+    Sentry.captureException(error);
   }
 };
 export const resolvers = {
@@ -131,6 +154,7 @@ export const resolvers = {
           include: { tags: true },
         });
       } catch (error) {
+        Sentry.captureException(error);
         throw new Error(`Failed to query resources: ${error}`);
       }
     },
