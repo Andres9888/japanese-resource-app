@@ -224,15 +224,8 @@ export const resolvers = {
     },
     setCommitmentLog: async (_root: undefined, { viewerId, timeZone }: setCommitmentLogVariables) => {
       try {
-        const updateResponse = await prisma.user.update({
-          where: {
-            id: viewerId,
-          },
-          data: {
-            committedLog: {
-              push: { timezone: timeZone, dateLogged: new Date() },
-            },
-          },
+        const updateResponse = await prisma.committedLog.create({
+          data: { userId: viewerId },
         });
         if (!updateResponse) {
           throw new Error('Viewer could not be updated');
