@@ -99,7 +99,8 @@ const logInViaGoogle = async (code: string, token: string, res) => {
 
     return viewer;
   } catch (error) {
-    console.log(error);
+    Sentry.captureException(error);
+    throw new Error(`Failed to Login : ${error}`);
   }
 };
 const logInViaCookie = async (token: string, req: Request, res: Response): Promise<User | undefined> => {
@@ -114,13 +115,10 @@ const logInViaCookie = async (token: string, req: Request, res: Response): Promi
     if (userExist) {
       const updateResponse = await prisma.user.update({
         data: {
-          name: userName,
-          avatar: userAvatar,
-          contact: userEmail,
           token,
         },
         where: {
-          id: userId,
+          id: req.cookies.viewer,
         },
       });
       viewer = updateResponse;
@@ -137,8 +135,8 @@ const logInViaCookie = async (token: string, req: Request, res: Response): Promi
 
     return viewer;
   } catch (error) {
-    console.log(error);
     Sentry.captureException(error);
+    throw new Error(`Failed to Login  with Cookies: ${error}`);
   }
 };
 export const resolvers = {

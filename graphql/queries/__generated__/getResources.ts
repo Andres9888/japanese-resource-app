@@ -7,15 +7,20 @@
 // GraphQL query operation: getResources
 // ====================================================
 
+export interface getResources_resources_tags {
+  __typename: "Tags";
+  name: string | null;
+}
+
 export interface getResources_resources {
   __typename: "Resource";
-  id: string;
-  title: string;
-  description: string;
-  image: string;
-  url: string;
-  tags: string[];
-  count: number;
+  id: string | null;
+  title: string | null;
+  description: string | null;
+  image: string | null;
+  url: string | null;
+  tags: getResources_resources_tags[];
+  count: number | null;
 }
 
 export interface getResources {

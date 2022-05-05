@@ -34,7 +34,7 @@ const Home = ({ viewer, searchTerm, setSearchTerm }: Props) => {
       ({ title, description, tags }) =>
         title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        tags.name.includes(searchTerm.toLowerCase())
+        tags.some(({ name }) => name === searchTerm.toLowerCase())
     );
     setSearchResults(filteredData);
   }, [searchTerm, resources]);
@@ -56,6 +56,7 @@ const Home = ({ viewer, searchTerm, setSearchTerm }: Props) => {
         />
       </Head>
       <div className="container">
+        {console.log(resources)}
         <FilterByTag setSearchTerm={setSearchTerm} />
         <ResourceTable refetch={refetch} searchResults={searchResults} viewer={viewer} />
       </div>
