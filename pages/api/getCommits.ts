@@ -19,6 +19,7 @@ export default async (request, response) => {
           lte: getTwoDaysAgo(),
         },
       },
+      include: { committedLog: true },
     });
 
     const getIdsToCharge = () => {
@@ -31,7 +32,7 @@ export default async (request, response) => {
 
     const idsToCharge = getIdsToCharge();
 
-    return response.status(200).json({ idsToCharge });
+    return response.status(200).send(idsToCharge);
   } catch (error) {
     throw new Error(`Failed to query listings: ${error}`);
   }
