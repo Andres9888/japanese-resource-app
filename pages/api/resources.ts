@@ -1,12 +1,17 @@
-import { connectDatabase } from '~server/database';
+import { PrismaClient } from '@prisma/client';
 
-export default async (req, res) => {
+const prisma = new PrismaClient();
+
+export default async (_req, res) => {
   try {
-    const database = await connectDatabase();
-    const resources = await database.listings
-      .find({})
-      .sort({ count: -1 })
-      .toArray();
+    const resources = await prisma.resource.findMany({
+      orderBy: [
+        {
+          count: 'desc',
+        },
+      ],
+      include: { tags: true },
+    });
 
     res.status(200).json({ resources });
   } catch (error) {
