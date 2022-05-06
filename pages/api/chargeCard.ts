@@ -1,23 +1,45 @@
 // @ts-nocheck
 /* eslint-disable */
 
-import { connectDatabase } from '~server/database';
+import { PrismaClient } from '@prisma/client';
+
+import { getTwoDaysAgo, didlogYesterday } from '~lib/utils/timeFunctions';
+
+const prisma = new PrismaClient();
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(request, response) {
+  if (request.query.COMMIT_ROUTE_SECRET !== process.env.COMMIT_ROUTE_SECRET) {
+    return response.status(401).json({
+      error: 'Invalid secret',
+    });
+  }
+
   if (request.method === 'POST') {
     try {
-      // const userToCharge = users.reduce((accumulator, current) => {
-      //   if (current.committedLog === null || current.committedLog.length === 0) {
-      //     accumulator.push(current.stripeId);
-      //   }
-      //   return accumulator;
-      // }, []);
+      const commits = await prisma.user.findMany({
+        where: {
+          committed: true,
+          dateCommitted: {
+            lte: getTwoDaysAgo(),
+          },
+        },
+        include: { committedLog: true },
+      });
 
-      const testChargeArray = ['cus_LU66abTLRFOPLM'];
+      const getUsersToCharge = () => {
+        return commits.filter(user => {
+          const yesterdaysLogs = user.committedLog.filter(log => didlogYesterday(log, user));
 
-      for (const stripeId of testChargeArray) {
+          return yesterdaysLogs.length === 0;
+        });
+      };
+
+      const usersToCharge = getUsersToCharge();
+      const userStripeIdsToCharge = usersToCharge.map(user => user.stripeId);
+
+      for (const stripeId of userStripeIdsToCharge) {
         const paymentMethods = await stripe.paymentMethods.list({
           customer: stripeId,
           type: 'card',
@@ -32,7 +54,7 @@ export default async function handler(request, response) {
           confirm: true,
         });
       }
-      response.status(200).json({ message: 'success' });
+      response.status(200).json({ message: 'success', usersCharged: usersToCharge });
     } catch (error) {
       // Error code will be authentication_required if authentication is needed
       console.log('Error code is:', error.code);
