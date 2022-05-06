@@ -7,9 +7,14 @@
 // GraphQL query operation: getUserResourcesIds
 // ====================================================
 
+export interface getUserResourcesIds_getUserResourceIds_resources {
+  __typename: "ResourceId";
+  resourceId: string | null;
+}
+
 export interface getUserResourcesIds_getUserResourceIds {
   __typename: "UserResources";
-  resources: string[];
+  resources: getUserResourcesIds_getUserResourceIds_resources[];
 }
 
 export interface getUserResourcesIds {

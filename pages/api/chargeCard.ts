@@ -51,7 +51,6 @@ export default async function handler(request, response) {
           customer: stripeId,
           payment_method: paymentMethods.data[0].id,
           off_session: true,
-          confirm: true,
         });
       }
       response.status(200).json({ message: 'success', usersCharged: usersToCharge });
