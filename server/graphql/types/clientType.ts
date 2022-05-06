@@ -67,7 +67,7 @@ export const typeDefs = gql`
     increment(id: ID!, viewer: ID!, resource: String!): ConfirmStatus!
     setCommitment(viewerId: ID!, isCommited: Boolean!, timeZone: String!): Viewer!
     setStripeCardStatus(viewerId: ID!): Viewer!
-    setCommitmentLog(viewerId: ID!, timeZone: String!): ConfirmStatus!
+    setCommitmentLog(viewerId: ID!): ConfirmStatus!
     logIn(input: LogInInput): Viewer!
     logOut: Viewer!
   }

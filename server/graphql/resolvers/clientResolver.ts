@@ -222,7 +222,7 @@ export const resolvers = {
         throw new Error(`Failed to setCommitment : ${error}`);
       }
     },
-    setCommitmentLog: async (_root: undefined, { viewerId, timeZone }: setCommitmentLogVariables) => {
+    setCommitmentLog: async (_root: undefined, { viewerId }: setCommitmentLogVariables) => {
       try {
         const updateResponse = await prisma.committedLog.create({
           data: { userId: viewerId },

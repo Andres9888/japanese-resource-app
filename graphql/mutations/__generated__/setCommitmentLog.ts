@@ -18,5 +18,4 @@ export interface setCommitmentLog {
 
 export interface setCommitmentLogVariables {
   viewerId: string;
-  timeZone: string;
 }

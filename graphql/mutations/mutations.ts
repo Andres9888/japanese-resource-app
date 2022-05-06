@@ -15,8 +15,8 @@ export const SET_STRIPE_CARD_STATUS = gql`
 `;
 
 export const SET_COMMITMENT_LOG = gql`
-  mutation setCommitmentLog($viewerId: ID!, $timeZone: String!) {
-    setCommitmentLog(viewerId: $viewerId, timeZone: $timeZone) {
+  mutation setCommitmentLog($viewerId: ID!) {
+    setCommitmentLog(viewerId: $viewerId) {
       status
     }
   }
