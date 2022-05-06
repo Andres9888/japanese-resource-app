@@ -2,7 +2,7 @@ import { DateTime } from 'luxon';
 
 export const getTwoDaysAgo = () => {
   return DateTime.now()
-    .setZone('America/New_York')
+    .setZone('utc')
     .minus({ days: 2 })
     .startOf('day')
     .toISO();
@@ -32,9 +32,8 @@ export const didlogYesterday = (log, user) => {
   convertToMilliseconds(dateToJS);
 
   if (convertToMilliseconds(dateToJS) >= getYesterdayStart(user.timezone) && convertToMilliseconds(dateToJS) <= getYesterdayEnd(user.timezone)) {
-    console.log(true);
     return true;
   }
-  console.log(false);
+
   return false;
 };
