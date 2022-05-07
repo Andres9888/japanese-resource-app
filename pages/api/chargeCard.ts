@@ -22,7 +22,7 @@ export default async function handler(request, response) {
         where: {
           committed: true,
           dateCommitted: {
-            lte: '2022-05-06T00:00:00.000Z',
+            lte: getTwoDaysAgo(),
           },
         },
         include: { committedLog: true },
@@ -43,21 +43,21 @@ export default async function handler(request, response) {
 
       for (const stripeId of userStripeIdsToCharge) {
         const paymentMethods = await stripe.paymentMethods.list({
-          customer: 'cus_LdmCaKX0Am6xGl',
+          customer: stripeId,
           type: 'card',
         });
 
         const paymentIntent = await stripe.paymentIntents.create({
           amount: 100,
           currency: 'usd',
-          customer: 'cus_LdmCaKX0Am6xGl',
+          customer: stripeId,
           payment_method: paymentMethods.data[0].id,
           confirm: true,
           off_session: true,
         });
       }
 
-      response.status(200).json({ message: 'success', usersCharged: userStripeIdsToCharge });
+      response.status(200).json({ message: 'success', usersCharged: userStripeIdsToCharge, UsersChargedInfo: usersToCharge });
     } catch (error) {
       // Error code will be authentication_required if authentication is needed
       console.log('Error code is:', error.code);
