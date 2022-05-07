@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-async function handler(request, response) {
+export default async function handler(request, response) {
   if (request.query.COMMIT_ROUTE_SECRET !== process.env.COMMIT_ROUTE_SECRET) {
     return response.status(401).json({
       error: 'Invalid secret',
@@ -22,11 +22,13 @@ async function handler(request, response) {
         where: {
           committed: true,
           dateCommitted: {
-            lte: getTwoDaysAgo(),
+            lte: '2022-05-06T00:00:00.000Z',
           },
         },
         include: { committedLog: true },
       });
+
+      console.log(commits);
 
       const getUsersToCharge = () => {
         return commits.filter(user => {
@@ -41,19 +43,21 @@ async function handler(request, response) {
 
       for (const stripeId of userStripeIdsToCharge) {
         const paymentMethods = await stripe.paymentMethods.list({
-          customer: stripeId,
+          customer: 'cus_LdmCaKX0Am6xGl',
           type: 'card',
         });
 
         const paymentIntent = await stripe.paymentIntents.create({
           amount: 100,
           currency: 'usd',
-          customer: stripeId,
+          customer: 'cus_LdmCaKX0Am6xGl',
           payment_method: paymentMethods.data[0].id,
+          confirm: true,
           off_session: true,
         });
       }
-      response.status(200).json({ message: 'success', usersCharged: usersToCharge });
+
+      response.status(200).json({ message: 'success', usersCharged: userStripeIdsToCharge });
     } catch (error) {
       // Error code will be authentication_required if authentication is needed
       console.log('Error code is:', error.code);
@@ -63,21 +67,21 @@ async function handler(request, response) {
   }
 }
 
-const allowCors = fn => async (req, res) => {
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  // another common pattern
-  // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  );
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
-  return await fn(req, res);
-};
+// const allowCors = fn => async (req, res) => {
+//   res.setHeader('Access-Control-Allow-Credentials', true);
+//   res.setHeader('Access-Control-Allow-Origin', '*');
+//   // another common pattern
+//   // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+//   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+//   res.setHeader(
+//     'Access-Control-Allow-Headers',
+//     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+//   );
+//   if (req.method === 'OPTIONS') {
+//     res.status(200).end();
+//     return;
+//   }
+//   return await fn(req, res);
+// };
 
-module.exports = allowCors(handler);
+//module.exports = allowCors(handler);
