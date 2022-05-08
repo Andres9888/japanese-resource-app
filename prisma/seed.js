@@ -12,7 +12,7 @@ const generateNodeData = () => ({
   committed: chance.bool(),
   token: chance.guid(),
   committedLog: {
-    create: {},
+    create: { dateLogged: new Date() },
   },
 });
 
