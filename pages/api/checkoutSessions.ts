@@ -44,7 +44,7 @@ const handler = async (request, response /* : NextApiResponse<ResponseData> */) 
       const { contact: userEmail, stripeId: userStripeId, name: userName } = userById;
 
       if (!userStripeId) {
-        const customer = await stripe.customers.create({ name: userName, email: userEmail });
+        const customer = await stripe.customers.create({ name: userName, email: userEmail, metadata: { hostId: viewerId } });
         await prisma.user.update({
           data: {
             stripeId: customer.id,
