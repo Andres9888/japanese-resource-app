@@ -1,18 +1,17 @@
-const { PrismaClient } = require('@prisma/client');
-const { Chance } = require('chance');
+import { randEmail, randFullName, randBoolean, randImg, randUuid, randBetweenDate } from '@ngneat/falso';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
-const chance = new Chance();
 
 const generateNodeData = () => ({
-  id: chance.guid(),
-  contact: chance.email(),
-  name: chance.name(),
-  avatar: chance.avatar(),
-  committed: chance.bool(),
-  token: chance.guid(),
+  id: randUuid(),
+  contact: randEmail(),
+  name: randFullName(),
+  avatar: randImg(),
+  committed: randBoolean(),
+  token: randUuid(),
   committedLog: {
-    create: { dateLogged: new Date() },
+    create: { dateLogged: randBetweenDate({ from: new Date('05/08/2022'), to: new Date() }) },
   },
 });
 

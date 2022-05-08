@@ -16,7 +16,7 @@
     "Typescript"
   ],
   "main": "server/index.ts",
-   
+  "type": "module",
   "scripts": {
     "dev": "nodemon",
     "build": "next build && tsc --project tsconfig.server.json",
@@ -31,9 +31,6 @@
     "codegen:schema": "npx apollo client:download-schema --endpoint=http://localhost:3000/api/graphql",
     "codegen:generate": "npx apollo client:codegen --localSchemaFile=schema.json --includes=graphql/**/*.ts --target=typescript"
   },
-  "prisma": {
-    "seed": "ts-node prisma/seed.ts"
-  },
   "engines": {
     "node": "^14.16.1",
     "npm": "^6.14.12"
@@ -41,6 +38,7 @@
   "dependencies": {
     "@apollo/client": "^3.3.15",
     "@apollo/react-hooks": "^3.1.5",
+    "@ngneat/falso": "^5.2.0",
     "@prisma/client": "^3.12.0",
     "@sanv/eslint-config-unicorn-typescript": "^2.0.3",
     "@sentry/nextjs": "^6.19.7",
