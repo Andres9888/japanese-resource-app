@@ -48,9 +48,7 @@ export const typeDefs = gql`
   input resourceInput {
     resource: String!
   }
-  type CountResult {
-    acknowledged: Boolean
-  }
+
   type Acknowledged {
     acknowledged: Boolean
   }
