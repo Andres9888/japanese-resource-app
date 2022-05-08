@@ -28,8 +28,6 @@ export default async function handler(request, response) {
         include: { committedLog: true },
       });
 
-      console.log(commits);
-
       const getUsersToCharge = () => {
         return commits.filter(user => {
           const yesterdaysLogs = user.committedLog.filter(log => didlogYesterday(log, user));
