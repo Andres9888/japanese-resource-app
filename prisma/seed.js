@@ -11,6 +11,9 @@ const generateNodeData = () => ({
   avatar: chance.avatar(),
   committed: chance.bool(),
   token: chance.guid(),
+  committedLog: {
+    create: {},
+  },
 });
 
 const seedDate = [
