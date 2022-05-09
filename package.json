@@ -16,7 +16,6 @@
     "Typescript"
   ],
   "main": "server/index.ts",
-  "type": "module",
   "scripts": {
     "dev": "nodemon",
     "build": "next build && tsc --project tsconfig.server.json",

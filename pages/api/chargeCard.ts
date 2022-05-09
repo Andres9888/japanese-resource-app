@@ -52,6 +52,8 @@ export default async function handler(request, response) {
           payment_method: paymentMethods.data[0].id,
           confirm: true,
           off_session: true,
+        }, {
+          idempotencyKey: "random-key",
         });
       }
 
