@@ -38,23 +38,26 @@ export default async function handler(request, response) {
 
       const usersToCharge = getUsersToCharge();
       const userStripeIdsToCharge = usersToCharge.map(user => user.stripeId);
-
+      const idempotenceKey = request.getHeader('x-idempotence-key');
       for (const stripeId of userStripeIdsToCharge) {
         const paymentMethods = await stripe.paymentMethods.list({
           customer: stripeId,
           type: 'card',
         });
 
-        const paymentIntent = await stripe.paymentIntents.create({
-          amount: 100,
-          currency: 'usd',
-          customer: stripeId,
-          payment_method: paymentMethods.data[0].id,
-          confirm: true,
-          off_session: true,
-        }, {
-          idempotencyKey: "random-key",
-        });
+        const paymentIntent = await stripe.paymentIntents.create(
+          {
+            amount: 100,
+            currency: 'usd',
+            customer: stripeId,
+            payment_method: paymentMethods.data[0].id,
+            confirm: true,
+            off_session: true,
+          },
+          {
+            idempotencyKey: idempotenceKey,
+          }
+        );
       }
 
       response.status(200).json({ message: 'success', usersCharged: userStripeIdsToCharge, UsersChargedInfo: usersToCharge });
@@ -63,6 +66,7 @@ export default async function handler(request, response) {
       console.log('Error code is:', error.code);
       const paymentIntentRetrieved = await stripe.paymentIntents.retrieve(error.raw.payment_intent.id);
       console.log('PI retrieved:', paymentIntentRetrieved.id);
+      response.status(500).json({ message: 'failed', paymentIntentRetrieved: paymentIntentRetrieved, errorCode: error.code });
     }
   }
 }
