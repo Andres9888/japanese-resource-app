@@ -38,7 +38,7 @@ export default async function handler(request, response) {
 
       const usersToCharge = getUsersToCharge();
       const userStripeIdsToCharge = usersToCharge.map(user => user.stripeId);
-      const idempotenceKey = request.getHeader('x-idempotence-key');
+      const idempotenceKey = request.headers['x-idempotence-key'];
       for (const stripeId of userStripeIdsToCharge) {
         const paymentMethods = await stripe.paymentMethods.list({
           customer: stripeId,
@@ -64,9 +64,9 @@ export default async function handler(request, response) {
     } catch (error) {
       // Error code will be authentication_required if authentication is needed
       console.log('Error code is:', error.code);
-      const paymentIntentRetrieved = await stripe.paymentIntents.retrieve(error.raw.payment_intent.id);
-      console.log('PI retrieved:', paymentIntentRetrieved.id);
-      response.status(500).json({ message: 'failed', paymentIntentRetrieved: paymentIntentRetrieved, errorCode: error.code });
+      //const paymentIntentRetrieved = await stripe.paymentIntents.retrieve(error.raw.payment_intent.id);
+      //console.log('PI retrieved:', paymentIntentRetrieved.id);
+      response.status(500).json({ message: 'failed' });
     }
   }
 }
