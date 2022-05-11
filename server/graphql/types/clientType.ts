@@ -49,9 +49,6 @@ export const typeDefs = gql`
     resource: String!
   }
 
-  type Acknowledged {
-    acknowledged: Boolean
-  }
   input ConnectStripeInput {
     code: String!
   }

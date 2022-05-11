@@ -38,7 +38,9 @@ export default async function handler(request, response) {
 
       const usersToCharge = getUsersToCharge();
       const userStripeIdsToCharge = usersToCharge.map(user => user.stripeId);
-      const idempotenceKey = request.headers['x-idempotence-key'];
+
+      const { id: idempotenceKey } = request.body;
+
       for (const stripeId of userStripeIdsToCharge) {
         const paymentMethods = await stripe.paymentMethods.list({
           customer: stripeId,
