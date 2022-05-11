@@ -37,8 +37,9 @@
   "dependencies": {
     "@apollo/client": "^3.3.15",
     "@apollo/react-hooks": "^3.1.5",
+    "@nexus/schema": "^0.20.1",
     "@ngneat/falso": "^5.2.0",
-    "@prisma/client": "^3.12.0",
+    "@prisma/client": "^3.14.0",
     "@sanv/eslint-config-unicorn-typescript": "^2.0.3",
     "@sentry/nextjs": "^6.19.7",
     "@stripe/react-stripe-js": "^1.7.0",
@@ -84,6 +85,7 @@
     "morgan": "^1.10.0",
     "next": "^12.1.0",
     "next-images": "^1.7.0",
+    "nexus-plugin-prisma": "^0.35.0",
     "node-fetch": "^2.6.1",
     "npm": "^6.14.13",
     "postcss": "^8.4.5",
