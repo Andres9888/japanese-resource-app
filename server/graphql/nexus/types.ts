@@ -1,8 +1,7 @@
-import path from 'path';
+import { PrismaClient } from '@prisma/client';
+import { mutationType, queryType, objectType, idArg, nonNull, stringArg, booleanArg, arg, inputObjectType } from 'nexus';
 
-import { mutationType, queryType, objectType, idArg, nonNull, stringArg, booleanArg, arg, inputObjectType, scalarType } from '@nexus/schema';
-import { schema } from 'nexus';
-import { nexusPrisma } from 'nexus-plugin-prisma';
+const prisma = new PrismaClient();
 
 export const ConfirmStatus = objectType({
   name: 'ConfirmStatus',
@@ -51,7 +50,24 @@ export const Mutation = mutationType({
 });
 export const Query = queryType({
   definition(t) {
-    t.nonNull.list.nonNull.field('resources', { type: Resource });
+    t.nonNull.list.nonNull.field('resources', {
+      type: Resource,
+      resolve: async () => {
+        try {
+          return await prisma.resource.findMany({
+            orderBy: [
+              {
+                count: 'desc',
+              },
+            ],
+            include: { tags: true },
+          });
+        } catch (error) {
+          // Sentry.captureException(error);
+          throw new Error(`Failed to query resources: ${error}`);
+        }
+      },
+    });
     t.nonNull.string('authUrl');
     t.nonNull.list.nonNull.field('getUserResourceIds', {
       type: UserResources,
