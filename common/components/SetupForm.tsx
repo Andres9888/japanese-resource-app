@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 import styled from 'styled-components';
@@ -12,8 +12,11 @@ interface Props {
 const SetupForm = ({ wantsToCommit, viewer }: Props) => {
   const stripe = useStripe();
   const elements = useElements();
+  const [origin, setOrigin] = useState();
   const [errorMessage, setErrorMessage] = useState(null);
-
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
   const handleSubmit = async event => {
     // We don't want to let default form submission happen here,
     // which would refresh the page.
@@ -29,7 +32,7 @@ const SetupForm = ({ wantsToCommit, viewer }: Props) => {
       // `Elements` instance that was used to create the Payment Element
       elements,
       confirmParams: {
-        return_url: `http://localhost:3000/paymentstatus${wantsToCommit ? '?wantsToCommit=true' : ''}`,
+        return_url: `${origin}/paymentstatus${wantsToCommit ? '?wantsToCommit=true' : ''}`,
       },
     });
 
