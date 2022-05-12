@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect } from 'react';
 
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
@@ -24,10 +25,10 @@ const SetupForm = ({ wantsToCommit, viewer }: Props) => {
 
     if (!stripe || !elements) {
       // Stripe.js has not yet loaded.
-      // Make sure to disable form submission until Stripe.js has loaded.
+      // Make sure to disable form submission until Stripe.js has loaded./*  */
       return;
     }
-    console.log(wantsToCommit);
+
     const { error } = await stripe.confirmSetup({
       // `Elements` instance that was used to create the Payment Element
       elements,
