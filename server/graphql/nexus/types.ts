@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import * as Sentry from '@sentry/nextjs';
 import { mutationType, queryType, objectType, idArg, nonNull, stringArg, booleanArg, arg, inputObjectType } from 'nexus';
 
 const prisma = new PrismaClient();
@@ -63,7 +64,7 @@ export const Query = queryType({
             include: { tags: true },
           });
         } catch (error) {
-          // Sentry.captureException(error);
+          Sentry.captureException(error);
           throw new Error(`Failed to query resources: ${error}`);
         }
       },
@@ -73,6 +74,24 @@ export const Query = queryType({
       type: UserResources,
       args: {
         id: nonNull(idArg()),
+      },
+      validate: ({ string }, arguments_, context) => ({
+        id: string().required().validate('no');
+      }),
+      resolve: async (_root: undefined, { id }) => {
+        try {
+          return await prisma.user.findMany({
+            where: {
+              id,
+            },
+            select: {
+              resources: true,
+            },
+          });
+        } catch (error) {
+          Sentry.captureException(error);
+          throw new Error(`Failed to query user resources Ids: ${error}`);
+        }
       },
     });
   },

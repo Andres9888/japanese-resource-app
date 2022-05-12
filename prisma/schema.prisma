@@ -11,10 +11,6 @@ generator client {
   previewFeatures = ["dataProxy", "referentialIntegrity"]
 }
 
-generator nexusPrisma {
-  provider = "nexus-prisma"
-}
-
 model Tag {
   id Int @id @default(autoincrement())
 

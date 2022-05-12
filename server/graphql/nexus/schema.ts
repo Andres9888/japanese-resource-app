@@ -3,12 +3,13 @@ import { join } from 'path';
 
 import { makeSchema } from 'nexus';
 import { nexusPrisma } from 'nexus-plugin-prisma';
+import { validatePlugin } from 'nexus-validate';
 
 import * as types from './types';
 
 export const schema = makeSchema({
   types,
-  plugins: [nexusPrisma()],
+  plugins: [nexusPrisma(), validatePlugin()],
   outputs: {
     typegen: join(process.cwd(), 'nexus-generated/nexus-typegen.ts'),
     schema: join(process.cwd(), 'nexus-generated/schema.graphql'),
