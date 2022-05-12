@@ -31,11 +31,6 @@ const LogIn = ({ setViewer }: Props) => {
   const [logIn, { data: logInData, loading: logInLoading, error: logInError }] = useMutation<LogInData, LogInVariables>(LOG_IN, {
     onCompleted: async data => {
       if (data && data.logIn && data.logIn.token) {
-        await axios.post('/api/stream', {
-          name: data.logIn.name,
-          avatar: data.logIn.avatar,
-          id: data.logIn.id,
-        });
         setViewer(data.logIn);
         sessionStorage.setItem('token', data.logIn.token);
         displaySuccessNotification("You've successfully logged in!");
