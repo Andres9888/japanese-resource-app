@@ -16,6 +16,9 @@ import Nav from '~layouts/default/Nav';
 import { useApollo, initializeApollo } from '~lib/apolloClient';
 import { Viewer } from '~types/globalTypes';
 
+const LogRocket = require('logrocket');
+const setupLogRocketReact = require('logrocket-react');
+
 const initialViewer: Viewer = {
   id: null,
   token: null,
@@ -54,6 +57,11 @@ export default function App({ Component, pageProps }: AppProps) {
   const logInReference = useRef(logIn);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      LogRocket.init('jwy8km/japaneselist');
+      // plugins should also only be initialized when in the browser
+      setupLogRocketReact(LogRocket);
+    }
     logInReference.current();
   }, []);
 
