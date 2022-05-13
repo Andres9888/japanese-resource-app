@@ -23,25 +23,29 @@ function userPage({ viewer }: Props) {
   if (!viewer.id) {
     return <div>Log in to View Page</div>;
   }
-  const { data, loading, error } = useQuery<getUserResourceIdsData, getUserResourcesIdsVariables>(GET_USER_RESOURCES_IDS, {
-    variables: { id: viewer.id },
-  });
+  const { data: { getUserResourceIds } = {}, loading, error } = useQuery<getUserResourceIdsData, getUserResourcesIdsVariables>(
+    GET_USER_RESOURCES_IDS,
+    {
+      variables: { id: viewer.id },
+    }
+  );
+
   const [recommendation, setRecommendation] = useState<recommendationData>();
-  const { data: dataResources, loading: loadingResources, error: errorResources } = useQuery(RESOURCES);
+  const { data: { resources } = {}, loading: loadingResources, error: errorResources } = useQuery(RESOURCES);
 
-  useEffect(() => {
-    const getRecommendation = async () => {
-      try {
-        const { data: responseData } = await axios.get<recommendationData>(`/api/recommendation?user=${viewer.id}`);
+  // useEffect(() => {
+  //   const getRecommendation = async () => {
+  //     try {
+  //       const { data: responseData } = await axios.get<recommendationData>(`/api/recommendation?user=${viewer.id}`);
 
-        setRecommendation(responseData);
-      } catch (error_) {
-        console.log(error_);
-      }
-    };
+  //       setRecommendation(responseData);
+  //     } catch (error_) {
+  //       console.log(error_);
+  //     }
+  //   };
 
-    getRecommendation();
-  }, []);
+  //   getRecommendation();
+  // }, []);
 
   if (loading || loadingResources) {
     return <Image alt="" height={116} src="/static/images/flat_750x_075_f-pad_750x1000_f8f8f8_sh4wbg.jpg" width={538} />;
@@ -49,9 +53,14 @@ function userPage({ viewer }: Props) {
   if (error || errorResources) {
     return <h2>error</h2>;
   }
-  const userVotedResources = dataResources.resources.filter(resource => data.getUserResourceIds[0].resources.includes(resource.id));
 
-  const recommendedResource = dataResources.resources.filter(resource => resource.id === recommendation);
+  const [userVotedResourceIds] = getUserResourceIds;
+
+  const userVotedResources = resources.filter(resource =>
+    userVotedResourceIds.resources.some(({ resourceId: userVotedResourceId }) => userVotedResourceId === resource.id)
+  );
+
+  // const recommendedResource = dataResources.resources.filter(resource => resource.id === recommendation);
 
   return (
     <div>
@@ -63,7 +72,7 @@ function userPage({ viewer }: Props) {
         <Divider />
       </div>
       <div className="container">
-        <Header>You Might Like This Resource Below</Header>
+        {/* <Header>You Might Like This Resource Below</Header>
         <table className="table is-fullwidth is-hoverable">
           <tbody>
             {recommendedResource.map(resource => (
@@ -86,7 +95,7 @@ function userPage({ viewer }: Props) {
               </TableRow>
             ))}
           </tbody>
-        </table>
+        </table> */}
         <Divider />
         <Header>Your Liked Resources</Header>
         <table className="table is-fullwidth is-hoverable">
