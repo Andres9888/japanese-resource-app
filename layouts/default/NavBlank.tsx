@@ -11,7 +11,7 @@ const NavBlank = () => {
       <Header className="app-header">
         <div className="app-header__logo-search-section">
           <div className="app-header__logo">
-            <Link href="/">
+            <Link passHref href="/">
               <div>
                 <Icon type="home" />
               </div>

@@ -27,7 +27,6 @@ export const StripeInput = ({ viewer, wantsToCommit }: Props) => {
 
         setClientSecret(clientSecretResponse);
       } catch (error) {
-        console.log(error);
         Sentry.captureException(error);
       }
     };

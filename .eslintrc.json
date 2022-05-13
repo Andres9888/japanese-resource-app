@@ -44,6 +44,9 @@
         }
       }
     ],
+    "unicorn/prefer-module": [
+      "warn"
+    ],
     "unicorn/prevent-abbreviations": [
       "error",
       {

@@ -40,7 +40,7 @@ const MenuItems = ({ viewer, setViewer }: Props) => {
       </SubMenu>
     ) : (
       <Item key="/login">
-        <Link href="/login">
+        <Link passHref href="/login">
           <Button type="primary">Sign In</Button>
         </Link>
       </Item>

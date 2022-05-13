@@ -3,8 +3,8 @@ import React from 'react';
 import { Alert } from 'antd';
 
 interface Props {
-  message?: string;
-  description?: string;
+  message: string;
+  description: string;
 }
 
 export const ErrorBanner = ({
