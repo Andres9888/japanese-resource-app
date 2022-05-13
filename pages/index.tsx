@@ -12,9 +12,6 @@ import { RESOURCES } from '~graphql/queries/queries';
 import { initializeApollo } from '~lib/apolloClient';
 import { Viewer } from '~types/globalTypes';
 
-const LogRocket = require('logrocket');
-const setupLogRocketReact = require('logrocket-react');
-
 const loadingImageUrl = '/static/images/japanese-loading-text-bar.jpg';
 
 interface Props {
@@ -34,12 +31,6 @@ const Home = ({ viewer, searchTerm, setSearchTerm }: Props) => {
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      LogRocket.init('jwy8km/japaneselist');
-      // plugins should also only be initialized when in the browser
-      setupLogRocketReact(LogRocket);
-    }
-
     const filteredData = resources.filter(
       ({ title, description, tags }) =>
         title.toLowerCase().includes(searchTerm.toLowerCase()) ||
