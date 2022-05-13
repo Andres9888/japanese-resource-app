@@ -10,6 +10,7 @@
         "displayName": true,
         "preprocess": false
       }
-    ]
+    ],
+    "@babel/plugin-transform-react-display-name"
   ]
 }
