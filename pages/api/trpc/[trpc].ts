@@ -33,7 +33,7 @@ export const appRouter = trpc
           id: input.id,
         },
         select: {
-          resources: true,
+          votedResourceIds: true,
         },
       });
     },

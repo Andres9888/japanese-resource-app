@@ -1,5 +1,4 @@
 // @ts-nocheck
-import React from 'react';
 
 import { useQuery } from '@apollo/react-hooks';
 import { motion } from 'framer-motion';
@@ -12,6 +11,7 @@ import { getResources } from '~graphql/queries/__generated__/getResources';
 import { getUserResourcesIds as getUserResourceIdsData, getUserResourcesIdsVariables } from '~graphql/queries/__generated__/getUserResourcesIds';
 import { GET_USER_RESOURCES_IDS } from '~graphql/queries/queries';
 import { displayErrorMessage } from '~lib/utils';
+import { trpc } from '~lib/utils/trpc';
 import { Viewer } from '~types/globalTypes';
 
 interface Props {
@@ -21,11 +21,11 @@ interface Props {
 }
 
 const ResourceTable = ({ viewer, searchResults, refetch }: Props) => {
-  const { data, loading, refetch: refetchUserResourcesIds } = useQuery<getUserResourceIdsData, getUserResourcesIdsVariables>(GET_USER_RESOURCES_IDS, {
-    variables: { id: viewer.id },
-    skip: !viewer.id,
-  });
-
+  // const { data, loading, refetch: refetchUserResourcesIds } = useQuery<getUserResourceIdsData, getUserResourcesIdsVariables>(GET_USER_RESOURCES_IDS, {
+  //   variables: { id: viewer.id },
+  //   skip: !viewer.id,
+  // });
+  const { data, loading, refetch: refetchUserResourcesIds } = trpc.useQuery(['findUserVotedResourceIds', { id: viewer.id, enabled: !!viewer.id }]);
   const renderVoteButton = resource => {
     if (loading) {
       return null;
@@ -38,7 +38,7 @@ const ResourceTable = ({ viewer, searchResults, refetch }: Props) => {
             refetch={refetch}
             refetchUserResourcesIds={refetchUserResourcesIds}
             resource={resource}
-            userResourcesIds={data}
+            userVotedResourceIdsData={data}
             viewer={viewer}
           />
           <span>{resource.count}</span>
