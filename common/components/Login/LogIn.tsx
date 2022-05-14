@@ -15,7 +15,10 @@ import { AUTH_URL } from '~graphql/queries/queries';
 import { initializeApollo } from '~lib/apolloClient';
 import { displaySuccessNotification, displayErrorMessage } from '~lib/utils';
 import { Viewer } from '~types/globalTypes';
+
 import 'antd/dist/antd.css';
+
+const LogRocket = require('logrocket');
 
 const { Content } = Layout;
 const { Text, Title } = Typography;
@@ -31,6 +34,7 @@ const LogIn = ({ setViewer }: Props) => {
     onCompleted: async data => {
       if (data && data.logIn && data.logIn.token) {
         setViewer(data.logIn);
+        LogRocket.identify(data.logIn.id, { ...data.logIn });
         sessionStorage.setItem('token', data.logIn.token);
         displaySuccessNotification("You've successfully logged in!");
       }
