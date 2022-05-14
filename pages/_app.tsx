@@ -49,6 +49,8 @@ function App({ Component, pageProps }: AppProps) {
     onCompleted: data => {
       if (data && data.logIn) {
         setViewer(data.logIn);
+        LogRocket.identify(data.logIn.id, { ...data.logIn });
+
         if (data.logIn.token) {
           sessionStorage.setItem('token', data.logIn.token);
         } else {
