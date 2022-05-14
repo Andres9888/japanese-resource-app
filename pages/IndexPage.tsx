@@ -1,13 +1,14 @@
 import { trpc } from '~lib/utils/trpc';
 
 export default function IndexPage() {
-  const hello = trpc.useQuery(['hello', { text: 'client' }]);
+  const hello = trpc.useQuery(['findUserVotedResourceIds', { id: 1 }]);
   if (!hello.data) {
     return <div>Loading...</div>;
   }
+  console.log(hello.data.resources);
   return (
     <div>
-      <p>{hello.data.greeting}</p>
+      <h1>test</h1>
     </div>
   );
 }
