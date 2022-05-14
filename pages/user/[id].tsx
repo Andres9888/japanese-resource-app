@@ -16,24 +16,27 @@ import { Viewer } from '~types/globalTypes';
 interface Props {
   viewer: Viewer;
 }
-interface recommendationData {
-  data: string;
-}
+// interface recommendationData {
+//   data: string;
+// }
 
 function userPage({ viewer }: Props) {
   if (!viewer.id) {
     return <div>Log in to View Page</div>;
   }
-  const userVotedResourceIdsQuery = trpc.useQuery(['findUserVotedResourceIds', { id: viewer.id }]);
-
-  const { data: { getUserResourceIds } = {}, loading, error } = useQuery<getUserResourceIdsData, getUserResourcesIdsVariables>(
-    GET_USER_RESOURCES_IDS,
-    {
-      variables: { id: viewer.id },
-    }
-  );
-
+  const { isLoading, isError, data: { votedResourceIds: userVotedResourceIds } = {}, error } = trpc.useQuery([
+    'findUserVotedResourceIds',
+    { id: viewer.id },
+  ]);
   const { data: { resources } = {}, loading: loadingResources, error: errorResources } = useQuery(RESOURCES);
+
+  // const { data: { getUserResourceIds } = {}, loading, error } = useQuery<getUserResourceIdsData, getUserResourcesIdsVariables>(
+  //   GET_USER_RESOURCES_IDS,
+  //   {
+  //     variables: { id: viewer.id },
+  //   }
+  // );
+
   // const [recommendation, setRecommendation] = useState<recommendationData>();
 
   // useEffect(() => {
@@ -50,20 +53,24 @@ function userPage({ viewer }: Props) {
   //   getRecommendation();
   // }, []);
 
-  if (loading || loadingResources) {
-    return <Image alt="" height={116} src="/static/images/flat_750x_075_f-pad_750x1000_f8f8f8_sh4wbg.jpg" width={538} />;
+  // if (loading || loadingResources) {
+  //   return <Image alt="" height={116} src="/static/images/flat_750x_075_f-pad_750x1000_f8f8f8_sh4wbg.jpg" width={538} />;
+  // }
+  // if (error || errorResources) {
+  //   return <h2>error</h2>;
+  // }
+  if (isLoading || loadingResources) {
+    return <div>Loading...</div>;
   }
-  if (error || errorResources) {
+
+  if (isError || errorResources) {
     return <h2>error</h2>;
   }
-
-  const [userVotedResourceIds] = getUserResourceIds;
+  // const recommendedResource = dataResources.resources.filter(resource => resource.id === recommendation);
 
   const userVotedResources = resources.filter(resource =>
-    userVotedResourceIds.resources.some(({ resourceId: userVotedResourceId }) => userVotedResourceId === resource.id)
+    userVotedResourceIds?.some(({ resourceId: userVotedResourceId }) => userVotedResourceId === resource.id)
   );
-  console.log(userVotedResourceIdsQuery);
-  // const recommendedResource = dataResources.resources.filter(resource => resource.id === recommendation);
 
   return (
     <div>
