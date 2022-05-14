@@ -53,16 +53,16 @@ model CommittedLog {
 }
 
 model User {
-  id            String         @id @default(cuid())
-  contact       String         @unique
-  name          String
-  avatar        String
-  committed     Boolean?
-  dateCommitted DateTime?
-  stripeId      String?        @unique
-  stripeHasCard Boolean?
-  timezone      String?
-  committedLog  CommittedLog[]
-  resources     ResourceId[]
-  token         String         @unique
+  id               String         @id @default(cuid())
+  contact          String         @unique
+  name             String
+  avatar           String
+  committed        Boolean?
+  dateCommitted    DateTime?
+  stripeId         String?        @unique
+  stripeHasCard    Boolean?
+  timezone         String?
+  committedLog     CommittedLog[]
+  votedResourceIds ResourceId[]
+  token            String         @unique
 }

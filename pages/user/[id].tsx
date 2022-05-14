@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useQuery } from '@apollo/react-hooks';
 import { Avatar, Divider } from 'antd';
-import axios from 'axios';
+// import axios from 'axios';
 import Image from 'next/image';
 import { RWebShare } from 'react-web-share';
 import styled from 'styled-components';
@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import { getUserResourcesIds as getUserResourceIdsData, getUserResourcesIdsVariables } from '../../graphql/queries/__generated__/getUserResourcesIds';
 
 import { GET_USER_RESOURCES_IDS, RESOURCES } from '~graphql/queries/queries';
+import { trpc } from '~lib/utils/trpc';
 import { Viewer } from '~types/globalTypes';
 
 interface Props {
@@ -23,6 +24,8 @@ function userPage({ viewer }: Props) {
   if (!viewer.id) {
     return <div>Log in to View Page</div>;
   }
+  const userVotedResourceIdsQuery = trpc.useQuery(['findUserVotedResourceIds', { id: viewer.id }]);
+
   const { data: { getUserResourceIds } = {}, loading, error } = useQuery<getUserResourceIdsData, getUserResourcesIdsVariables>(
     GET_USER_RESOURCES_IDS,
     {
@@ -30,8 +33,8 @@ function userPage({ viewer }: Props) {
     }
   );
 
-  const [recommendation, setRecommendation] = useState<recommendationData>();
   const { data: { resources } = {}, loading: loadingResources, error: errorResources } = useQuery(RESOURCES);
+  // const [recommendation, setRecommendation] = useState<recommendationData>();
 
   // useEffect(() => {
   //   const getRecommendation = async () => {
@@ -59,7 +62,7 @@ function userPage({ viewer }: Props) {
   const userVotedResources = resources.filter(resource =>
     userVotedResourceIds.resources.some(({ resourceId: userVotedResourceId }) => userVotedResourceId === resource.id)
   );
-
+  console.log(userVotedResourceIdsQuery);
   // const recommendedResource = dataResources.resources.filter(resource => resource.id === recommendation);
 
   return (
