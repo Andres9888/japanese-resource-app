@@ -29,10 +29,15 @@ const MenuItems = ({ viewer, setViewer }: Props) => {
           <Link href="/commit">Commit</Link>
         </Item>
         <Item key="/user">
-          <Link href="/goals">Goal Setting</Link>
+          <Link href="/log">Log</Link>
         </Item>
         <Item key="/user">
-          <Link href="/log">Log</Link>
+          <Link href="/goals">Goal Setting</Link>
+        </Item>
+        <Item>
+          <a href="https://discord.gg/w2gvPtCRXY" rel="noreferrer" target="_blank">
+            Discord
+          </a>
         </Item>
         <Item key="/logout">
           <LogOutButton setViewer={setViewer}>Sign Out</LogOutButton>
