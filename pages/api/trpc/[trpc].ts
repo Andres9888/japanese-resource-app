@@ -1,23 +1,16 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import * as trpc from '@trpc/server';
+import { TRPCError } from '@trpc/server';
 import * as trpcNext from '@trpc/server/adapters/next';
 import { z } from 'zod';
 
 const prisma = new PrismaClient();
+const userVotedResourceIds = Prisma.validator<Prisma.UserSelect>()({
+  votedResourceIds: true,
+});
+
 export const appRouter = trpc
   .router()
-  .query('hello', {
-    input: z
-      .object({
-        text: z.string().nullish(),
-      })
-      .nullish(),
-    resolve({ input }) {
-      return {
-        greeting: `hello ${input?.text ?? 'world'}`,
-      };
-    },
-  })
   .query('findUsers', {
     resolve() {
       return prisma.user.findMany();
@@ -27,15 +20,20 @@ export const appRouter = trpc
     input: z.object({
       id: z.string().nonempty(),
     }),
-    resolve({ input }) {
-      return prisma.user.findUnique({
+    async resolve({ input }) {
+      const userVotedResourceIdReponse = await prisma.user.findUnique({
         where: {
           id: input.id,
         },
-        select: {
-          votedResourceIds: true,
-        },
+        select: userVotedResourceIds,
       });
+      if (!userVotedResourceIdReponse) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `No votedResourceIds with userId :'${input.id}'`,
+        });
+      }
+      return userVotedResourceIdReponse;
     },
   });
 

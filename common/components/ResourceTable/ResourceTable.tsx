@@ -21,10 +21,6 @@ interface Props {
 }
 
 const ResourceTable = ({ viewer, searchResults, refetch }: Props) => {
-  // const { data, loading, refetch: refetchUserResourcesIds } = useQuery<getUserResourceIdsData, getUserResourcesIdsVariables>(GET_USER_RESOURCES_IDS, {
-  //   variables: { id: viewer.id },
-  //   skip: !viewer.id,
-  // });
   const { data, loading, refetch: refetchUserResourcesIds } = trpc.useQuery(['findUserVotedResourceIds', { id: viewer.id, enabled: !!viewer.id }]);
   const renderVoteButton = resource => {
     if (loading) {

@@ -22,10 +22,7 @@ function userPage({ viewer }: Props) {
   if (!viewer.id) {
     return <div>Log in to View Page</div>;
   }
-  const { isLoading, isError, data: { votedResourceIds: userVotedResourceIds } = {}, error } = trpc.useQuery([
-    'findUserVotedResourceIds',
-    { id: viewer.id },
-  ]);
+  const { isLoading, isError, data: userData } = trpc.useQuery(['findUserVotedResourceIds', { id: viewer.id }]);
   const { data: { resources } = {}, loading: loadingResources, error: errorResources } = useQuery(RESOURCES);
 
   // const { data: { getUserResourceIds } = {}, loading, error } = useQuery<getUserResourceIdsData, getUserResourcesIdsVariables>(
@@ -67,7 +64,7 @@ function userPage({ viewer }: Props) {
   // const recommendedResource = dataResources.resources.filter(resource => resource.id === recommendation);
 
   const userVotedResources = resources.filter(resource =>
-    userVotedResourceIds?.some(({ resourceId: userVotedResourceId }) => userVotedResourceId === resource.id)
+    userData?.votedResourceIds.some(({ resourceId: userVotedResourceId }) => userVotedResourceId === resource.id)
   );
 
   return (

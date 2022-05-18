@@ -24,11 +24,11 @@ interface Props {
 const VoteButton = ({ resource, viewer, refetch, refetchUserResourcesIds, userVotedResourceIdsData }: Props) => {
   const [incrementCount] = useMutation<incrementCountData, incrementCountVariables>(INCREMENT_COUNT);
   const [disabled, setDisabled] = useState(false);
-  const { votedResourceIds: userVotedResourceIds } = userVotedResourceIdsData;
+
   // eslint-disable-next-line no-shadow
   const handleIncrementCount = async resource => {
     if (viewer.id) {
-      const didVote = userVotedResourceIds.some(({ resourceId }) => resourceId === resource.id);
+      const didVote = userVotedResourceIdsData.votedResourceIds.some(({ resourceId }) => resourceId === resource.id);
 
       if (!didVote) {
         await incrementCount({
