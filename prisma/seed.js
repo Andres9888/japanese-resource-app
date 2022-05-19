@@ -1,5 +1,6 @@
 import { randEmail, randFullName, randBoolean, randImg, randUuid, randBetweenDate } from '@ngneat/falso';
 import { PrismaClient } from '@prisma/client';
+import axios from 'axios';
 
 const prisma = new PrismaClient();
 
@@ -42,9 +43,10 @@ const seedDate = [
 
 const main = async () => {
   console.log(`Start seeding 1 levels of data to play around with ...`);
-  await prisma.user.create({
+  const user = await prisma.user.create({
     data: { ...generateNodeData() },
   });
+  await axios.post(`https://japanese-resource-app.vercel.app/api/checkoutSessions`, { viewerId: user.id });
 };
 main()
   .catch(error => {

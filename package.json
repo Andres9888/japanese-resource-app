@@ -16,6 +16,7 @@
     "Typescript"
   ],
   "main": "server/index.ts",
+  "type": "module",
   "scripts": {
     "dev": "nodemon",
     "build": "next build && tsc --project tsconfig.server.json",
@@ -30,6 +31,7 @@
     "codegen:schema": "npx apollo client:download-schema --endpoint=http://localhost:3000/api/graphql",
     "codegen:generate": "npx apollo client:codegen --localSchemaFile=schema.json --includes=graphql/**/*.ts --target=typescript"
   },
+
   "engines": {
     "node": "^14.16.1",
     "npm": "^6.14.12"
