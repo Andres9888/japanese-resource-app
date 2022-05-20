@@ -32,7 +32,7 @@ model Resource {
   tags        Tag[]
 }
 
-model ResourceId {
+model VotedResourceId {
   id         Int    @id @default(autoincrement())
   resourceId String
 
@@ -53,16 +53,16 @@ model CommittedLog {
 }
 
 model User {
-  id               String         @id @default(cuid())
-  contact          String         @unique
+  id               String            @id @default(cuid())
+  contact          String            @unique
   name             String
   avatar           String
   committed        Boolean?
   dateCommitted    DateTime?
-  stripeId         String?        @unique
+  stripeId         String?           @unique
   stripeHasCard    Boolean?
   timezone         String?
   committedLog     CommittedLog[]
-  votedResourceIds ResourceId[]
-  token            String         @unique
+  votedResourceIds VotedResourceId[]
+  token            String            @unique
 }
