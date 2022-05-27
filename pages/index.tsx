@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 
 import { useQuery } from '@apollo/react-hooks';
+import { Layout } from 'antd';
 import Head from 'next/head';
 import Image from 'next/image';
 
@@ -19,6 +20,7 @@ interface Props {
   searchTerm: string;
   setSearchTerm: (searchTerm: string) => void;
 }
+const { Footer } = Layout;
 
 const Home = ({ viewer, searchTerm, setSearchTerm }: Props) => {
   const {
@@ -60,6 +62,7 @@ const Home = ({ viewer, searchTerm, setSearchTerm }: Props) => {
         <FilterByTag setSearchTerm={setSearchTerm} />
         <ResourceTable refetch={refetch} searchResults={searchResults} viewer={viewer} />
       </div>
+      <Footer style={{ textAlign: 'center' }}> Created by Andres Gutierrez</Footer>
     </>
   );
 };

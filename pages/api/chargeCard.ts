@@ -18,41 +18,21 @@ export default async function handler(request, response) {
 
   if (request.method === 'POST') {
     try {
-      const commits = await prisma.user.findMany({
-        where: {
-          committed: true,
-          dateCommitted: {
-            lte: getTwoDaysAgo(),
-          },
-        },
-        include: { committedLog: true },
-      });
-
-      const getUsersToCharge = () => {
-        return commits.filter(user => {
-          const yesterdaysLogs = user.committedLog.filter(log => didlogYesterday(log, user));
-
-          return yesterdaysLogs.length === 0;
-        });
-      };
-
-      const usersToCharge = getUsersToCharge();
-      const userStripeIdsToCharge = usersToCharge.map(user => user.stripeId);
-
       const { id: idempotenceKey } = request.body;
 
-      for (const stripeId of userStripeIdsToCharge) {
-        const paymentMethods = await stripe.paymentMethods.list({
-          customer: stripeId,
-          type: 'card',
-        });
+      for (let index = 0; index < usersToCharge.length; index++) {
+        const stripeId = userStripeIdsToCharge[index];
+        // const paymentMethods = await stripe.paymentMethods.list({
+        //   customer: stripeId,
+        //   type: 'card',
+        // });
 
-        const paymentIntent = await stripe.paymentIntents.create(
+        await stripe.paymentIntents.create(
           {
             amount: 100,
             currency: 'usd',
             customer: stripeId,
-            payment_method: paymentMethods.data[0].id,
+            //payment_method: paymentMethods.data[0].id,
             confirm: true,
             off_session: true,
           },
@@ -72,22 +52,3 @@ export default async function handler(request, response) {
     }
   }
 }
-
-// const allowCors = fn => async (req, res) => {
-//   res.setHeader('Access-Control-Allow-Credentials', true);
-//   res.setHeader('Access-Control-Allow-Origin', '*');
-//   // another common pattern
-//   // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
-//   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-//   res.setHeader(
-//     'Access-Control-Allow-Headers',
-//     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-//   );
-//   if (req.method === 'OPTIONS') {
-//     res.status(200).end();
-//     return;
-//   }
-//   return await fn(req, res);
-// };
-
-//module.exports = allowCors(handler);

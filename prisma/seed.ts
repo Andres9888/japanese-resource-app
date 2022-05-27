@@ -1,20 +1,8 @@
-import { randEmail, randFullName, randBoolean, randImg, randUuid, randBetweenDate } from '@ngneat/falso';
+import { randEmail, randFullName, randBoolean, randImg, randUuid, randBetweenDate, randRecentDate, randTimeZone } from '@ngneat/falso';
 import { PrismaClient } from '@prisma/client';
 import axios from 'axios';
 
 const prisma = new PrismaClient();
-
-const generateNodeData = () => ({
-  id: randUuid(),
-  contact: randEmail(),
-  name: randFullName(),
-  avatar: randImg(),
-  committed: randBoolean(),
-  token: randUuid(),
-  committedLog: {
-    create: { dateLogged: randBetweenDate({ from: new Date('05/08/2022'), to: new Date() }) },
-  },
-});
 
 const seedDate = [
   {
@@ -40,13 +28,30 @@ const seedDate = [
 //     },
 //   },
 // });
+// dateLogged: randBetweenDate({ from: new Date('05/14/2022'), to: new Date() })
 
+const generateNodeData = () => ({
+  id: randUuid(),
+  contact: randEmail(),
+  name: randFullName(),
+  avatar: randImg(),
+  committed: true,
+  dateCommitted: randRecentDate({ days: 7 }),
+  token: randUuid(),
+  timezone: randTimeZone(),
+  committedLog: {
+    create: { dateLogged: randBetweenDate({ from: new Date('05/20/2022'), to: new Date() }).toISOString() },
+  },
+});
 const main = async () => {
   console.log(`Start seeding 1 levels of data to play around with ...`);
+
   const user = await prisma.user.create({
     data: { ...generateNodeData() },
   });
-  await axios.post(`https://japanese-resource-app.vercel.app/api/checkoutSessions`, { viewerId: user.id });
+  await axios.post(`http://localhost:3000/api/checkoutSessions`, { viewerId: user.id });
+
+  console.log(user);
 };
 main()
   .catch(error => {
