@@ -10,6 +10,7 @@ import FilterByTag from '~common/components/FilterByTag';
 import ResourceTable from '~common/components/ResourceTable';
 import { getResources } from '~graphql/queries/__generated__/getResources';
 import { RESOURCES } from '~graphql/queries/queries';
+import Footer from '~layouts/default/Footer';
 import { initializeApollo } from '~lib/apolloClient';
 import { Viewer } from '~types/globalTypes';
 
@@ -61,6 +62,7 @@ const Home = ({ viewer, searchTerm, setSearchTerm }: Props) => {
         <FilterByTag setSearchTerm={setSearchTerm} />
         <ResourceTable refetch={refetch} searchResults={searchResults} viewer={viewer} />
       </Container>
+      <Footer />
     </>
   );
 };

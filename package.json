@@ -16,7 +16,7 @@
     "Typescript"
   ],
   "main": "server/index.ts",
-    "scripts": {
+  "scripts": {
     "dev": "nodemon",
     "build": "next build && tsc --project tsconfig.server.json",
     "start": "cross-env NODE_ENV=production ts-node --project tsconfig.server.json -r tsconfig-paths/register dist/server",
@@ -40,6 +40,9 @@
     "@apollo/client": "^3.3.15",
     "@apollo/react-hooks": "^3.1.5",
     "@babel/plugin-transform-react-display-name": "^7.16.7",
+    "@mantine/core": "^4.2.7",
+    "@mantine/hooks": "^4.2.7",
+    "@mantine/next": "^4.2.7",
     "@ngneat/falso": "^5.2.0",
     "@prisma/client": "^3.14.0",
     "@sanv/eslint-config-unicorn-typescript": "^2.0.3",

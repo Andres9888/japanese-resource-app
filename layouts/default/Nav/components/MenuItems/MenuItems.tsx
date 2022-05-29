@@ -34,11 +34,6 @@ const MenuItems = ({ viewer, setViewer }: Props) => {
         <Item key="/user">
           <Link href="/goals">Goal Setting</Link>
         </Item>
-        <Item>
-          <a href="https://discord.gg/w2gvPtCRXY" rel="noreferrer" target="_blank">
-            Discord
-          </a>
-        </Item>
         <Item key="/logout">
           <LogOutButton setViewer={setViewer}>Sign Out</LogOutButton>
         </Item>
