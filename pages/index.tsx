@@ -2,9 +2,9 @@
 import { useState, useEffect } from 'react';
 
 import { useQuery } from '@apollo/react-hooks';
-import { Layout } from 'antd';
 import Head from 'next/head';
 import Image from 'next/image';
+import styled from 'styled-components';
 
 import FilterByTag from '~common/components/FilterByTag';
 import ResourceTable from '~common/components/ResourceTable';
@@ -20,7 +20,6 @@ interface Props {
   searchTerm: string;
   setSearchTerm: (searchTerm: string) => void;
 }
-const { Footer } = Layout;
 
 const Home = ({ viewer, searchTerm, setSearchTerm }: Props) => {
   const {
@@ -58,11 +57,10 @@ const Home = ({ viewer, searchTerm, setSearchTerm }: Props) => {
           name="description"
         />
       </Head>
-      <div className="container">
+      <Container>
         <FilterByTag setSearchTerm={setSearchTerm} />
         <ResourceTable refetch={refetch} searchResults={searchResults} viewer={viewer} />
-      </div>
-      <Footer style={{ textAlign: 'center' }}> Created by Andres Gutierrez</Footer>
+      </Container>
     </>
   );
 };
@@ -79,3 +77,7 @@ export async function getServerSideProps() {
     props: { initialApolloState: apolloClient.cache.extract() },
   };
 }
+
+const Container = styled.div.attrs({
+  className: 'container',
+})``;
