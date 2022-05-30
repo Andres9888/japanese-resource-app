@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
-// @ts-nochecky
+// @ts-nocheck
 
 import { withTRPC } from '@trpc/next';
 import { AppType } from 'next/dist/shared/lib/utils';

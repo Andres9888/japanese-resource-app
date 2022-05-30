@@ -1,4 +1,6 @@
-import { Anchor, Footer as MFooter, Center } from '@mantine/core';
+// @ts-nocheck
+
+import { Footer as MFooter, Center } from '@mantine/core';
 import styled from 'styled-components';
 
 export default function Footer() {
