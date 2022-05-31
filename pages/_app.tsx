@@ -18,6 +18,7 @@ import Head from 'next/head';
 import LoadingCookieTemplatePage from '~app/components/LoadingCookieTemplatePage';
 import { LogIn as LogInData } from '~graphql/mutations/__generated__/LogIn';
 import { LOG_IN } from '~graphql/mutations/mutations';
+import Footer from '~layouts/default/Footer';
 import Nav from '~layouts/default/Nav';
 import { useApollo, initializeApollo } from '~lib/apolloClient';
 import { Viewer } from '~types/globalTypes';
@@ -128,8 +129,8 @@ function App({ Component, pageProps }: AppProps) {
       </Head>
 
       <Nav error={error} handleSearchChange={handleSearchChange} searchTerm={searchTerm} setViewer={setViewer} viewer={viewer} />
-
       <Component {...pageProps} searchTerm={searchTerm} setSearchTerm={setSearchTerm} setViewer={setViewer} viewer={viewer} />
+      <Footer />
     </ApolloProvider>
   );
 }
