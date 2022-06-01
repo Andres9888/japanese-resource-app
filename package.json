@@ -63,6 +63,7 @@
     "apollo-server-micro": "^2.25.3",
     "apollo-server-plugin-http-headers": "^0.1.4",
     "autoprefixer": "^9.8.6",
+    "aws-sdk": "^2.1146.0",
     "axios": "^0.23.0",
     "babel-register": "^6.26.0",
     "bulma": "^0.9.3",
