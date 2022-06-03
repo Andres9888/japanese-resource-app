@@ -20,27 +20,19 @@ export default async function handler(request, response) {
     try {
       const { id: idempotenceKey } = request.body;
 
-      for (let index = 0; index < usersToCharge.length; index++) {
-        const stripeId = userStripeIdsToCharge[index];
-        // const paymentMethods = await stripe.paymentMethods.list({
-        //   customer: stripeId,
-        //   type: 'card',
-        // });
-
-        await stripe.paymentIntents.create(
-          {
-            amount: 100,
-            currency: 'usd',
-            customer: stripeId,
-            //payment_method: paymentMethods.data[0].id,
-            confirm: true,
-            off_session: true,
-          },
-          {
-            idempotencyKey: idempotenceKey,
-          }
-        );
-      }
+      await stripe.paymentIntents.create(
+        {
+          amount: 100,
+          currency: 'usd',
+          customer: stripeId,
+          //payment_method: paymentMethods.data[0].id,
+          confirm: true,
+          off_session: true,
+        },
+        {
+          idempotencyKey: idempotenceKey,
+        }
+      );
 
       response.status(200).json({ message: 'success', usersCharged: userStripeIdsToCharge, UsersChargedInfo: usersToCharge });
     } catch (error) {

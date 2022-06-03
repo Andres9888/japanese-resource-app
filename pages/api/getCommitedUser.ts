@@ -19,7 +19,7 @@ export default async function handler(request, response) {
     });
   }
 
-  if (request.method === 'GET') {
+  if (request.method === 'POST') {
     try {
       const commits = await prisma.user.findMany({
         where: {
@@ -45,35 +45,33 @@ export default async function handler(request, response) {
 
       // Create an SQS service object
       const sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
-      const parameters = {
-        MessageGroupId: 'TestGroup',
-        MessageAttributes: {
-          Title: {
-            DataType: 'String',
-            StringValue: 'The Whistler',
-          },
-          Author: {
-            DataType: 'String',
-            StringValue: 'John Grisham',
-          },
-          WeeksOn: {
-            DataType: 'Number',
-            StringValue: '6',
-          },
-        },
-        MessageBody: 'Information about current NY Times fiction bestseller for week of 12/11/2016.',
-        // MessageDeduplicationId: "TheWhistler",  // Required for FIFO queues
-        // MessageGroupId: "Group1",  // Required for FIFO queues
-        QueueUrl: 'https://sqs.us-east-1.amazonaws.com/316703392763/chargeUsers.fifo',
-      };
 
-      sqs.sendMessage(parameters, function(error, data) {
-        if (error) {
-          console.log('Error', error);
-        } else {
-          console.log('Success', data.MessageId);
-        }
-      });
+      for (const stripeId of userStripeIdsToCharge) {
+        const parameters = {
+          MessageGroupId: 'TestGroup',
+
+          MessageBody: `{"stripeId": "${stripeId}"}`,
+          // MessageDeduplicationId: "TheWhistler",  // Required for FIFO queues
+          // MessageGroupId: "Group1",  // Required for FIFO queues
+          QueueUrl: 'https://sqs.us-east-1.amazonaws.com/316703392763/chargeUsers.fifo',
+        };
+
+        sqs.sendMessage(parameters, (err, data) => {
+          if (err) {
+            console.log('Error', err);
+          } else {
+            console.log('Success', data.MessageId);
+          }
+        });
+      }
+
+      // sqs.sendMessage(parameters, function(error, data) {
+      //   if (error) {
+      //     console.log('Error', error);
+      //   } else {
+      //     console.log('Success', data.MessageId);
+      //   }
+      // });
 
       response.status(200).json({ message: 'success', usersCharged: userStripeIdsToCharge, UsersChargedInfo: usersToCharge });
     } catch (error) {
