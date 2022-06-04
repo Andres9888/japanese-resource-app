@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { MongoClient } from 'mongodb';
 
 const dbname = process.env.DBNAME;

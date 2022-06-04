@@ -2,17 +2,16 @@
 /* eslint-disable react/prop-types */
 // @ts-nocheck
 
-import { withTRPC } from '@trpc/next';
-import { AppType } from 'next/dist/shared/lib/utils';
-
-import { AppRouter } from './api/trpc/[trpc]';
-
 import '~styles/main.scss';
 import { useState, useEffect, useRef } from 'react';
 
 import { ApolloProvider, useMutation } from '@apollo/react-hooks';
+import { withTRPC } from '@trpc/next';
 import { AppProps } from 'next/app';
+import { AppType } from 'next/dist/shared/lib/utils';
 import Head from 'next/head';
+
+import { AppRouter } from './api/trpc/[trpc]';
 // import Script from 'next/script';
 
 import LoadingCookieTemplatePage from '~app/components/LoadingCookieTemplatePage';
