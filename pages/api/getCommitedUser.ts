@@ -44,7 +44,11 @@ export default async function handler(request, response) {
       const userStripeIdsToCharge = usersToCharge.map(user => user.stripeId);
 
       // Create an SQS service object
-      const sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
+      const sqs = new AWS.SQS({
+        apiVersion: '2012-11-05',
+        // accessKeyId: process.env.AWS_ACCESS_KEY_ID, // should be:  process.env.AWS_ACCESS_ID
+        // secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      });
 
       for (const stripeId of userStripeIdsToCharge) {
         const parameters = {
@@ -56,22 +60,14 @@ export default async function handler(request, response) {
           QueueUrl: 'https://sqs.us-east-1.amazonaws.com/316703392763/chargeUsers.fifo',
         };
 
-        sqs.sendMessage(parameters, (err, data) => {
-          if (err) {
-            console.log('Error', err);
+        sqs.sendMessage(parameters, (error, data) => {
+          if (error) {
+            console.log('Error', error);
           } else {
             console.log('Success', data.MessageId);
           }
         });
       }
-
-      // sqs.sendMessage(parameters, function(error, data) {
-      //   if (error) {
-      //     console.log('Error', error);
-      //   } else {
-      //     console.log('Success', data.MessageId);
-      //   }
-      // });
 
       response.status(200).json({ message: 'success', usersCharged: userStripeIdsToCharge, UsersChargedInfo: usersToCharge });
     } catch (error) {
