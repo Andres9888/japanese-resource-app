@@ -28,6 +28,9 @@
       "~app/*": [
         "./app/*"
       ],
+      "~features/*": [
+        "./features/*"
+      ],
       "~common/*": [
         "./common/*"
       ],

@@ -10,20 +10,20 @@ import { withTRPC } from '@trpc/next';
 import { AppProps } from 'next/app';
 import { AppType } from 'next/dist/shared/lib/utils';
 import Head from 'next/head';
+import { Provider } from 'react-redux';
 
 import { AppRouter } from './api/trpc/[trpc]';
-// import Script from 'next/script';
 
 import LoadingCookieTemplatePage from '~app/components/LoadingCookieTemplatePage';
+import { store } from '~app/store';
+// import Script from 'next/script';
+
 import { LogIn as LogInData } from '~graphql/mutations/__generated__/LogIn';
 import { LOG_IN } from '~graphql/mutations/mutations';
 import Footer from '~layouts/default/Footer';
 import Nav from '~layouts/default/Nav';
 import { useApollo, initializeApollo } from '~lib/apolloClient';
 import { Viewer } from '~types/globalTypes';
-
-const LogRocket = require('logrocket');
-const setupLogRocketReact = require('logrocket-react');
 
 const initialViewer: Viewer = {
   id: null,
@@ -81,8 +81,9 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <ApolloProvider client={apolloClient}>
-      <Head>
-        {/* <Script
+      <Provider store={store}>
+        <Head>
+          {/* <Script
           src="/static/scripts/sakura.min.js"
           strategy="beforeInteractive"
           onLoad={() => {
@@ -125,11 +126,12 @@ function App({ Component, pageProps }: AppProps) {
           }}
         />
         */}
-      </Head>
+        </Head>
 
-      <Nav error={error} handleSearchChange={handleSearchChange} searchTerm={searchTerm} setViewer={setViewer} viewer={viewer} />
-      <Component {...pageProps} searchTerm={searchTerm} setSearchTerm={setSearchTerm} setViewer={setViewer} viewer={viewer} />
-      <Footer />
+        <Nav error={error} handleSearchChange={handleSearchChange} searchTerm={searchTerm} setViewer={setViewer} viewer={viewer} />
+        <Component {...pageProps} searchTerm={searchTerm} setSearchTerm={setSearchTerm} setViewer={setViewer} viewer={viewer} />
+        <Footer />
+      </Provider>
     </ApolloProvider>
   );
 }
