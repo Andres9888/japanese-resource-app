@@ -56,22 +56,14 @@ export default async function handler(request, response) {
           QueueUrl: 'https://sqs.us-east-1.amazonaws.com/316703392763/chargeUsers.fifo',
         };
 
-        sqs.sendMessage(parameters, (err, data) => {
-          if (err) {
-            console.log('Error', err);
+        sqs.sendMessage(parameters, (error, data) => {
+          if (error) {
+            console.log('Error', error);
           } else {
             console.log('Success', data.MessageId);
           }
         });
       }
-
-      // sqs.sendMessage(parameters, function(error, data) {
-      //   if (error) {
-      //     console.log('Error', error);
-      //   } else {
-      //     console.log('Success', data.MessageId);
-      //   }
-      // });
 
       response.status(200).json({ message: 'success', usersCharged: userStripeIdsToCharge, UsersChargedInfo: usersToCharge });
     } catch (error) {

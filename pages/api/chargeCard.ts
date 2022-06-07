@@ -18,8 +18,10 @@ export default async function handler(request, response) {
 
   if (request.method === 'POST') {
     try {
-      const { id: idempotenceKey } = request.body;
-
+      const idempotenceKey = request.headers[`x-idempotence-key`];
+      const stripeId = request.headers[`stripe-id`];
+      console.log(`idempotenceKey: ${idempotenceKey}`);
+      console.log(`stripeId: ${stripeId}`);
       await stripe.paymentIntents.create(
         {
           amount: 100,
@@ -34,7 +36,7 @@ export default async function handler(request, response) {
         }
       );
 
-      response.status(200).json({ message: 'success', usersCharged: userStripeIdsToCharge, UsersChargedInfo: usersToCharge });
+      response.status(200).json({ message: 'success', userCharged: stripeId });
     } catch (error) {
       // Error code will be authentication_required if authentication is needed
       console.log('Error code is:', error.code);
