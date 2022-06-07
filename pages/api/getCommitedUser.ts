@@ -44,7 +44,11 @@ export default async function handler(request, response) {
       const userStripeIdsToCharge = usersToCharge.map(user => user.stripeId);
 
       // Create an SQS service object
-      const sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
+      const sqs = new AWS.SQS({
+        apiVersion: '2012-11-05',
+        // accessKeyId: process.env.AWS_ACCESS_KEY_ID, // should be:  process.env.AWS_ACCESS_ID
+        // secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      });
 
       for (const stripeId of userStripeIdsToCharge) {
         const parameters = {
