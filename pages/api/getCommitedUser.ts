@@ -51,11 +51,10 @@ export default async function handler(request, response) {
       for (const stripeId of userStripeIdsToCharge) {
         const parameters = {
           MessageGroupId: 'TestGroup',
-
-          MessageBody: `{"stripeId": "${stripeId}"}`,
+          MessageBody: stripeId,
+          QueueUrl: 'https://sqs.us-east-1.amazonaws.com/316703392763/chargeUsers.fifo',
           // MessageDeduplicationId: "TheWhistler",  // Required for FIFO queues
           // MessageGroupId: "Group1",  // Required for FIFO queues
-          QueueUrl: 'https://sqs.us-east-1.amazonaws.com/316703392763/chargeUsers.fifo',
         };
 
         sqs.sendMessage(parameters, (error, data) => {
