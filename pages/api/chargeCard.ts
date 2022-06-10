@@ -10,38 +10,36 @@ const prisma = new PrismaClient();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(request, response) {
-  if (request.query.COMMIT_ROUTE_SECRET !== process.env.COMMIT_ROUTE_SECRET) {
+  if (request.query.commit_route_secret !== process.env.commit_route_secret) {
     return response.status(401).json({
-      error: 'Invalid secret',
+      error: 'invalid secret',
     });
   }
 
-  if (request.method === 'POST') {
+  if (request.method === 'post') {
     try {
-      const idempotenceKey = request.headers[`x-idempotence-key`];
-      const stripeId = request.headers[`stripe-id`];
-      console.log(`idempotenceKey: ${idempotenceKey}`);
-      console.log(`stripeId: ${stripeId}`);
-      await stripe.paymentIntents.create(
+      const idempotencekey = request.headers[`x-idempotence-key`];
+      const stripeid = request.headers[`stripe-id`];
+      await stripe.paymentintents.create(
         {
           amount: 100,
           currency: 'usd',
-          customer: stripeId,
-          //payment_method: paymentMethods.data[0].id,
+          customer: stripeid,
+          //payment_method: paymentmethods.data[0].id,
           confirm: true,
           off_session: true,
         },
         {
-          idempotencyKey: idempotenceKey,
+          idempotencykey: idempotencekey,
         }
       );
 
-      response.status(200).json({ message: 'success', userCharged: stripeId });
+      response.status(200).json({ message: 'success', usercharged: stripeid });
     } catch (error) {
-      // Error code will be authentication_required if authentication is needed
-      console.log('Error code is:', error.code);
-      //const paymentIntentRetrieved = await stripe.paymentIntents.retrieve(error.raw.payment_intent.id);
-      //console.log('PI retrieved:', paymentIntentRetrieved.id);
+      // error code will be authentication_required if authentication is needed
+      console.log('error code is:', error.code);
+      //const paymentintentretrieved = await stripe.paymentintents.retrieve(error.raw.payment_intent.id);
+      //console.log('pi retrieved:', paymentintentretrieved.id);
       response.status(500).json({ message: 'failed' });
     }
   }
