@@ -30,7 +30,7 @@ describe('Commit component', () => {
   };
 
   const setViewer = jest.fn();
-  it('should render without error', () => {
+  it('Should Render Yes Text when a viewer is not commited', () => {
     const { getByText } = render(
       <ApolloProvider client={apolloClient}>
         <Commit setViewer={setViewer} viewer={viewer} />
