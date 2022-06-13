@@ -56,16 +56,6 @@ const Commit = ({ viewer, setViewer }: Props) => {
     };
     handleSuccess();
   }, []);
-  if (!viewer.id) {
-    return (
-      <Background>
-        <Container>
-          <Title>You have to Login to View this page</Title>
-        </Container>
-      </Background>
-    );
-  }
-
   const handleClick = async () => {
     if (!viewer.hasWallet) {
       setShowStripe(true);
@@ -83,6 +73,15 @@ const Commit = ({ viewer, setViewer }: Props) => {
       });
     }
   };
+  if (!viewer.id) {
+    return (
+      <Background>
+        <Container>
+          <Title>You have to Login to View this page</Title>
+        </Container>
+      </Background>
+    );
+  }
 
   if (viewer.isCommited) {
     return (
