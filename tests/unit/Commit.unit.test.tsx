@@ -33,7 +33,7 @@ describe('Commit component', () => {
         <Commit setViewer={setViewer} viewer={NonCommitedViewer} />
       </ApolloProvider>
     );
-    screen.debug();
     expect(getByText(/Yes/i)).toBeInTheDocument();
   });
+  it('Should Display Remove Commit ');
 });
