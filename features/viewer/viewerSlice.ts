@@ -1,14 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export interface CounterState {
-  value: number;
-}
-
-const initialState: CounterState = {
-  value: 0,
-};
-
-const initialViewer: Viewer = {
+const initialState: Viewer = {
   id: null,
   token: null,
   avatar: null,
@@ -20,7 +12,7 @@ const initialViewer: Viewer = {
 
 export const viewerSlice = createSlice({
   name: 'counter',
-  initialViewer,
+  initialState,
   reducers: {
     setViewer: (state, action) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It

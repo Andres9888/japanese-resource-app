@@ -25,6 +25,9 @@ import Nav from '~layouts/default/Nav';
 import { useApollo, initializeApollo } from '~lib/apolloClient';
 import { Viewer } from '~types/globalTypes';
 
+const LogRocket = require('logrocket');
+const setupLogRocketReact = require('logrocket-react');
+
 const initialViewer: Viewer = {
   id: null,
   token: null,
