@@ -9,15 +9,12 @@ import { ApolloProvider, useMutation } from '@apollo/react-hooks';
 import { withTRPC } from '@trpc/next';
 import { AppProps } from 'next/app';
 import { AppType } from 'next/dist/shared/lib/utils';
-import Head from 'next/head';
 import { Provider } from 'react-redux';
 
 import { AppRouter } from './api/trpc/[trpc]';
 
 import LoadingCookieTemplatePage from '~app/components/LoadingCookieTemplatePage';
 import { store } from '~app/store';
-// import Script from 'next/script';
-
 import { LogIn as LogInData } from '~graphql/mutations/__generated__/LogIn';
 import { LOG_IN } from '~graphql/mutations/mutations';
 import Footer from '~layouts/default/Footer';
