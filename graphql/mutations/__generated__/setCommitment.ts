@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface setCommitment_setCommitment {
-  __typename: "Viewer";
+  __typename: 'Viewer';
   id: string | null;
   token: string | null;
   avatar: string | null;

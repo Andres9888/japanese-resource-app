@@ -82,6 +82,8 @@
     "getstream": "^7.4.1",
     "googleapis": "^67.1.1",
     "graphql": "^14.7.0",
+    "graphql-config": "^4.3.1",
+    "graphql-language-service-server": "^2.7.27",
     "graphql-tag": "^2.11.0",
     "helmet": "^3.23.3",
     "install": "^0.13.0",
